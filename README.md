@@ -29,9 +29,10 @@ owner. Stubs compile and elaborate, so nobody is blocked on anyone else's port
 list — which is the thing that actually costs a day on a project this size.
 
 ```
-make -C sim lint     # 7/7 testbenches elaborate     ✓
-make -C sim test     # 7/7 run; all report SKIP      — no checks written yet
-pytest tests/        # 32/32 golden-model tests pass ✓
+make -C sim lint         # 7/7 testbenches elaborate     ✓
+make -C sim test         # 7/7 run; all report SKIP      — no checks written yet
+pytest tests/            # 32/32 golden-model tests pass ✓
+make -C docs/diagrams    # 3 diagrams -> PNG + PDF       ✓
 ```
 
 A testbench with nothing asserted reports **SKIP**, never PASS. See
@@ -52,7 +53,7 @@ A testbench with nothing asserted reports **SKIP**, never PASS. See
 - **Satya** → `vreg_file` and `dmem` **before Saturday noon** so Parth can
   integrate
 - **Jivit** → `scalar_top`, then the cycle-counting rules and the comparison
-- **Taj** → block diagrams, synthesis, then the report PDF
+- **Taj** → synthesis, waveform screenshots, then the report PDF (golden model and block diagrams are done)
 
 ---
 

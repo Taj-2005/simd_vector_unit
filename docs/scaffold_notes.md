@@ -89,6 +89,7 @@ repository owner, the reviewer and the submitter**, and the README says so.
 | `results/` with header-only CSVs | Somewhere for the cycle and synthesis numbers to land that is not "in the report text". Templates are empty on purpose. |
 | `docs/spec.md` | The plan's spec tables, in one place that can be frozen and cited, with the encoding filled in. |
 | `docs/cycle_counting.md` | The plan asks Jivit for "one paragraph" of counting rules. It is a table here because the speed-up number is the project's headline claim. |
+| `docs/diagrams/*.svg` + `Makefile` | The plan says "draw 3 block diagrams in draw.io or similar". They are hand-authored SVG instead, so a diagram edit is a reviewable text diff rather than an opaque binary; `make -C docs/diagrams` regenerates the PNG and PDF. |
 | `docs/scaffold_notes.md` | This file. |
 | `docs/phase1_work_plan.md` | The plan PDF as editable markdown, so an ownership change is a reviewable diff. |
 | `docs/notes_<name>.md` | Carried over from our AML project (Project 18), where it worked well for the viva: one page per member, *what I built and why*. |
@@ -147,10 +148,11 @@ must not be able to change that.
 Icarus Verilog 13.0, Python 3.14, macOS.
 
 ```
-make -C sim lint     7/7 testbenches elaborate, no warnings
-make -C sim test     7/7 run; all report SKIP (no checks written yet)
-pytest tests/        32/32 pass
-ruff check + format  clean
+make -C sim lint       7/7 testbenches elaborate, no warnings
+make -C sim test       7/7 run; all report SKIP (no checks written yet)
+pytest tests/          32/32 pass
+ruff check + format    clean
+make -C docs/diagrams  3 diagrams -> PNG (1800px) + PDF (vector)
 ```
 
 **Not verified:** nothing in `rtl/` or `scalar/` computes anything yet — they are
