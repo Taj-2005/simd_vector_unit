@@ -9,31 +9,19 @@
 | **Report sections** | Abstract, References, IEEE formatting and the final PDF |
 | **Video slot** | 2:40–3:25 |
 
-## How this compares to my AML role
+## The job
 
-On Project 18 (*Water Quality Prediction*, CSAI) I was team lead and repository
-owner. **I own the repository here too** — I created it, built the scaffold and
-the build system, and I review and merge every pull request. What changed is the
-technical half of the job.
+I own two things: the repository, and the definition of *correct*.
 
-| | Project 18 (AML) | Project 11 (MCA) |
-| :--- | :--- | :--- |
-| Repository, branch rules, merges | **me** | **me** |
-| Shared contract everyone codes against | Parthraj's `evaluate_api` | the frozen ISA — Parthraj freezes it, I encode it in `simd_defs.vh` and the golden model |
-| My code | `src/clean.py`, `src/config.py`, cleaning + EDA notebooks | `golden/golden_model.py`, `golden/gen_vectors.py`, `tb/tb_system.v`, `sim/Makefile` |
-| My verification | unit tests on the cleaning rules | the self-checking system test, plus synthesis and waveform evidence |
-| My writing | data dictionary, missing-data theory note | Abstract, References, IEEE formatting, final PDF |
-| Report assembly | Satya | **me** |
-| Integration of other people's work | Parthraj (final evaluation) | Parthraj (`simd_top`) |
+The repository means the layout, the build system, CI and the branch rules —
+the things nobody else can start without — plus reviewing and merging every
+pull request. The definition of correct means the golden model: an independent
+Python reference for what each instruction must produce, so that "the RTL
+works" is a test result rather than an opinion, and a disagreement points at
+exactly one of two places instead of at a vague feeling that something is off.
 
-So the repository role carried over and the report role is new: on the AML
-project Satya assembled the PDF, here I do.
-
-The common thread both projects are graded on is the same one: **a shared,
-unarguable definition of correct.** There it was one split and one `evaluate()`
-that every model had to go through. Here it is one golden model that says what
-each instruction must produce, so "the RTL is right" is a test result rather
-than an opinion.
+On top of that I assemble the report: the IEEEtran template, the Abstract, the
+References and the final PDF.
 
 ## What I built
 
@@ -95,9 +83,9 @@ _TODO: fill in on Monday, before the video._
 
 The team plan had Parth creating it on Friday night. I did it instead, because
 my own chain of work — golden model, diagrams, report template — depends on
-nobody, so I was the one person free on Friday, and because I had just done the
-same job on Project 18. Parth keeps what the plan actually makes his: freezing
-the spec, `ctrl_unit`, and integrating `simd_top` from four people's modules.
+nobody, so I was the one person free on Friday while everyone else was waiting
+on the spec. Parth keeps what the plan actually makes his: freezing the spec,
+`ctrl_unit`, and integrating `simd_top` from four people's modules.
 The deviation is recorded in [scaffold_notes.md](scaffold_notes.md) A6 and at
 the top of [phase1_work_plan.md](phase1_work_plan.md).
 

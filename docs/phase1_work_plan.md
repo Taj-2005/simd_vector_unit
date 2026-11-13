@@ -5,9 +5,9 @@ ownership change is a reviewable diff rather than a message nobody can find.
 
 > **One deviation from the PDF.** The PDF has Parth creating the repository on
 > Friday night. In practice **Taj created the repository and the scaffold** and
-> owns branch reviews and merges, as he did on Project 18; Parth keeps the spec
-> freeze, `ctrl_unit`, `simd_top` integration and the Google Form submission.
-> Everything else below matches the PDF.
+> owns branch reviews and merges; Parth keeps the spec freeze, `ctrl_unit`,
+> `simd_top` integration and the Google Form submission. Everything else below
+> matches the PDF.
 
 **Deadline: 16 Nov 2026, 11:59 PM IST.** The plan targets **9 PM** as the real
 deadline, leaving three hours of margin.

@@ -69,8 +69,8 @@ with them.
 
 The plan has Parth creating the repository on Friday night. **In practice Taj
 created it and built the scaffold**, because his chain of work (golden model,
-diagrams, report template) depends on nobody and he had just done the same job
-on Project 18.
+diagrams, report template) depends on nobody — he was the one person free on
+Friday while everyone else was waiting on the spec.
 
 **Resolved: Taj is the repository owner** — he created it, owns the build system
 and CI, and reviews and merges every pull request. **Parth is the integration
@@ -101,7 +101,7 @@ marks are assessed on.
 | `docs/diagrams/*.svg` + `Makefile` | The plan says "draw 3 block diagrams in draw.io or similar". They are hand-authored SVG instead, so a diagram edit is a reviewable text diff rather than an opaque binary; `make -C docs/diagrams` regenerates the PNG and PDF. |
 | `docs/scaffold_notes.md` | This file. |
 | `docs/phase1_work_plan.md` | The plan PDF as editable markdown, so an ownership change is a reviewable diff. |
-| `docs/notes_<name>.md` | Carried over from our AML project (Project 18), where it worked well for the viva: one page per member, *what I built and why*. |
+| `docs/notes_<name>.md` | One page per member, *what I built and why*. The viva is assessed individually and "why" is the half that gets asked about, so it is worth writing down while the reason is still fresh. |
 | `.gitattributes` | `eol=lf` on every text type. Two of us are on Windows; this avoids whole-file diffs on merge. |
 | `docs/video_script.md`, `docs/submission_checklist.md` | The plan's video table and final checklist, as working documents with checkboxes. |
 
