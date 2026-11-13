@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700">
+<!--
+  top_level.svg - Project 11, SIMD Vector Unit. Owner: Taj.
+  Module and signal names are identical to docs/spec.md section 4. Thick lines
+  are 128-bit vector buses; thin lines are control or scalar. The instruction
+  encoding is deliberately NOT shown here - it lives in report section 4.1,
+  because it is the part of the spec still open to change.
+  Source of truth: edit this SVG, then `make -C docs/diagrams`.
+-->
+<style>
+  .blk   { fill:#f4f4f4; stroke:#111; stroke-width:1.8; }
+  .blk2  { fill:#e6e6e6; stroke:#111; stroke-width:1.8; }
+  .reg   { fill:#fafafa; stroke:#111; stroke-width:1.8; }
+  .name  { font:600 15px Helvetica,Arial,sans-serif; fill:#111; text-anchor:middle; }
+  .sub   { font:11px Helvetica,Arial,sans-serif; fill:#444; text-anchor:middle; }
+  .sig   { font:11px Helvetica,Arial,sans-serif; fill:#111; }
+  .sigc  { font:11px Helvetica,Arial,sans-serif; fill:#111; text-anchor:middle; }
+  .note  { font:italic 11px Helvetica,Arial,sans-serif; fill:#555; }
+  .bus   { fill:none; stroke:#111; stroke-width:3;   marker-end:url(#ah); }
+  .ctl   { fill:none; stroke:#111; stroke-width:1.3; marker-end:url(#ahs); }
+  .leg   { font:11px Helvetica,Arial,sans-serif; fill:#333; }
+</style>
+<defs>
+  <marker id="ah"  markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+    <path d="M0,0 L9,4.5 L0,9 z" fill="#111"/></marker>
+  <marker id="ahs" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto">
+    <path d="M0,0 L7,3.5 L0,7 z" fill="#111"/></marker>
+</defs>
+
+<!-- ============================ fetch ============================ -->
+<rect class="reg" x="40"  y="40" width="100" height="50" rx="3"/>
+<text class="name" x="90"  y="62">pc</text>
+<text class="sub"  x="90"  y="78">[5:0]</text>
+
+<rect class="blk" x="190" y="40" width="170" height="50" rx="3"/>
+<text class="name" x="275" y="62">instr_mem</text>
+<text class="sub"  x="275" y="78">64 x 16-bit ROM</text>
+
+<path class="ctl" d="M140,65 L190,65"/>
+<path class="ctl" d="M275,90 L275,150"/>
+<text class="sig" x="283" y="124">instr[15:0]</text>
+
+<!-- pc increment / halt feedback -->
+<path class="ctl" d="M160,40 L160,18 L66,18 L66,38" stroke-dasharray="4 3"/>
+<text class="note" x="172" y="22">pc + 1 each cycle until halt</text>
+
+<!-- ============================ control ============================ -->
+<rect class="blk2" x="190" y="150" width="520" height="60" rx="3"/>
+<text class="name" x="450" y="175">ctrl_unit</text>
+<text class="sub"  x="450" y="195">combinational decode - no state</text>
+
+<!-- control fan-out -->
+<path class="ctl" d="M250,210 L250,247 L140,247 L140,280"/>
+<text class="sig" x="146" y="243">we, waddr, raddr1, raddr2</text>
+
+<path class="ctl" d="M415,210 L415,280"/>
+<text class="sig" x="423" y="252">alu_op[2:0]</text>
+
+<path class="ctl" d="M660,210 L660,247 L690,247 L690,280"/>
+<text class="sig" x="585" y="243">mem_rd, mem_wr</text>
+
+<path class="ctl" d="M710,180 L850,180 L850,583 L812,583"/>
+<text class="sig" x="718" y="174">halt</text>
+
+<!-- ============================ execute ============================ -->
+<rect class="blk" x="40"  y="280" width="200" height="110" rx="3"/>
+<text class="name" x="140" y="322">vreg_file</text>
+<text class="sub"  x="140" y="342">8 x 128-bit</text>
+<text class="sub"  x="140" y="358">2 read, 1 write</text>
+
+<rect class="blk" x="300" y="280" width="230" height="110" rx="3"/>
+<text class="name" x="415" y="322">vec_alu</text>
+<text class="sub"  x="415" y="342">LANES x lane_alu</text>
+<text class="sub"  x="415" y="358">4 lanes, one cycle</text>
+
+<rect class="blk" x="600" y="280" width="180" height="110" rx="3"/>
+<text class="name" x="690" y="322">dmem</text>
+<text class="sub"  x="690" y="342">16 x 128-bit</text>
+<text class="sub"  x="690" y="358">$readmemh init</text>
+
+<path class="bus" d="M240,310 L300,310"/>
+<text class="sig" x="243" y="298">rdata1</text>
+<path class="bus" d="M240,360 L300,360"/>
+<text class="sig" x="243" y="348">rdata2</text>
+
+<!-- store data: vreg_file -> dmem, routed under the execute row -->
+<path class="bus" d="M140,390 L140,416 L640,416 L640,392"/>
+<text class="sig" x="300" y="434">store data (VST)</text>
+
+<!-- ============================ write-back ============================ -->
+<rect class="blk2" x="330" y="450" width="230" height="46" rx="3"/>
+<text class="name" x="445" y="479">write-back mux</text>
+
+<path class="bus" d="M415,390 L415,450"/>
+<text class="sig" x="423" y="410">y[127:0]</text>
+
+<path class="bus" d="M730,392 L730,438 L545,438 L545,450"/>
+<text class="sig" x="640" y="452">rdata</text>
+
+<text class="note" x="575" y="479">VLD takes rdata, every other write takes y</text>
+
+<!-- write-back loop back into the register file -->
+<path class="bus" d="M445,496 L445,524 L18,524 L18,335 L40,335"/>
+<text class="sig" x="200" y="540">wdata[127:0]</text>
+
+<!-- ============================ counter / outputs ============================ -->
+<rect class="reg" x="620" y="560" width="192" height="46" rx="3"/>
+<text class="name" x="716" y="582">cycle_count</text>
+<text class="sub"  x="716" y="598">[31:0], stops at halt</text>
+
+<path class="ctl" d="M716,606 L716,648"/>
+<text class="sig" x="724" y="640">done, cycle_count</text>
+
+<!-- ============================ clk / rst ============================ -->
+<text class="sig"  x="40" y="128">clk, rst</text>
+<text class="note" x="40" y="144">to every sequential block</text>
+<path class="ctl" d="M90,120 L90,92" stroke-dasharray="3 3"/>
+
+<!-- ============================ legend ============================ -->
+<line x1="40" y1="600" x2="90" y2="600" stroke="#111" stroke-width="3"/>
+<text class="leg" x="98" y="604">128-bit vector bus</text>
+<line x1="40" y1="622" x2="90" y2="622" stroke="#111" stroke-width="1.3"/>
+<text class="leg" x="98" y="626">control / scalar</text>
+<line x1="40" y1="644" x2="90" y2="644" stroke="#111" stroke-width="1.3" stroke-dasharray="4 3"/>
+<text class="leg" x="98" y="648">sequencing</text>
+</svg>

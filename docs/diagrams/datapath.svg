@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="900" height="620">
+<!--
+  datapath.svg - Project 11, SIMD Vector Unit. Owner: Taj.
+  The 128-bit datapath: two read ports, four independent lanes, write-back mux.
+  The slicing is what makes LANES a parameter: lane i is bits [i*32 +: 32],
+  and the generate loop in vec_alu.v indexes exactly that way.
+-->
+<style>
+  .blk  { fill:#f4f4f4; stroke:#111; stroke-width:1.8; }
+  .wire { fill:#ececec; stroke:#111; stroke-width:1.5; }
+  .encl { fill:none; stroke:#111; stroke-width:1.6; stroke-dasharray:7 4; }
+  .name { font:600 15px Helvetica,Arial,sans-serif; fill:#111; text-anchor:middle; }
+  .lane { font:600 13px Helvetica,Arial,sans-serif; fill:#111; text-anchor:middle; }
+  .sub  { font:11px Helvetica,Arial,sans-serif; fill:#444; text-anchor:middle; }
+  .sig  { font:11px Helvetica,Arial,sans-serif; fill:#111; }
+  .sigm { font:11px Helvetica,Arial,sans-serif; fill:#111; text-anchor:middle; }
+  .note { font:italic 11px Helvetica,Arial,sans-serif; fill:#555; }
+  .key  { font:600 12px Helvetica,Arial,sans-serif; fill:#111; }
+  .bus  { fill:none; stroke:#111; stroke-width:3;   marker-end:url(#ah); }
+  .thin { fill:none; stroke:#111; stroke-width:1.4; marker-end:url(#ahs); }
+  .vrot { font:600 13px Helvetica,Arial,sans-serif; fill:#111; text-anchor:middle; }
+</style>
+<defs>
+  <marker id="ah"  markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto">
+    <path d="M0,0 L9,4.5 L0,9 z" fill="#111"/></marker>
+  <marker id="ahs" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto">
+    <path d="M0,0 L7,3.5 L0,7 z" fill="#111"/></marker>
+</defs>
+
+<!-- register file -->
+<rect class="blk" x="26" y="250" width="150" height="120" rx="3"/>
+<text class="name" x="101" y="292">vreg_file</text>
+<text class="sub"  x="101" y="312">8 x 128-bit</text>
+<text class="sub"  x="101" y="328">2 read ports</text>
+
+<path class="bus" d="M176,288 L268,288"/>
+<text class="sig" x="180" y="276">rdata1[127:0]</text>
+<path class="bus" d="M176,334 L268,334"/>
+<text class="sig" x="180" y="360">rdata2[127:0]</text>
+
+<!-- vec_alu enclosure -->
+<rect class="encl" x="250" y="30" width="452" height="530" rx="4"/>
+<text class="name" x="476" y="22">vec_alu  (LANES = 4)</text>
+
+<!-- lane split -->
+<rect class="wire" x="270" y="60" width="58" height="470" rx="3"/>
+<text class="vrot" x="299" y="295" transform="rotate(-90 299 295)">lane split</text>
+
+<!-- lane concat -->
+<rect class="wire" x="612" y="60" width="58" height="470" rx="3"/>
+<text class="vrot" x="641" y="295" transform="rotate(-90 641 295)">lane concat</text>
+
+<!-- lanes -->
+<rect class="blk" x="370" y="70"  width="192" height="82" rx="3"/>
+<text class="lane" x="466" y="98">lane_alu  #0</text>
+<text class="sub"  x="466" y="118">a = rdata1[31:0]</text>
+<text class="sub"  x="466" y="134">b = rdata2[31:0]</text>
+
+<rect class="blk" x="370" y="190" width="192" height="82" rx="3"/>
+<text class="lane" x="466" y="218">lane_alu  #1</text>
+<text class="sub"  x="466" y="238">a = rdata1[63:32]</text>
+<text class="sub"  x="466" y="254">b = rdata2[63:32]</text>
+
+<rect class="blk" x="370" y="310" width="192" height="82" rx="3"/>
+<text class="lane" x="466" y="338">lane_alu  #2</text>
+<text class="sub"  x="466" y="358">a = rdata1[95:64]</text>
+<text class="sub"  x="466" y="374">b = rdata2[95:64]</text>
+
+<rect class="blk" x="370" y="430" width="192" height="82" rx="3"/>
+<text class="lane" x="466" y="458">lane_alu  #3</text>
+<text class="sub"  x="466" y="478">a = rdata1[127:96]</text>
+<text class="sub"  x="466" y="494">b = rdata2[127:96]</text>
+
+<!-- split -> lanes : a and b per lane -->
+<path class="thin" d="M328,96  L370,96"/>  <path class="thin" d="M328,126 L370,126"/>
+<path class="thin" d="M328,216 L370,216"/> <path class="thin" d="M328,246 L370,246"/>
+<path class="thin" d="M328,336 L370,336"/> <path class="thin" d="M328,366 L370,366"/>
+<path class="thin" d="M328,456 L370,456"/> <path class="thin" d="M328,486 L370,486"/>
+
+<!-- lanes -> concat -->
+<path class="thin" d="M562,111 L612,111"/>
+<text class="sig" x="566" y="105">y0</text>
+<path class="thin" d="M562,231 L612,231"/>
+<text class="sig" x="566" y="225">y1</text>
+<path class="thin" d="M562,351 L612,351"/>
+<text class="sig" x="566" y="345">y2</text>
+<path class="thin" d="M562,471 L612,471"/>
+<text class="sig" x="566" y="465">y3</text>
+
+<!-- alu_op broadcast -->
+<path class="thin" d="M660,8 L660,30"/>
+<text class="sig" x="668" y="20">alu_op[2:0]</text>
+<text class="note" x="330" y="548">one alu_op to every lane - no inter-lane carry, no data path between lanes</text>
+
+<!-- concat -> write-back mux -->
+<path class="bus" d="M670,295 L756,295"/>
+<text class="sig" x="676" y="288">y[127:0]</text>
+
+<rect class="blk" x="756" y="268" width="120" height="54" rx="3"/>
+<text class="name" x="816" y="292">write-back</text>
+<text class="name" x="816" y="310">mux</text>
+
+<path class="bus" d="M816,380 L816,324"/>
+<text class="sig" x="760" y="396">dmem rdata (VLD)</text>
+
+<path class="bus" d="M816,268 L816,228"/>
+<text class="sig" x="760" y="222">wdata[127:0]</text>
+
+<!-- the convention that matters -->
+<text class="key"  x="26" y="440">Lane 0 is the low-order lane</text>
+<text class="note" x="26" y="458">lane i = bits [i*32 +: 32], so lane 0 sits</text>
+<text class="note" x="26" y="474">in bits [31:0]. The generate loop, the</text>
+<text class="note" x="26" y="490">golden model and every .hex file agree.</text>
+<text class="note" x="26" y="506">Reversing it compiles cleanly and fails</text>
+<text class="note" x="26" y="522">tb_system with four wrong lanes.</text>
+</svg>
