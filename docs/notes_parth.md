@@ -4,7 +4,7 @@
 | :--- | :--- |
 | **Enrollment** | 2401010320 |
 | **GitHub** | [@parthrajsinghbhati](https://github.com/parthrajsinghbhati) |
-| **Role** | Repository owner · spec, control unit, integration, submission |
+| **Role** | Integration lead · spec, control unit, `simd_top`, submission |
 | **Branch prefix** | `feat/parth-*` |
 | **Report section** | Proposed Solution 4.1 — architecture and control |
 | **Video slots** | 0:40–1:25 and 4:20–4:50 |
@@ -17,7 +17,8 @@
 3. **`rtl/instr_mem.v`** — _TODO_
 4. **`rtl/simd_top.v`** — _TODO_
 5. **`tb/tb_ctrl_unit.v`** — _TODO_
-6. **Repository ownership** — branch reviews, merges, submission.
+6. **Integration** — wiring `simd_top` from four people's modules, and the
+   Google Form submission.
 
 ## Why I built it that way
 

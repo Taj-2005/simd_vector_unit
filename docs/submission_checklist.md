@@ -1,7 +1,7 @@
 # Submission checklist
 
-**Parth ticks these before submitting the Google Form.** Deadline 16 Nov 2026,
-11:59 PM IST; target 9 PM.
+**Taj ticks the repository and report rows; Parth ticks the rest and submits
+the Google Form.** Deadline 16 Nov 2026, 11:59 PM IST; target 9 PM.
 
 ## Repository (5 marks)
 
@@ -15,6 +15,7 @@
 - [ ] No member's file was overwritten by someone else
 - [ ] File names match [spec.md](spec.md) exactly
 - [ ] CI is green on `main`
+- [ ] All four teammates added as collaborators (Taj)
 
 ## Code
 

@@ -3,6 +3,12 @@
 Markdown source of the team plan PDF, kept editable in the repository so an
 ownership change is a reviewable diff rather than a message nobody can find.
 
+> **One deviation from the PDF.** The PDF has Parth creating the repository on
+> Friday night. In practice **Taj created the repository and the scaffold** and
+> owns branch reviews and merges, as he did on Project 18; Parth keeps the spec
+> freeze, `ctrl_unit`, `simd_top` integration and the Google Form submission.
+> Everything else below matches the PDF.
+
 **Deadline: 16 Nov 2026, 11:59 PM IST.** The plan targets **9 PM** as the real
 deadline, leaving three hours of margin.
 
@@ -16,10 +22,10 @@ components depend on everyone.
 
 | Member | Code / RTL | Testing and tools | Report section | Video slot |
 | :--- | :--- | :--- | :--- | :--- |
-| **Parthraj** | `ctrl_unit`, `simd_top`, program ROM | `tb_ctrl_unit`; repo setup and merges | Proposed Solution 4.1: architecture and control | 0:40–1:25 and 4:20–4:50 |
+| **Taj** *(repo owner)* | Python golden model, self-checking system testbench | repository and build system, block diagrams, synthesis run, GTKWave screenshots | Abstract, References, IEEE formatting, final PDF | 2:40–3:25 |
+| **Parthraj** | `ctrl_unit`, `simd_top`, program ROM | `tb_ctrl_unit`; spec freeze; `simd_top` integration | Proposed Solution 4.1: architecture and control | 0:40–1:25 and 4:20–4:50 |
 | **Satya** | `vreg_file`, 128-bit `dmem` | `tb_vreg_file`, `tb_dmem`; register-file waveform | Literature Review | 1:25–2:00 |
 | **Himanshu** | `lane_alu`, `vec_alu` (4 lanes) | `tb_lane_alu`, `tb_vec_alu`; ALU waveform; edits and uploads the final video | Proposed Solution 4.2: lane and datapath design | 2:00–2:40 |
-| **Taj** | Python golden model, self-checking system testbench | block diagrams, synthesis run, GTKWave screenshots | Abstract, References, IEEE formatting, final PDF | 2:40–3:25 |
 | **Jivit** | `scalar_top` baseline, benchmark programs (hex) | cycle counters; scalar vs SIMD comparison table | Proposed Solution 4.3: baseline and evaluation method; Individual Contributions table | 3:25–4:20 |
 
 Nobody is only a writer and nobody is only a coder. All five say their name in
@@ -30,33 +36,34 @@ the 0:00–0:40 intro.
 ## How the work flows
 
 ```
-Parth: freeze the spec  (Fri night)
-   ├─> Himanshu: lane_alu ──> vec_alu
-   │        └─> Jivit: scalar_top (reuses lane_alu)
-   ├─> Satya: vreg_file + dmem
-   ├─> Parth: ctrl_unit + instr_mem
-   └─> Taj: golden model + diagrams + Overleaf template   (needs nobody)
-                 │
-                 └─> Parth: simd_top integration  (needs Satya, Himanshu, Jivit)
-                          └─> Taj: tb_system + synthesis + waveforms
-                                   └─> Jivit: cycle table and speed-up
-                                            └─> Taj: final PDF
-                                            └─> Himanshu: final video
+Taj: repo + scaffold + build system + branch rules      (done)
+   └─> Parth: freeze the spec
+          ├─> Himanshu: lane_alu ──> vec_alu
+          │        └─> Jivit: scalar_top  (reuses lane_alu)
+          ├─> Satya: vreg_file + dmem
+          ├─> Parth: ctrl_unit + instr_mem
+          └─> Taj: golden model + diagrams + report template  (done)
+                        │
+                        └─> Parth: simd_top  (needs Satya, Himanshu, Jivit)
+                                 └─> Taj: tb_system + synthesis + waveforms
+                                          └─> Jivit: cycle table + speed-up
+                                                   ├─> Taj: final PDF
+                                                   └─> Himanshu: final video
 ```
 
-Parth's spec unblocks everyone. The five blocks run in parallel on Saturday;
-only integration has to wait, and only on three of them.
+The repository came first; then Parth's spec, which unblocks everyone else.
+The five blocks run in parallel on Saturday, and only integration has to
+wait — on three of them.
 
 ---
 
 ## Per-member task lists
 
-### Parthraj — control unit, integration, repo owner
+### Parthraj — control unit, integration
 
-- **Fri night** — create the GitHub repo with `rtl/`, `tb/`, `scalar/`, `sim/`,
-  `docs/`, `report/`, `video/`; add all four teammates as collaborators.
-- **Fri night** — push a README holding the spec and the interface tables, and
-  tell the group the spec is frozen.
+- **Fri night** — confirm or edit the proposed spec and tell the group the spec
+  is frozen. *(The repository itself was created and scaffolded by Taj — see the
+  note at the top of this file.)*
 - **Sat** — `ctrl_unit.v`: decode the 16-bit instruction into `we`, `waddr`,
   `raddr1`, `raddr2`, `alu_op`, `mem_rd`, `mem_wr`, `halt`.
 - **Sat** — `tb_ctrl_unit.v`, one directed check per opcode.
@@ -112,8 +119,11 @@ report.
 **Done when:** both ALU testbenches pass and the final video is uploaded with a
 working link.
 
-### Taj — golden model, system test, diagrams, report assembly
+### Taj — repository, golden model, system test, diagrams, report assembly
 
+- **Fri night** — create the GitHub repository with `rtl/`, `tb/`, `scalar/`,
+  `sim/`, `docs/`, `report/`, `video/`, the build system and CI; add all four
+  teammates as collaborators.
 - **Sat morning** — set up the Overleaf project with the IEEEtran conference
   template, share it with all four, add the five section headings.
 - **Sat** — Python golden model of the 6 vector ops, outputting random input
@@ -166,7 +176,7 @@ frozen design.
 
 | When (IST) | Checkpoint | Who |
 | :--- | :--- | :--- |
-| Sat by 10 AM | Repo live, spec frozen and posted; Overleaf template shared | Parth, Taj |
+| Sat by 10 AM | Repo live and collaborators added; Overleaf template shared; spec frozen and posted | Taj, Parth |
 | Sat by 12 noon | `lane_alu.v` pushed; `vreg_file.v` and `dmem.v` pushed | Himanshu, Satya |
 | Sat by 6 PM | `vec_alu`, `ctrl_unit`, `scalar_top` and their unit testbenches pass | Himanshu, Parth, Jivit |
 | Sat by 9 PM | Golden model and 3 block diagrams pushed; benchmark hex files agreed | Taj, Jivit, Parth |
@@ -224,8 +234,8 @@ Monday night, **will look like one person did everything**.
   messages that say what changed (e.g. `Add vreg_file with 2 read ports`).
 - Commit as you finish each piece, across Saturday, Sunday and Monday — not in
   one dump.
-- Work on your own branch and merge into `main` through Parth, or push straight
-  to `main` only for your own files. **Never overwrite someone else's file.**
+- Work on your own branch and open a pull request into `main` for Taj to
+  review. **Never overwrite someone else's file.**
 - Commit the report text too: export the Overleaf source into `report/` on
   Sunday and Monday, with the PDF at the end.
 - Keep file names exactly as in the spec so imports and testbenches line up.
