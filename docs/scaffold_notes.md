@@ -65,16 +65,25 @@ assigns these to **Jivit, agreed with Parth** — they are a starting point, not
 claim on that task. If A1 or A2 changes, both files and every comment change
 with them.
 
-### A6. Repository ownership
+### A6. Repository ownership — RESOLVED
 
-The plan has **Parth create the repository on Friday night** and add the other
-four as collaborators. This scaffold was prepared by Taj instead, to get the
-golden model, the diagrams and the report template moving on a path that depends
-on nobody.
+The plan has Parth creating the repository on Friday night. **In practice Taj
+created it and built the scaffold**, because his chain of work (golden model,
+diagrams, report template) depends on nobody and he had just done the same job
+on Project 18.
 
-**Decide:** either Parth creates the repo and this is pushed into it, or this
-repo is created and Parth is given admin. Either is fine — but **Parth is the
-repository owner, the reviewer and the submitter**, and the README says so.
+**Resolved: Taj is the repository owner** — he created it, owns the build system
+and CI, and reviews and merges every pull request. **Parth is the integration
+lead** and keeps everything the plan makes his: freezing the spec, `ctrl_unit`,
+`instr_mem`, wiring `simd_top` together, and submitting the Google Form.
+
+This is the one place the repository deviates from the submitted plan PDF, so it
+is also noted at the top of [phase1_work_plan.md](phase1_work_plan.md). Nothing
+else about anyone's workload changes.
+
+**Still to do:** add all four teammates as collaborators, or none of them can
+commit — and "every member commits from their own account" is what the 5 GitHub
+marks are assessed on.
 
 ---
 
@@ -89,6 +98,7 @@ repository owner, the reviewer and the submitter**, and the README says so.
 | `results/` with header-only CSVs | Somewhere for the cycle and synthesis numbers to land that is not "in the report text". Templates are empty on purpose. |
 | `docs/spec.md` | The plan's spec tables, in one place that can be frozen and cited, with the encoding filled in. |
 | `docs/cycle_counting.md` | The plan asks Jivit for "one paragraph" of counting rules. It is a table here because the speed-up number is the project's headline claim. |
+| `docs/diagrams/*.svg` + `Makefile` | The plan says "draw 3 block diagrams in draw.io or similar". They are hand-authored SVG instead, so a diagram edit is a reviewable text diff rather than an opaque binary; `make -C docs/diagrams` regenerates the PNG and PDF. |
 | `docs/scaffold_notes.md` | This file. |
 | `docs/phase1_work_plan.md` | The plan PDF as editable markdown, so an ownership change is a reviewable diff. |
 | `docs/notes_<name>.md` | Carried over from our AML project (Project 18), where it worked well for the viva: one page per member, *what I built and why*. |
@@ -147,10 +157,11 @@ must not be able to change that.
 Icarus Verilog 13.0, Python 3.14, macOS.
 
 ```
-make -C sim lint     7/7 testbenches elaborate, no warnings
-make -C sim test     7/7 run; all report SKIP (no checks written yet)
-pytest tests/        32/32 pass
-ruff check + format  clean
+make -C sim lint       7/7 testbenches elaborate, no warnings
+make -C sim test       7/7 run; all report SKIP (no checks written yet)
+pytest tests/          32/32 pass
+ruff check + format    clean
+make -C docs/diagrams  3 diagrams -> PNG (1800px) + PDF (vector)
 ```
 
 **Not verified:** nothing in `rtl/` or `scalar/` computes anything yet — they are

@@ -29,9 +29,10 @@ owner. Stubs compile and elaborate, so nobody is blocked on anyone else's port
 list — which is the thing that actually costs a day on a project this size.
 
 ```
-make -C sim lint     # 7/7 testbenches elaborate     ✓
-make -C sim test     # 7/7 run; all report SKIP      — no checks written yet
-pytest tests/        # 32/32 golden-model tests pass ✓
+make -C sim lint         # 7/7 testbenches elaborate     ✓
+make -C sim test         # 7/7 run; all report SKIP      — no checks written yet
+pytest tests/            # 32/32 golden-model tests pass ✓
+make -C docs/diagrams    # 3 diagrams -> PNG + PDF       ✓
 ```
 
 A testbench with nothing asserted reports **SKIP**, never PASS. See
@@ -52,7 +53,7 @@ A testbench with nothing asserted reports **SKIP**, never PASS. See
 - **Satya** → `vreg_file` and `dmem` **before Saturday noon** so Parth can
   integrate
 - **Jivit** → `scalar_top`, then the cycle-counting rules and the comparison
-- **Taj** → block diagrams, synthesis, then the report PDF
+- **Taj** → synthesis, waveform screenshots, then the report PDF (golden model and block diagrams are done)
 
 ---
 
@@ -350,14 +351,19 @@ able to explain **the whole datapath** in the viva, not only their own block.
 
 ### Roster
 
-**Repository owner and integration lead:** Parthraj Singh Bhati
+**Repository owner:** Shaik Tajuddin ([@Taj-2005](https://github.com/Taj-2005))
+— created the repository and the scaffold, reviews and merges every pull
+request, and is the point of contact for the faculty.
+
+**Integration lead:** Parthraj Singh Bhati
 ([@parthrajsinghbhati](https://github.com/parthrajsinghbhati)) — owns the frozen
-spec, reviews and merges every branch, and submits the Google Form.
+spec, wires `simd_top` together from everyone's modules, and submits the Google
+Form.
 
 | Name | Enrollment | Email | GitHub |
 | :--- | :--- | :--- | :--- |
-| Parthraj Singh Bhati *(repo owner)* | 2401010320 | parthraj.bhati2024@nst.rishihood.edu.in | [@parthrajsinghbhati](https://github.com/parthrajsinghbhati) |
-| Shaik Tajuddin | 2401010436 | shaik.tajuddin2024@nst.rishihood.edu.in | [@Taj-2005](https://github.com/Taj-2005) |
+| Shaik Tajuddin *(repo owner)* | 2401010436 | shaik.tajuddin2024@nst.rishihood.edu.in | [@Taj-2005](https://github.com/Taj-2005) |
+| Parthraj Singh Bhati *(integration lead)* | 2401010320 | parthraj.bhati2024@nst.rishihood.edu.in | [@parthrajsinghbhati](https://github.com/parthrajsinghbhati) |
 | Himanshu Pandey | 2401020095 | himanshu.h2024@nst.rishihood.edu.in | [@14-himanshu](https://github.com/14-himanshu) |
 | Jivit Rana | 2401010202 | jivit.rana2024@nst.rishihood.edu.in | [@Jivit87](https://github.com/Jivit87) |
 | Satya Yadav | 2401010427 | satya.yadav2024@nst.rishihood.edu.in | [@ACE-pwd](https://github.com/ACE-pwd) |
@@ -366,10 +372,10 @@ spec, reviews and merges every branch, and submits the Google Form.
 
 | Member | Code / RTL | Testing and tools | Report section | Video | Branch prefix |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Parthraj** *(repo owner)* | `ctrl_unit`, `simd_top`, program ROM | `tb_ctrl_unit`; repo setup and merges | 4.1 architecture and control | 0:40–1:25, 4:20–4:50 | `feat/parth-*` |
+| **Taj** *(repo owner)* | Python golden model, `tb_system` | repository and build system, block diagrams, synthesis run, GTKWave screenshots; reviews and merges every PR | Abstract, References, IEEE formatting, final PDF | 2:40–3:25 | `feat/taj-*` |
+| **Parthraj** *(integration lead)* | `ctrl_unit`, `simd_top`, program ROM | `tb_ctrl_unit`; spec freeze; `simd_top` integration | 4.1 architecture and control | 0:40–1:25, 4:20–4:50 | `feat/parth-*` |
 | **Satya** | `vreg_file`, 128-bit `dmem` | `tb_vreg_file`, `tb_dmem`; register-file waveform | Literature Review | 1:25–2:00 | `feat/satya-*` |
 | **Himanshu** | `lane_alu`, `vec_alu` | `tb_lane_alu`, `tb_vec_alu`; ALU waveform; **edits and uploads the final video** | 4.2 lane and datapath design | 2:00–2:40 | `feat/himanshu-*` |
-| **Taj** | Python golden model, `tb_system` | block diagrams, synthesis run, GTKWave screenshots | Abstract, References, IEEE formatting, final PDF | 2:40–3:25 | `feat/taj-*` |
 | **Jivit** | `scalar_top`, benchmark programs | cycle counters; scalar vs SIMD comparison table | 4.3 baseline and evaluation; Individual Contributions table | 3:25–4:20 | `feat/jivit-*` |
 
 All five say their name in the 0:00–0:40 intro. If someone is stuck, whoever
@@ -377,30 +383,32 @@ finishes first takes the next free task — and the usual rescue is Himanshu
 helping with integration, with optional items (VSHL, synthesis) dropped before
 any required one.
 
-Per-member write-ups: [notes_parth.md](docs/notes_parth.md) ·
-[notes_satya.md](docs/notes_satya.md) · [notes_himanshu.md](docs/notes_himanshu.md) ·
-[notes_jivit.md](docs/notes_jivit.md) · [notes_taj.md](docs/notes_taj.md)
+Per-member write-ups: [notes_taj.md](docs/notes_taj.md) ·
+[notes_parth.md](docs/notes_parth.md) · [notes_satya.md](docs/notes_satya.md) ·
+[notes_himanshu.md](docs/notes_himanshu.md) · [notes_jivit.md](docs/notes_jivit.md)
 
 ### Order of work
 
 ```
-Parth: freeze the spec  (Friday night)
-   ├─> Himanshu: lane_alu ──> vec_alu
-   │        └─> Jivit: scalar_top  (reuses lane_alu)
-   ├─> Satya: vreg_file + dmem
-   ├─> Parth: ctrl_unit + instr_mem
-   └─> Taj: golden model + diagrams + report template   (needs nobody)
-                 │
-                 └─> Parth: simd_top  (needs Satya, Himanshu, Jivit)
-                          └─> Taj: tb_system + synthesis + waveforms
-                                   └─> Jivit: cycle table + speed-up
-                                            ├─> Taj: final PDF
-                                            └─> Himanshu: final video
+Taj: repo + scaffold + build system + branch rules      (done)
+   └─> Parth: freeze the spec
+          ├─> Himanshu: lane_alu ──> vec_alu
+          │        └─> Jivit: scalar_top  (reuses lane_alu)
+          ├─> Satya: vreg_file + dmem
+          ├─> Parth: ctrl_unit + instr_mem
+          └─> Taj: golden model + diagrams + report template  (done)
+                        │
+                        └─> Parth: simd_top  (needs Satya, Himanshu, Jivit)
+                                 └─> Taj: tb_system + synthesis + waveforms
+                                          └─> Jivit: cycle table + speed-up
+                                                   ├─> Taj: final PDF
+                                                   └─> Himanshu: final video
 ```
 
-Parth's spec unblocks everyone; the five blocks run in parallel on Saturday;
-only integration has to wait, and only on three of them. Taj's chain starts
-independent of all RTL, which is why the golden model, the diagrams and the
+The repository came first, because nobody can commit without it; then Parth's
+spec, which unblocks everyone else. The five blocks run in parallel on
+Saturday, and only integration has to wait — on three of them. Taj's chain
+needs no RTL at all, which is why the golden model, the diagrams and the
 report template are already here.
 
 Full per-member task lists and the checkpoint timeline:
@@ -421,9 +429,9 @@ like one person did everything.**
   `update`.
 - **Commit as you finish each piece**, across Saturday, Sunday and Monday, not in
   one dump. Everyone needs commits on **at least two different days**.
-- One branch per person, `feat/<name>-<task>`. Merge into `main` through Parth,
-  or push straight to `main` only for your own files. **Never overwrite someone
-  else's file** — if a port does not match, talk to the owner.
+- One branch per person, `feat/<name>-<task>`. Open a **pull request into
+  `main`** and wait for the repository owner's review (Taj). **Never overwrite
+  someone else's file** — if a port does not match, talk to the owner.
 - Keep file names exactly as in [docs/spec.md](docs/spec.md) so the testbenches
   and `$readmemh` paths line up.
 - **Commit the report text too**: export the Overleaf source into `report/` on
@@ -456,7 +464,7 @@ Sunday's integration when there is no time to fix it.
 | :--- | ---: | :--- | :--- |
 | IEEE report, 4–6 pages | 10 | Taj assembles; one section each | [report/](report/) |
 | Demonstration video, under 5:00 | 15 | Himanshu edits; Parth submits | [video/README.md](video/README.md) |
-| GitHub repository and history | 5 | Parth | this repo |
+| GitHub repository and history | 5 | Taj | this repo |
 
 The report has **exactly five parts** — Abstract, Literature Review, Proposed
 Solution, Individual Contributions, References — and **no separate Results

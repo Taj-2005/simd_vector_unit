@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 600" width="780" height="600">
+<!--
+  lane.svg - Project 11, SIMD Vector Unit. Owner: Taj.
+  Inside one lane_alu: six operations in parallel, one mux, selected by op[2:0].
+  Op codes match docs/spec.md section 2 and rtl/simd_defs.vh.
+-->
+<style>
+  .blk  { fill:#f4f4f4; stroke:#111; stroke-width:1.8; }
+  .opt  { fill:#fafafa; stroke:#111; stroke-width:1.6; stroke-dasharray:6 4; }
+  .mux  { fill:#e6e6e6; stroke:#111; stroke-width:1.8; }
+  .name { font:600 15px Helvetica,Arial,sans-serif; fill:#111; text-anchor:middle; }
+  .op   { font:600 13px Helvetica,Arial,sans-serif; fill:#111; }
+  .code { font:600 12px Helvetica,Arial,sans-serif; fill:#444; }
+  .sig  { font:11px Helvetica,Arial,sans-serif; fill:#111; }
+  .note { font:italic 11px Helvetica,Arial,sans-serif; fill:#555; }
+  .key  { font:600 12px Helvetica,Arial,sans-serif; fill:#111; }
+  .wire { fill:none; stroke:#111; stroke-width:1.4; marker-end:url(#ahs); }
+  .rail { fill:none; stroke:#111; stroke-width:2; }
+</style>
+<defs>
+  <marker id="ahs" markerWidth="7" markerHeight="7" refX="6.5" refY="3.5" orient="auto">
+    <path d="M0,0 L7,3.5 L0,7 z" fill="#111"/></marker>
+</defs>
+
+<!-- operand rails -->
+<text class="sig" x="16" y="26">a[31:0]</text>
+<path class="rail" d="M62,22 L104,22 L104,500"/>
+<text class="sig" x="16" y="54">b[31:0]</text>
+<path class="rail" d="M62,50 L140,50 L140,500"/>
+
+<!-- operations -->
+<rect class="blk" x="228" y="30"  width="200" height="48" rx="3"/>
+<text class="op"   x="246" y="52">a + b</text>
+<text class="code" x="372" y="52">000</text>
+<text class="note" x="246" y="69">modulo 2^32, no carry out</text>
+
+<rect class="blk" x="228" y="100" width="200" height="48" rx="3"/>
+<text class="op"   x="246" y="122">a - b</text>
+<text class="code" x="372" y="122">001</text>
+<text class="note" x="246" y="139">modulo 2^32, no borrow out</text>
+
+<rect class="blk" x="228" y="170" width="200" height="40" rx="3"/>
+<text class="op"   x="246" y="195">a &amp; b</text>
+<text class="code" x="372" y="195">010</text>
+
+<rect class="blk" x="228" y="232" width="200" height="40" rx="3"/>
+<text class="op"   x="246" y="257">a | b</text>
+<text class="code" x="372" y="257">011</text>
+
+<rect class="blk" x="228" y="294" width="200" height="48" rx="3"/>
+<text class="op"   x="246" y="316">a == b</text>
+<text class="code" x="372" y="316">100</text>
+<text class="note" x="246" y="333">result in bit 0, zeros above</text>
+
+<rect class="blk" x="228" y="364" width="200" height="48" rx="3"/>
+<text class="op"   x="246" y="386">a &lt; b</text>
+<text class="code" x="372" y="386">101</text>
+<text class="note" x="246" y="403">SIGNED, two's complement</text>
+
+<rect class="opt" x="228" y="434" width="200" height="48" rx="3"/>
+<text class="op"   x="246" y="456">a &lt;&lt; b[4:0]</text>
+<text class="code" x="372" y="456">110</text>
+<text class="note" x="246" y="473">optional - dropped first</text>
+
+<!-- operand taps -->
+<path class="wire" d="M104,44  L228,44"/>  <path class="wire" d="M140,64  L228,64"/>
+<path class="wire" d="M104,114 L228,114"/> <path class="wire" d="M140,134 L228,134"/>
+<path class="wire" d="M104,180 L228,180"/> <path class="wire" d="M140,200 L228,200"/>
+<path class="wire" d="M104,242 L228,242"/> <path class="wire" d="M140,262 L228,262"/>
+<path class="wire" d="M104,308 L228,308"/> <path class="wire" d="M140,328 L228,328"/>
+<path class="wire" d="M104,378 L228,378"/> <path class="wire" d="M140,398 L228,398"/>
+<path class="wire" d="M104,448 L228,448"/> <path class="wire" d="M140,468 L228,468"/>
+
+<!-- mux -->
+<polygon class="mux" points="516,24 566,54 566,468 516,498"/>
+<text class="name" x="541" y="270" transform="rotate(-90 541 270)">mux</text>
+
+<path class="wire" d="M428,54  L516,54"/>
+<path class="wire" d="M428,124 L516,124"/>
+<path class="wire" d="M428,190 L516,190"/>
+<path class="wire" d="M428,252 L516,252"/>
+<path class="wire" d="M428,318 L516,318"/>
+<path class="wire" d="M428,388 L516,388"/>
+<path class="wire" d="M428,458 L516,458"/>
+
+<path class="wire" d="M541,540 L541,498"/>
+<text class="sig" x="470" y="556">op[2:0] selects</text>
+
+<path class="wire" d="M566,261 L680,261"/>
+<text class="sig" x="610" y="254">y[31:0]</text>
+
+<!-- notes -->
+<text class="key"  x="16" y="520">All seven results are computed every cycle.</text>
+<text class="note" x="16" y="538">The mux picks one; the rest are discarded. That is</text>
+<text class="note" x="16" y="554">what makes a lane single-cycle, and it is why area</text>
+<text class="note" x="16" y="570">grows with LANES but latency does not.</text>
+
+<text class="key"  x="596" y="520">op = 111 is undefined:</text>
+<text class="note" x="596" y="538">y must be 0, never x.</text>
+</svg>
