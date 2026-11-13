@@ -39,10 +39,10 @@ A testbench with nothing asserted reports **SKIP**, never PASS. See
 [§6](#6-what-the-simulation-output-means).
 
 > **Read [docs/scaffold_notes.md](docs/scaffold_notes.md) first.** It lists
-> everything in this repository that goes beyond the team plan, and the six
-> decisions the plan left open that Parth needs to confirm when freezing the
-> spec — the instruction op codes, where the `VLD`/`VST` address sits, which
-> register `VST` reads, and three more.
+> everything in this repository that goes beyond the team plan, and the five
+> open decisions Parth needs to confirm when freezing the spec — the
+> instruction op codes, where the `VLD`/`VST` address sits, which register
+> `VST` reads, and two more.
 
 **Next, in dependency order:**
 

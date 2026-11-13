@@ -3,10 +3,11 @@
 Prepared by **Taj** while setting up the repository. Read this once before
 starting work.
 
-The Phase I team plan specifies the folders `rtl/`, `tb/`, `scalar/`, `sim/`,
-`docs/`, `report/`, `video/`, five RTL blocks, their testbenches, a Python
-golden model and a report. All of that is here. This file lists everything
-**extra** that is not in the plan, split into three groups:
+The repository, the scaffold and the build system are Taj's. The team plan
+specifies the folders `rtl/`, `tb/`, `scalar/`, `sim/`, `docs/`, `report/`,
+`video/`, five RTL blocks, their testbenches, a Python golden model and a
+report. All of that is here. This file lists everything **extra** that is not
+in the plan, split into three groups:
 
 - **Needs a decision** — I had to pick something the plan left open. Parth
   confirms or changes it when freezing the spec.
@@ -65,26 +66,6 @@ assigns these to **Jivit, agreed with Parth** — they are a starting point, not
 claim on that task. If A1 or A2 changes, both files and every comment change
 with them.
 
-### A6. Repository ownership — RESOLVED
-
-The plan has Parth creating the repository on Friday night. **In practice Taj
-created it and built the scaffold**, because his chain of work (golden model,
-diagrams, report template) depends on nobody and he had just done the same job
-on Project 18.
-
-**Resolved: Taj is the repository owner** — he created it, owns the build system
-and CI, and reviews and merges every pull request. **Parth is the integration
-lead** and keeps everything the plan makes his: freezing the spec, `ctrl_unit`,
-`instr_mem`, wiring `simd_top` together, and submitting the Google Form.
-
-This is the one place the repository deviates from the submitted plan PDF, so it
-is also noted at the top of [phase1_work_plan.md](phase1_work_plan.md). Nothing
-else about anyone's workload changes.
-
-**Still to do:** add all four teammates as collaborators, or none of them can
-commit — and "every member commits from their own account" is what the 5 GitHub
-marks are assessed on.
-
 ---
 
 ## B. Added tooling
@@ -101,7 +82,7 @@ marks are assessed on.
 | `docs/diagrams/*.svg` + `Makefile` | The plan says "draw 3 block diagrams in draw.io or similar". They are hand-authored SVG instead, so a diagram edit is a reviewable text diff rather than an opaque binary; `make -C docs/diagrams` regenerates the PNG and PDF. |
 | `docs/scaffold_notes.md` | This file. |
 | `docs/phase1_work_plan.md` | The plan PDF as editable markdown, so an ownership change is a reviewable diff. |
-| `docs/notes_<name>.md` | Carried over from our AML project (Project 18), where it worked well for the viva: one page per member, *what I built and why*. |
+| `docs/notes_<name>.md` | One page per member, *what I built and why*. The viva is assessed individually and "why" is the half that gets asked about, so it is worth writing down while the reason is still fresh. |
 | `.gitattributes` | `eol=lf` on every text type. Two of us are on Windows; this avoids whole-file diffs on merge. |
 | `docs/video_script.md`, `docs/submission_checklist.md` | The plan's video table and final checklist, as working documents with checkboxes. |
 

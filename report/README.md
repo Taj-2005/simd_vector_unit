@@ -45,4 +45,6 @@ pdflatex main && bibtex main && pdflatex main && pdflatex main
 
 Two pdfLaTeX passes after BibTeX, or the citations render as `[?]`.
 
-The final PDF is committed as `report/simd_vector_unit_phase1_report.pdf`.
+Commit the final PDF as `report/simd_vector_unit_phase1_report.pdf` on Monday,
+alongside the LaTeX source. Not yet present - it is written last, once the
+cycle numbers exist.
