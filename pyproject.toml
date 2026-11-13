@@ -1,0 +1,31 @@
+[project]
+name = "simd-vector-unit"
+version = "0.1.0"
+description = "Golden model and tooling for the Project 11 SIMD vector unit (Modern Computer Architecture, Phase I)"
+requires-python = ">=3.10"
+
+# The deliverable of this repository is Verilog; Python is here only for the
+# golden model, its tests and the vector generator. Everything under golden/ and
+# tests/ is linted, because tb_system.v trusts its output.
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+include = ["golden/**/*.py", "tests/**/*.py"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "F",    # pyflakes: undefined names, unused imports
+    "I",    # import sorting
+    "UP",   # pyupgrade: outdated syntax
+    "B",    # bugbear: likely bugs
+    "C4",   # comprehension simplifications
+]
+ignore = [
+    "E501",  # line length is enforced by the formatter, not the linter
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

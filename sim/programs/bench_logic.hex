@@ -1,0 +1,17 @@
+// bench_logic - AND, OR, CMPEQ and CMPLT on the crafted compare pair.
+//
+// Owner: Jivit, encoding agreed with Parthraj. Checks the ops the array add never
+// touches. Results land in words 8-11 and are checked against
+// sim/vectors/expected_logic.hex, whose lanes deliberately disagree with each
+// other: lane 0 equal, lane 1 greater, lane 2 less, lane 3 signed (-1 < 1).
+8000   //  0: VLD    V0, [ 0]     ; A[0] - crafted compare pair
+8220   //  1: VLD    V1, [ 4]     ; B[0]
+2408   //  2: VAND   V2, V0, V1
+9440   //  3: VST    V2, [ 8]     ; expected_logic.hex line 1
+3608   //  4: VOR    V3, V0, V1
+9648   //  5: VST    V3, [ 9]     ; line 2
+4808   //  6: VCMPEQ V4, V0, V1
+9850   //  7: VST    V4, [10]     ; line 3
+5a08   //  8: VCMPLT V5, V0, V1   ; signed
+9a58   //  9: VST    V5, [11]     ; line 4
+f000   // 10: HALT

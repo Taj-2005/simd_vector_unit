@@ -1,0 +1,8 @@
+# Python is only needed for the golden model, its tests and the vector
+# generator. The RTL toolchain is installed separately - see README section 5.
+pytest>=7.4
+ruff>=0.6
+
+# Nothing else: the golden model uses the standard library only, on purpose.
+# It is the reference the hardware is checked against, so a numpy version
+# difference must never be able to change what "correct" means.

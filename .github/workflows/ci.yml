@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same branch rather than paying for both.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  rtl:
+    name: Elaborate and simulate
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Icarus Verilog
+        run: sudo apt-get update && sudo apt-get install -y iverilog
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # The gate that matters on every push: every module and testbench in the
+      # repository elaborates together, so a port-list change in one person's
+      # module fails here instead of silently breaking integration day.
+      - name: Elaborate all testbenches
+        run: make -C sim lint
+
+      - name: Run all testbenches
+        run: make -C sim test
+
+      # A testbench that prints FAIL still exits 0 under vvp, so grep the log.
+      # SKIP is tolerated on purpose while modules are still stubs; FAIL is not.
+      - name: No testbench reported FAIL
+        run: |
+          make -C sim test 2>&1 | tee sim.log
+          if grep -q '^FAIL' sim.log; then
+            echo "::error::a testbench reported FAIL"
+            grep '^FAIL' sim.log
+            exit 1
+          fi
+          echo "no FAIL lines"
+          grep -c '^SKIP' sim.log | xargs -I {} echo "{} testbench(es) still reporting SKIP"
+
+      - name: Golden vectors are reproducible
+        # The committed vectors must equal what the current model produces. A
+        # drifted expectation file makes correct RTL look broken, and that costs
+        # an afternoon of debugging the wrong thing.
+        run: |
+          make -C sim vectors
+          git diff --exit-code -- sim/vectors/ || {
+            echo "::error::sim/vectors/ is out of date - run make -C sim vectors and commit";
+            exit 1;
+          }
+
+  golden:
+    name: Lint and test the golden model
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install ruff pytest
+
+      - name: Lint
+        run: ruff check golden/ tests/
+
+      - name: Format check
+        run: ruff format --check golden/ tests/
+
+      - name: Tests
+        run: pytest tests/ -v

@@ -1,0 +1,80 @@
+%% Project 11, SIMD Vector Unit - Phase I report (IEEE conference format)
+%%
+%% Owner: Taj (template, Abstract, References, formatting, final PDF).
+%% Section owners write only their own file under sections/ - that way two
+%% people never edit the same file and Overleaf never produces a merge mess.
+%%
+%% Compile with pdfLaTeX. On Overleaf: Menu -> Compiler -> pdfLaTeX.
+%% Bibliography lives in ../docs/refs.bib and is shared with the whole repo.
+%%
+%% Phase I has exactly five parts and NO separate Results section: preliminary
+%% numbers stay inside 4.3 and move to Results and Discussion in Phase II.
+
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{../docs/diagrams/}{../docs/waveforms/}}
+
+\begin{document}
+
+\title{A Parameterised 4-Lane SIMD Vector Unit in Verilog:
+Design, Verification Against a Golden Model, and Comparison with a
+Scalar Baseline}
+
+\author{
+\IEEEauthorblockN{Shaik Tajuddin}
+\IEEEauthorblockA{\textit{2401010436} \\ shaik.tajuddin2024@nst.rishihood.edu.in}
+\and
+\IEEEauthorblockN{Parthraj Singh Bhati}
+\IEEEauthorblockA{\textit{2401010320} \\ parthraj.bhati2024@nst.rishihood.edu.in}
+\and
+\IEEEauthorblockN{Himanshu Pandey}
+\IEEEauthorblockA{\textit{2401020095} \\ himanshu.h2024@nst.rishihood.edu.in}
+\and
+\IEEEauthorblockN{Jivit Rana}
+\IEEEauthorblockA{\textit{2401010202} \\ jivit.rana2024@nst.rishihood.edu.in}
+\and
+\IEEEauthorblockN{Satya Yadav}
+\IEEEauthorblockA{\textit{2401010427} \\ satya.yadav2024@nst.rishihood.edu.in}
+}
+
+\maketitle
+
+\begin{abstract}
+\input{sections/00_abstract}
+\end{abstract}
+
+\begin{IEEEkeywords}
+SIMD, vector processor, Verilog, RTL design, data-level parallelism,
+FPGA, computer architecture
+\end{IEEEkeywords}
+
+\section{Literature Review}
+\input{sections/01_literature_review}
+
+\section{Proposed Solution}
+
+\subsection{Architecture, Instruction Format and Control}
+\input{sections/02_solution_architecture}
+
+\subsection{Lane ALU, Vector Datapath, Register File and Memory}
+\input{sections/03_solution_datapath}
+
+\subsection{Scalar Baseline, Benchmark and Evaluation Method}
+\input{sections/04_solution_evaluation}
+
+\section{Individual Contributions}
+\input{sections/05_contributions}
+
+\bibliographystyle{IEEEtran}
+\bibliography{../docs/refs}
+
+\end{document}

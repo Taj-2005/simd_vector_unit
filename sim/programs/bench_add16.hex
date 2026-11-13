@@ -1,0 +1,29 @@
+// bench_add16 - the headline benchmark: C[i] = A[i] + B[i] for 16 elements.
+//
+// Owner: Jivit, encoding agreed with Parthraj. Data memory layout and the
+// instruction encoding are both in docs/spec.md; sim/vectors/dmem_init.hex
+// supplies A and B, and tb/tb_system.v checks words 8-11 against
+// sim/vectors/expected_add.hex.
+//
+// 4 vector adds here against 16 scalar adds in scalar_top: that ratio is the
+// whole point of the project.
+//
+// Word format: | 15:12 opcode | 11:9 vd | 8:6 vs1 | 5:3 vs2 | 2:0 unused |
+// Memory form: the 4-bit data address sits in bits 6:3.
+8000   //  0: VLD  V0, [ 0]      ; A[0]
+8220   //  1: VLD  V1, [ 4]      ; B[0]
+0408   //  2: VADD V2, V0, V1    ; 4 elements in one cycle
+9440   //  3: VST  V2, [ 8]      ; C[0]
+8008   //  4: VLD  V0, [ 1]      ; A[1]
+8228   //  5: VLD  V1, [ 5]      ; B[1]
+0408   //  6: VADD V2, V0, V1    ; 4 elements in one cycle
+9448   //  7: VST  V2, [ 9]      ; C[1]
+8010   //  8: VLD  V0, [ 2]      ; A[2]
+8230   //  9: VLD  V1, [ 6]      ; B[2]
+0408   // 10: VADD V2, V0, V1    ; 4 elements in one cycle
+9450   // 11: VST  V2, [10]      ; C[2]
+8018   // 12: VLD  V0, [ 3]      ; A[3]
+8238   // 13: VLD  V1, [ 7]      ; B[3]
+0408   // 14: VADD V2, V0, V1    ; 4 elements in one cycle
+9458   // 15: VST  V2, [11]      ; C[3]
+f000   // 16: HALT

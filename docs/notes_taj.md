@@ -1,0 +1,89 @@
+# What I built and why — Shaik Tajuddin
+
+| | |
+| :--- | :--- |
+| **Enrollment** | 2401010436 |
+| **GitHub** | [@Taj-2005](https://github.com/Taj-2005) |
+| **Role** | Verification and report assembly · golden model, system testbench, diagrams, synthesis, IEEE formatting |
+| **Branch prefix** | `feat/taj-*` |
+| **Report sections** | Abstract, References, IEEE formatting and the final PDF |
+| **Video slot** | 2:40–3:25 |
+
+## My role changed from the AML project
+
+On Project 18 (*Water Quality Prediction*, CSAI) I was **team lead and
+repository owner**: branch rules, the shared `evaluate_api` contract, data
+cleaning and EDA, and review on every pull request.
+
+On this project that is **not** my role. **Parthraj owns the repository,** the
+merges and the Google Form submission, and he owns the spec that unblocks
+everyone. I own **verification and the report artefact**:
+
+| | Project 18 (AML) | Project 11 (MCA) |
+| :--- | :--- | :--- |
+| Repository and merges | **me** | Parthraj |
+| Spec / shared contract | Parthraj (target + evaluate API) | Parthraj (frozen ISA) |
+| My code | `src/clean.py`, `src/config.py`, cleaning + EDA notebooks | `golden/golden_model.py`, `golden/gen_vectors.py`, `tb/tb_system.v` |
+| My verification | unit tests on the cleaning rules | the self-checking system test, plus synthesis and waveform evidence |
+| My writing | data dictionary, missing-data theory note | Abstract, References, IEEE formatting, final PDF |
+| Report owner | Satya | **me** |
+
+The common thread is the same one both projects are graded on: **a shared,
+unarguable definition of correct.** There it was one split and one `evaluate()`
+every model had to go through. Here it is one golden model that says what each
+instruction must produce, so "the RTL is right" is a test result rather than an
+opinion.
+
+## What I built
+
+1. **`golden/golden_model.py`** — a bit-exact Python reference for the six vector
+   ops. Standard library only, 32 unit tests.
+2. **`golden/gen_vectors.py`** — deterministic, seeded test-vector generation into
+   `sim/vectors/`. Vector pair 0 is crafted rather than random, so the compares
+   actually discriminate.
+3. **`tb/tb_system.v`** — self-checking system testbench: runs `simd_top` on the
+   benchmark, compares data memory against the golden vectors, prints one PASS
+   or FAIL line.
+4. **The repository scaffold** — directory layout, `sim/Makefile`, CI, and this
+   documentation set, handed to Parth as repository owner.
+5. **Block diagrams** (`docs/diagrams/`) — top level, datapath, one lane.
+6. **Synthesis evidence** (`results/`) — _TODO: Vivado or Yosys, or a plain
+   statement that no tool was available._
+7. **The report** — IEEEtran template, Abstract, References, final PDF.
+
+## Why I built it that way
+
+**The golden model is Python, not more Verilog.** A reference written in the same
+language and the same mental model as the thing it checks tends to repeat the
+same misreading of the spec. Python forced me to re-derive each op from
+[`spec.md`](spec.md) independently — which is how the narrow-compare and
+signed-CMPLT conventions got pinned down before anyone wrote an ALU.
+
+**The model uses no third-party libraries.** It defines what "correct" means for
+this project. A numpy upgrade must not be able to change that.
+
+**Vector pair 0 is crafted, not random.** Random 16-bit values made every lane
+answer the compares identically — a test that passes with the comparator
+deleted. The crafted pair covers equal, greater, less, and the signed case
+(`-1 < 1`) that an unsigned comparator gets wrong, plus an ADD that wraps.
+
+**The seed is fixed and the vectors are committed.** Everyone regenerates
+byte-identical files, and CI fails if the committed expectations drift from the
+model — otherwise correct RTL gets blamed for a stale expectation file.
+
+**A stub reports SKIP, never PASS.** Every testbench counts its checks and prints
+SKIP while that count is zero. A scaffold that printed PASS with nothing
+asserted would let all five of us tick off work nobody had done.
+
+## What I would do differently
+
+_TODO: fill in on Monday, before the video._
+
+## Questions I should be able to answer in the viva
+
+- Why does a 4-lane machine not reach exactly 4×?
+- What does the golden model catch that `tb_lane_alu` cannot, and vice versa?
+- Why are compares narrow (bit 0) rather than an all-ones mask, and what breaks
+  if the RTL and the model disagree about it?
+- Which lane is the low-order lane, and how would you detect a reversal?
+- What did synthesis report, and what does Fmax mean for this design?

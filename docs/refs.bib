@@ -1,0 +1,81 @@
+% Single source of truth for citations. report/main.tex cites this file
+% directly, so an entry added here is immediately citable from any section.
+%
+% Owner: Satya collects, Taj formats and compiles.
+%
+% RULE, and it is the one an examiner tests: only cite a source someone on the
+% team has actually opened. Every entry below is a STARTING POINT taken from the
+% Phase I team plan, with the fields that need checking marked. Before the final
+% PDF:
+%
+%   1. open the source;
+%   2. fill in or correct every TODO field from the actual document;
+%   3. delete the "verified" comment line and replace it with your initials and
+%      the date, e.g.  % verified: SY, 15 Nov 2026
+%
+% Any entry still carrying a TODO when the report is compiled gets deleted
+% rather than cited. An invented page number is worse than a missing reference.
+
+@article{flynn1966,
+  author  = {Flynn, Michael J.},
+  title   = {Very High-Speed Computing Systems},
+  journal = {Proceedings of the IEEE},
+  year    = {1966},
+  volume  = {TODO},
+  number  = {TODO},
+  pages   = {TODO},
+  doi     = {TODO}
+  % verified: NOT YET - Satya
+}
+
+@book{hennessy2019,
+  author    = {Hennessy, John L. and Patterson, David A.},
+  title     = {Computer Architecture: A Quantitative Approach},
+  publisher = {Morgan Kaufmann},
+  year      = {TODO},
+  edition   = {TODO},
+  note      = {cite the specific vector/SIMD chapter and edition you used}
+  % verified: NOT YET - Satya
+}
+
+@article{russell1978,
+  author  = {Russell, Richard M.},
+  title   = {The {CRAY-1} Computer System},
+  journal = {Communications of the ACM},
+  year    = {1978},
+  volume  = {TODO},
+  number  = {TODO},
+  pages   = {TODO},
+  doi     = {TODO}
+  % verified: NOT YET - Satya
+}
+
+@inproceedings{yu2008soft,
+  author    = {Yu, Jason and Lemieux, Guy and Eagleson, Christopher},
+  title     = {TODO - exact title},
+  booktitle = {Proceedings of the ACM/SIGDA International Symposium on
+               Field-Programmable Gate Arrays (FPGA)},
+  year      = {2008},
+  pages     = {TODO},
+  doi       = {TODO},
+  note      = {soft vector processors on FPGAs - the closest work to ours}
+  % verified: NOT YET - Satya
+}
+
+@misc{riscvvector,
+  title        = {RISC-V {``V''} Vector Extension Specification},
+  author       = {{RISC-V International}},
+  year         = {TODO},
+  note         = {version TODO; cite the version you actually read},
+  howpublished = {\url{TODO}}
+  % verified: NOT YET - Satya
+}
+
+% Tools. Worth citing: the report claims results produced by them.
+@misc{icarus,
+  title        = {Icarus Verilog},
+  author       = {Williams, Stephen},
+  note         = {version TODO - run `iverilog -V`},
+  howpublished = {\url{https://steveicarus.github.io/iverilog/}}
+  % verified: NOT YET - Taj
+}

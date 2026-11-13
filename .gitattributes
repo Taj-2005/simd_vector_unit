@@ -1,0 +1,16 @@
+# Verilog is text everywhere. Two of us are on Windows and three on macOS, so
+# normalise line endings in the repository rather than discovering a whole-file
+# diff on every merge.
+*.v      text eol=lf
+*.vh     text eol=lf
+*.hex    text eol=lf
+*.py     text eol=lf
+*.tex    text eol=lf
+*.bib    text eol=lf
+*.md     text eol=lf
+Makefile text eol=lf
+
+# Keep binary evidence out of the diff view.
+*.png    binary
+*.pdf    binary
+*.vcd    binary
