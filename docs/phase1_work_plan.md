@@ -1,13 +1,7 @@
 # Phase I work plan — Project 11, SIMD Vector Unit
 
-Markdown source of the team plan PDF, kept editable in the repository so an
-ownership change is a reviewable diff rather than a message nobody can find.
-
-> **One deviation from the PDF.** The PDF has Parth creating the repository on
-> Friday night. In practice **Taj created the repository and the scaffold** and
-> owns branch reviews and merges; Parth keeps the spec freeze, `ctrl_unit`,
-> `simd_top` integration and the Google Form submission. Everything else below
-> matches the PDF.
+The team's working plan, kept editable in the repository so an ownership change
+is a reviewable diff rather than a message nobody can find.
 
 **Deadline: 16 Nov 2026, 11:59 PM IST.** The plan targets **9 PM** as the real
 deadline, leaving three hours of margin.

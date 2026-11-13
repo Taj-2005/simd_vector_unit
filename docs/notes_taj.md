@@ -79,16 +79,6 @@ asserted would let all five of us tick off work nobody had done.
 
 _TODO: fill in on Monday, before the video._
 
-## Why I own the repository rather than Parth
-
-The team plan had Parth creating it on Friday night. I did it instead, because
-my own chain of work — golden model, diagrams, report template — depends on
-nobody, so I was the one person free on Friday while everyone else was waiting
-on the spec. Parth keeps what the plan actually makes his: freezing the spec,
-`ctrl_unit`, and integrating `simd_top` from four people's modules.
-The deviation is recorded in [scaffold_notes.md](scaffold_notes.md) A6 and at
-the top of [phase1_work_plan.md](phase1_work_plan.md).
-
 ## Questions I should be able to answer in the viva
 
 - Why does a 4-lane machine not reach exactly 4×?

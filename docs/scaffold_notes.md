@@ -3,10 +3,11 @@
 Prepared by **Taj** while setting up the repository. Read this once before
 starting work.
 
-The Phase I team plan specifies the folders `rtl/`, `tb/`, `scalar/`, `sim/`,
-`docs/`, `report/`, `video/`, five RTL blocks, their testbenches, a Python
-golden model and a report. All of that is here. This file lists everything
-**extra** that is not in the plan, split into three groups:
+The repository, the scaffold and the build system are Taj's. The team plan
+specifies the folders `rtl/`, `tb/`, `scalar/`, `sim/`, `docs/`, `report/`,
+`video/`, five RTL blocks, their testbenches, a Python golden model and a
+report. All of that is here. This file lists everything **extra** that is not
+in the plan, split into three groups:
 
 - **Needs a decision** — I had to pick something the plan left open. Parth
   confirms or changes it when freezing the spec.
@@ -64,26 +65,6 @@ written and commented line by line, against the **proposed** encoding. The plan
 assigns these to **Jivit, agreed with Parth** — they are a starting point, not a
 claim on that task. If A1 or A2 changes, both files and every comment change
 with them.
-
-### A6. Repository ownership — RESOLVED
-
-The plan has Parth creating the repository on Friday night. **In practice Taj
-created it and built the scaffold**, because his chain of work (golden model,
-diagrams, report template) depends on nobody — he was the one person free on
-Friday while everyone else was waiting on the spec.
-
-**Resolved: Taj is the repository owner** — he created it, owns the build system
-and CI, and reviews and merges every pull request. **Parth is the integration
-lead** and keeps everything the plan makes his: freezing the spec, `ctrl_unit`,
-`instr_mem`, wiring `simd_top` together, and submitting the Google Form.
-
-This is the one place the repository deviates from the submitted plan PDF, so it
-is also noted at the top of [phase1_work_plan.md](phase1_work_plan.md). Nothing
-else about anyone's workload changes.
-
-**Still to do:** add all four teammates as collaborators, or none of them can
-commit — and "every member commits from their own account" is what the 5 GitHub
-marks are assessed on.
 
 ---
 
