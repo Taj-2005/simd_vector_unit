@@ -1,0 +1,8 @@
+// prog_demo.hex - Parth's demo program for simd_top integration testing.
+// Encoding: instr[15:12] opcode, instr[11:9] vd, instr[8:6] vs1, instr[5:3] vs2, instr[3:0] addr
+// VST source register is vs1 (instr[8:6]).
+8000   // 0: VLD  V0, [0]     ; load vector from dmem[0] into V0
+8201   // 1: VLD  V1, [1]     ; load vector from dmem[1] into V1
+0408   // 2: VADD V2, V0, V1 ; vector add: V2 = V0 + V1
+9082   // 3: VST  V2, [2]     ; store vector V2 (vs1=2) into dmem[2]
+f000   // 4: HALT             ; halt execution
