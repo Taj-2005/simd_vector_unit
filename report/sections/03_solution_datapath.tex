@@ -1,8 +1,81 @@
-%% Proposed Solution 4.2 - owner: Himanshu. About one page.
-%% Lane ALU, vector datapath, register file and memory.
-%% Include the datapath diagram and the vec_alu waveform.
+%% Proposed Solution 4.2 - owner: Himanshu Pandey (2401020095)
+%% Lane ALU, Vector Datapath, Register File and Memory.
 
-\textit{TODO: the op table; lane replication through the generate loop and why
-\texttt{LANES} is a parameter; lane independence shown on the waveform; the
-128-bit register file (2 read ports, 1 write port) and the 128-bit data memory,
-including the same-cycle read/write behaviour.}
+The computational backbone of the SIMD architecture is centered around a modular, highly scalable execution datapath comprising a 32-bit execution core (\texttt{lane\_alu}), a four-lane parallel compute array (\texttt{vec\_alu}), an 8-entry dual-read-port vector register file (\texttt{vreg\_file}), and a wide single-cycle data memory (\texttt{dmem}). This section details the design rationale, parameterisation strategies, and functional verification of these datapath components.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{datapath.pdf}
+  \caption{Internal organisation of the vector datapath, showing the 128-bit routing between the vector register file, data memory, write-back multiplexer, and the four parallel ALU lanes.}
+  \label{fig:datapath}
+\end{figure}
+
+\subsubsection{32-Bit Scalar Core: \texttt{lane\_alu}}
+The basic unit of arithmetic and logical computation is the 32-bit lane ALU (\texttt{lane\_alu.v}). It is designed as a purely combinational block accepting two 32-bit operand inputs ($a[31:0]$, $b[31:0]$) and a 3-bit operation selector (\texttt{op[2:0]}), yielding a single 32-bit output ($y[31:0]$). Table~\ref{tab:alu_operations} summarizes the complete operation set and encoding.
+
+\begin{table}[htbp]
+  \centering
+  \caption{ALU Operation Codes and Functional Definitions}
+  \label{tab:alu_operations}
+  \begin{tabular}{ccll}
+    \toprule
+    \textbf{\texttt{op[2:0]}} & \textbf{Mnemonic} & \textbf{Expression} & \textbf{Description} \\
+    \midrule
+    \texttt{000} & \texttt{ADD}   & $a + b \pmod{2^{32}}$ & 32-bit unsigned/signed add \\
+    \texttt{001} & \texttt{SUB}   & $a - b \pmod{2^{32}}$ & 32-bit two's complement sub \\
+    \texttt{010} & \texttt{AND}   & $a \ \& \ b$          & Bitwise logical AND \\
+    \texttt{011} & \texttt{OR}    & $a \mid b$            & Bitwise logical OR \\
+    \texttt{100} & \texttt{CMPEQ} & $\{31'\text{b}0, a == b\}$ & Narrow equality compare \\
+    \texttt{101} & \texttt{CMPLT} & $\{31'\text{b}0, a_{\text{signed}} < b_{\text{signed}}\}$ & Signed less-than compare \\
+    \texttt{110} & \texttt{SHL}   & $a \ll b[4:0]$        & Optional logical shift left \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Two foundational architectural decisions govern the design of the lane ALU:
+\begin{enumerate}
+  \item \textbf{Narrow Boolean Compare Encoding:} Rather than generating an all-ones bitmask (\texttt{0xFFFFFFFF}) on a true condition, comparison operations (\texttt{CMPEQ} and \texttt{CMPLT}) return a strict boolean integer: bit 0 contains \texttt{1} (true) or \texttt{0} (false), while upper bits $31:1$ are padded with zeros. This representation allows comparison results to be directly accumulated across elements or used as integer indices and loop control predicates without additional unpacking or popcount circuitry.
+  \item \textbf{Signed Relational Comparison:} The \texttt{CMPLT} operation treats operands as two's complement signed integers via Verilog's \texttt{\$signed()} construct. In unsigned arithmetic, $-1$ (\texttt{0xFFFFFFFF}) evaluates to $4,294,967,295$, which would incorrectly cause $-1 < 1$ to evaluate as false. Implementing true signed comparison is essential for general-purpose mathematical algorithms and signed offset indexing.
+\end{enumerate}
+
+\subsubsection{Parallel Vector Datapath: \texttt{vec\_alu}}
+The SIMD compute unit (\texttt{vec\_alu.v}) replicates the scalar lane ALU across the full vector width using a Verilog \texttt{generate} loop:
+\begin{lstlisting}[language=Verilog, basicstyle=\footnotesize\ttfamily, frame=single]
+genvar i;
+generate
+  for (i = 0; i < LANES; i = i + 1) begin: lane
+    lane_alu u_lane (
+      .a (a[i*LANE_W +: LANE_W]),
+      .b (b[i*LANE_W +: LANE_W]),
+      .op(op),
+      .y (y[i*LANE_W +: LANE_W])
+    );
+  end
+endgenerate
+\end{lstlisting}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{vec_alu.png}
+  \caption{Simulation waveform of \texttt{tb\_vec\_alu} in GTKWave. Four lanes compute distinct values concurrently, demonstrating strict lane independence during arithmetic operations (0--30\,ns) and alternating boolean results ($[0, 1, 0, 1]$) under vector comparisons (40--50\,ns).}
+  \label{fig:vec_alu_wave}
+\end{figure}
+
+The datapath enforces three critical structural properties:
+\begin{itemize}
+  \item \textbf{Lane Ordering and Slicing Convention:} Lanes are packed little-end first: lane $i$ occupies bits $[i \times 32 +: 32]$. Lane 0 resides in the least significant 32 bits ($[31:0]$), while lane 3 resides in bits $[127:96]$. This strict ordering matches the Python golden model and eliminates lane-transposition discrepancies.
+  \item \textbf{Parameterised Architecture:} The lane count (\texttt{LANES = 4}) and width (\texttt{LANE\_W = 32}) are fully parameterised. Upgrading the datapath to an 8-lane, 256-bit SIMD unit is a one-line parameter update in \texttt{simd\_defs.vh}, with no structural redesign needed. In logic synthesis, the unrolled loop incurs zero area overhead over manual instantiation.
+  \item \textbf{Strict Lane Isolation:} There are zero carry or borrow propagation paths between adjacent lanes. This prevents a 128-bit carry ripple chain, keeping the critical path bounded strictly to a single 32-bit adder delay.
+\end{itemize}
+
+\subsubsection{Storage Interfaces: Vector Register File and Data Memory}
+The storage subsystem coordinates 128-bit operands:
+\begin{itemize}
+  \item \textbf{Vector Register File (\texttt{vreg\_file}):} Houses eight 128-bit registers ($V_0$--$V_7$). To support three-operand compute operations ($vd = vs1 \text{ op } vs2$), it exposes two independent combinational read ports (\texttt{rdata1}, \texttt{rdata2}) and one clocked write port. Write commits occur synchronously on the rising edge of \texttt{clk} when \texttt{we} is asserted. Simultaneous read and write to the same register in a single cycle correctly yields the existing register state combinationally before latching the new value on the clock boundary.
+  \item \textbf{Vector Data Memory (\texttt{dmem}):} Provides 16 words of 128 bits each. Memory loads (\texttt{VLD}) perform combinational reads addressed by \texttt{addr[3:0]}, enabling single-cycle write-back to the register file. Memory stores (\texttt{VST}) latch \texttt{rdata1} into memory synchronously at the rising clock edge when \texttt{we} is asserted.
+\end{itemize}
+
+\subsubsection{Functional Verification and Lane Independence}
+Verification of the datapath was conducted using \texttt{tb\_lane\_alu.v} (35 directed tests covering boundary wraps, zero operands, signed comparisons, and shifts) and \texttt{tb\_vec\_alu.v}.
+
+As depicted in Fig.~\ref{fig:vec_alu_wave}, \texttt{tb\_vec\_alu} exercises all four lanes concurrently with distinct operand vectors. At $0\,\text{ns}$ (\texttt{VADD}), lanes $0, 1, 2, 3$ compute $10+1=11$, $20+2=22$, $30+3=33$, and $40+4=44$ simultaneously. At $40\,\text{ns}$ (\texttt{VCMPEQ}) and $50\,\text{ns}$ (\texttt{VCMPLT}), the operand pairs are configured such that lanes 0 and 2 satisfy the predicate while lanes 1 and 3 do not. The resulting output vector contains $[0, 1, 0, 1]$ across lanes, proving conclusively that computations in Lane 2 do not leak into or corrupt Lane 1.
