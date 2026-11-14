@@ -3,7 +3,7 @@
 //
 // Owner: Himanshu (same person who writes the module - you test your own RTL)
 //
-// STUB. Required coverage, from the work plan: every op, zero, maximum and
+// Required coverage, from the work plan: every op, zero, maximum and
 // negative values, equal and unequal compares.
 //=============================================================================
 `timescale 1ns / 1ps
@@ -23,7 +23,7 @@ module tb_lane_alu;
     // One check, one line of output. Keep the format identical in every
     // testbench so the CI log is readable and the video shows one style.
     task check;
-        input [255:0] name;
+        input [511:0] name;
         input [31:0]  expected;
         begin
             #1;
@@ -42,19 +42,54 @@ module tb_lane_alu;
         $dumpfile("waves/tb_lane_alu.vcd");
         $dumpvars(0, tb_lane_alu);
 
-        // TODO(himanshu): fill in the cases. Examples of the ones that matter:
-        //
-        //   a = 32'd7;  b = 32'd5;  op = `ALU_ADD;   check("add",        32'd12);
-        //   a = 32'd5;  b = 32'd7;  op = `ALU_SUB;   check("sub neg",    -32'd2);
-        //   a = 32'hFFFFFFFF; b = 32'd1; op = `ALU_ADD; check("wrap",    32'd0);
-        //   a = 32'hF0F0F0F0; b = 32'h0FF00FF0; op = `ALU_AND; check("and", 32'h00F000F0);
-        //   a = 32'd4;  b = 32'd4;  op = `ALU_CMPEQ; check("eq true",   32'd1);
-        //   a = 32'd4;  b = 32'd5;  op = `ALU_CMPEQ; check("eq false",  32'd0);
-        //   a = -32'd1; b = 32'd1;  op = `ALU_CMPLT; check("signed lt", 32'd1);
-        //   a = 32'd1;  b = -32'd1; op = `ALU_CMPLT; check("signed ge", 32'd0);
-        //
-        // That last pair is the one worth having: an unsigned comparator passes
-        // every other case and fails exactly these two.
+        // --- ADD Tests ---
+        a = 32'd7;          b = 32'd5;          op = `ALU_ADD; check("add standard",          32'd12);
+        a = 32'd0;          b = 32'd42;         op = `ALU_ADD; check("add with zero",         32'd42);
+        a = 32'hFFFFFFFF;   b = 32'd1;          op = `ALU_ADD; check("add wrap overflow",     32'd0);
+        a = -32'd5;         b = -32'd10;        op = `ALU_ADD; check("add two negatives",     -32'd15);
+        a = 32'h7FFFFFFF;   b = 32'd1;          op = `ALU_ADD; check("add max signed pos",    32'h80000000);
+
+        // --- SUB Tests ---
+        a = 32'd10;         b = 32'd4;          op = `ALU_SUB; check("sub standard",          32'd6);
+        a = 32'd42;         b = 32'd0;          op = `ALU_SUB; check("sub zero",              32'd42);
+        a = 32'd5;          b = 32'd7;          op = `ALU_SUB; check("sub negative result",   -32'd2);
+        a = 32'd0;          b = 32'd1;          op = `ALU_SUB; check("sub wrap underflow",    32'hFFFFFFFF);
+        a = 32'd5;          b = -32'd3;         op = `ALU_SUB; check("sub negative operand",  32'd8);
+
+        // --- AND Tests ---
+        a = 32'hF0F0F0F0;   b = 32'h0FF00FF0;   op = `ALU_AND; check("and bitwise mask",      32'h00F000F0);
+        a = 32'hAAAAAAAA;   b = 32'h00000000;   op = `ALU_AND; check("and with zero",         32'h00000000);
+        a = 32'h12345678;   b = 32'hFFFFFFFF;   op = `ALU_AND; check("and with all ones",     32'h12345678);
+
+        // --- OR Tests ---
+        a = 32'hF0F00000;   b = 32'h00000F0F;   op = `ALU_OR;  check("or bitwise combine",    32'hF0F00F0F);
+        a = 32'h12345678;   b = 32'h00000000;   op = `ALU_OR;  check("or with zero",          32'h12345678);
+        a = 32'h12345678;   b = 32'hFFFFFFFF;   op = `ALU_OR;  check("or with all ones",      32'hFFFFFFFF);
+
+        // --- CMPEQ Tests ---
+        a = 32'd4;          b = 32'd4;          op = `ALU_CMPEQ; check("cmpeq true positive",   32'd1);
+        a = 32'd4;          b = 32'd5;          op = `ALU_CMPEQ; check("cmpeq false positive",  32'd0);
+        a = -32'd10;        b = -32'd10;        op = `ALU_CMPEQ; check("cmpeq true negative",   32'd1);
+        a = -32'd10;        b = -32'd5;         op = `ALU_CMPEQ; check("cmpeq false negative",  32'd0);
+        a = 32'h00000000;   b = 32'h00000000;   op = `ALU_CMPEQ; check("cmpeq zero",            32'd1);
+        a = 32'hFFFFFFFF;   b = 32'hFFFFFFFF;   op = `ALU_CMPEQ; check("cmpeq max uint",        32'd1);
+
+        // --- CMPLT Tests (Signed) ---
+        a = -32'd1;         b = 32'd1;          op = `ALU_CMPLT; check("cmplt signed neg < pos", 32'd1);
+        a = 32'd1;          b = -32'd1;         op = `ALU_CMPLT; check("cmplt signed pos < neg", 32'd0);
+        a = -32'd10;        b = -32'd5;         op = `ALU_CMPLT; check("cmplt two negatives lt", 32'd1);
+        a = -32'd5;         b = -32'd10;        op = `ALU_CMPLT; check("cmplt two negatives ge", 32'd0);
+        a = 32'd5;          b = 32'd10;         op = `ALU_CMPLT; check("cmplt two positives lt", 32'd1);
+        a = 32'd10;         b = 32'd5;          op = `ALU_CMPLT; check("cmplt two positives ge", 32'd0);
+        a = 32'd7;          b = 32'd7;          op = `ALU_CMPLT; check("cmplt equal values",     32'd0);
+        a = 32'h80000000;   b = 32'h7FFFFFFF;   op = `ALU_CMPLT; check("cmplt min signed < max", 32'd1);
+        a = 32'h7FFFFFFF;   b = 32'h80000000;   op = `ALU_CMPLT; check("cmplt max signed < min", 32'd0);
+
+        // --- SHL Tests (Optional) ---
+        a = 32'd1;          b = 32'd4;          op = `ALU_SHL;   check("shl 1 by 4",            32'd16);
+        a = 32'd42;         b = 32'd0;          op = `ALU_SHL;   check("shl by 0",              32'd42);
+        a = 32'd1;          b = 32'd31;         op = `ALU_SHL;   check("shl by 31",             32'h80000000);
+        a = 32'd1;          b = 32'd36;         op = `ALU_SHL;   check("shl masked shift amt",  32'd16);
 
         $display("");
         if (errors != 0)
