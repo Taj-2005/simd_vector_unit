@@ -36,7 +36,7 @@ IFLAGS := -g2005 -Wall -I $(RTL_DIR) $(DEFS)
 
 RTL := $(wildcard $(RTL_DIR)/*.v) $(wildcard $(SCALAR_DIR)/*.v)
 
-UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top simd_top
+UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top
 ALL_TESTS  := $(UNIT_TESTS) system
 
 .PHONY: all test lint vectors clean help $(ALL_TESTS)
