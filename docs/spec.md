@@ -1,10 +1,9 @@
 # Frozen spec — 4-lane SIMD vector unit
 
-**Status: PROPOSED, awaiting Parthraj's confirmation.** Everything below is the
-starting point from the Phase I team plan. Parth confirms or edits it, posts
-"spec is frozen" to the group, and after that nobody changes a number here
-without telling all five members — a silent change to a field width or an op
-code breaks four people's modules at once.
+**Status: FROZEN by Parthraj Singh Bhati (Integration Lead).** This specification
+is confirmed and frozen for Phase I implementation. All five team members code against
+the frozen interfaces, instruction encoding, and cycle-counting rules defined here.
+No field widths, opcodes, or port definitions may change without unanimous team consensus.
 
 The machine-readable copy of this document is [`rtl/simd_defs.vh`](../rtl/simd_defs.vh).
 If a number changes in one, it changes in the other **in the same commit**.
@@ -74,14 +73,24 @@ Two details that are easy to get wrong and that both testbenches assert:
 ### Memory form (VLD, VST)
 
 ```
- 15        12 11      9 8     7 6         3 2     0
-+------------+---------+-------+-----------+-------+
-|   opcode   |   vd    |unused |  address  | unused|
-+------------+---------+-------+-----------+-------+
+VLD:
+ 15        12 11      9 8                   4 3       0
++------------+---------+---------------------+---------+
+|   opcode   |   vd    |       unused        | address |
++------------+---------+---------------------+---------+
+
+VST:
+ 15        12 11      9 8       6 5         4 3       0
++------------+---------+---------+-----------+---------+
+|   opcode   | unused  |   vs1   |  unused   | address |
++------------+---------+---------+-----------+---------+
 ```
 
-`vd` is the destination for VLD and the **source** for VST. Bits 2:0 are
-reserved and must be written as zero.
+`addr` (`instr[3:0]`) is the 4-bit data-memory address, used only by `VLD`/`VST`
+(which ignore `vs2`).
+- For `VLD`: `vd` (`instr[11:9]`) is the destination register (`vd <- dmem[addr]`).
+- For `VST`: `vs1` (`instr[8:6]`) is the source data register (`dmem[addr] <- vs1`),
+  read directly via `raddr1 = vs1` from the register file.
 
 ### Op codes — `instr[15:12]`
 
@@ -93,16 +102,22 @@ reserved and must be written as zero.
 | `0011` | `VOR vd, vs1, vs2` | lanewise OR |
 | `0100` | `VCMPEQ vd, vs1, vs2` | lanewise equality |
 | `0101` | `VCMPLT vd, vs1, vs2` | lanewise signed less-than |
-| `0110` | `VSHL vd, vs1, vs2` | lanewise shift left — **optional** |
-| `1000` | `VLD vd, [addr]` | `V[vd] = DMEM[addr]` |
-| `1001` | `VST vd, [addr]` | `DMEM[addr] = V[vd]` |
-| `1111` | `HALT` | stop fetching; `done` goes high |
+| `0110` | `VSHL vd, vs1, vs2` | lanewise shift left — **optional** (decode implemented) |
+| `1000` | `VLD vd, addr` | `V[vd] = DMEM[addr]` |
+| `1001` | `VST vs1, addr` | `DMEM[addr] = V[vs1]` |
+| `1111` | `HALT` | stop fetching; freeze PC; `done` goes high |
+| other  | NOP | undefined opcode: inert (no writes, no halt) |
 
 **The numbering is load-bearing.** For every arithmetic and logic instruction the
 low three bits of the opcode *are* the ALU op code, so the control unit wires
-`alu_op = instr[14:12]` with no decode table. Bit 3 of the opcode separates
-compute (`0xxx`) from memory and control (`1xxx`). Keep both properties if
+`alu_op = instr[14:12]` (or `opcode[2:0]`) with no decode table. Bit 3 of the opcode
+separates compute (`0xxx`) from memory and control (`1xxx`). Keep both properties if
 anything is renumbered.
+
+### Cycle Counting Rules
+- `HALT` sets `done` and freezes the PC.
+- `cycle_count` counts clock cycles of executed instructions after reset, **excluding the HALT cycle**.
+- Jivit's scalar baseline must follow the exact same counting convention for an honest comparison.
 
 ---
 

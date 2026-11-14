@@ -80,10 +80,9 @@ Full spec, including the instruction encoding and the data-memory layout:
 [`rtl/simd_defs.vh`](rtl/simd_defs.vh) — a number that changes in one changes in
 the other in the same commit.
 
-> **The spec is PROPOSED, not frozen.** Parth confirms or edits it and posts
-> "spec is frozen" to the group. After that, nobody changes a field width or an
-> op code without telling all five members — a silent change there breaks four
-> people's modules at once.
+> **The spec is FROZEN by Parthraj Singh Bhati (Integration Lead).** The ISA,
+> instruction encoding, interface tables, and cycle-counting rules below are final
+> for Phase I. All five team members code against these frozen definitions.
 
 ### ALU op codes — `alu_op[2:0]`
 
@@ -105,26 +104,54 @@ the testbenches assert:
 - **CMPLT is signed** — `-1 < 1` must hold. An unsigned comparator passes every
   other case.
 
-### Instruction encoding — 16 bits
+### Fixed Instruction Encoding — 16 bits
+
+Bit breakdown:
+`instr[15:12]` opcode, `instr[11:9]` vd, `instr[8:6]` vs1, `instr[5:3]` vs2, `instr[3:0]` addr
+(`addr` is used only by `VLD`/`VST`, which ignore `vs2`).
 
 ```
-register-register:  | 15:12 opcode | 11:9 vd | 8:6 vs1 | 5:3 vs2 | 2:0 unused |
-memory (VLD/VST):   | 15:12 opcode | 11:9 vd |   8:7   | 6:3 addr| 2:0 unused |
+Register-Register (Compute: VADD, VSUB, VAND, VOR, VCMPEQ, VCMPLT, VSHL):
+ 15        12 11      9 8       6 5       3 2     0
++------------+---------+---------+---------+-------+
+|   opcode   |   vd    |   vs1   |   vs2   | unused|
++------------+---------+---------+---------+-------+
+
+Memory Form (VLD, VST):
+VLD:
+ 15        12 11      9 8                   4 3       0
++------------+---------+---------------------+---------+
+|   opcode   |   vd    |       unused        | address |
++------------+---------+---------------------+---------+
+
+VST:
+ 15        12 11      9 8       6 5         4 3       0
++------------+---------+---------+-----------+---------+
+|   opcode   | unused  |   vs1   |  unused   | address |
++------------+---------+---------+-----------+---------+
 ```
 
-| Opcode | Instruction | | Opcode | Instruction |
-| :--- | :--- | :-- | :--- | :--- |
-| `0000` | `VADD vd, vs1, vs2` | | `0100` | `VCMPEQ vd, vs1, vs2` |
-| `0001` | `VSUB vd, vs1, vs2` | | `0101` | `VCMPLT vd, vs1, vs2` |
-| `0010` | `VAND vd, vs1, vs2` | | `0110` | `VSHL vd, vs1, vs2` *(optional)* |
-| `0011` | `VOR vd, vs1, vs2` | | `1000` | `VLD vd, [addr]` |
-| | | | `1001` | `VST vd, [addr]` |
-| | | | `1111` | `HALT` |
+| Opcode | Instruction | Description |
+| :--- | :--- | :--- |
+| `0000` | `VADD vd, vs1, vs2` | `vd <- vs1 + vs2` |
+| `0001` | `VSUB vd, vs1, vs2` | `vd <- vs1 - vs2` |
+| `0010` | `VAND vd, vs1, vs2` | `vd <- vs1 & vs2` |
+| `0011` | `VOR vd, vs1, vs2` | `vd <- vs1 \| vs2` |
+| `0100` | `VCMPEQ vd, vs1, vs2` | `vd <- (vs1 == vs2) ? 1 : 0` |
+| `0101` | `VCMPLT vd, vs1, vs2` | `vd <- ($signed(vs1) < $signed(vs2)) ? 1 : 0` |
+| `0110` | `VSHL vd, vs1, vs2` | `vd <- vs1 << vs2[4:0]` *(optional; decode implemented)* |
+| `1000` | `VLD vd, addr` | `vd <- dmem[addr]` |
+| `1001` | `VST vs1, addr` | `dmem[addr] <- vs1` (source is `vs1`, read via `raddr1`) |
+| `1111` | `HALT` | Stop execution, set `done=1`, freeze `PC` |
+| other  | NOP | Unknown opcodes behave like NOP (no writes, no halt) |
 
-**The numbering is load-bearing.** For every compute instruction the low three
-bits of the opcode *are* the ALU op code, so the control unit wires
-`alu_op = instr[14:12]` with no decode table at all. Bit 3 separates compute
-(`0xxx`) from memory and control (`1xxx`).
+**Key Decode and Datapath Rules:**
+- `alu_op = opcode[2:0]` for opcodes `0000`–`0110`, directly matching the ALU op table.
+- `ctrl_unit` ports: input `instr[15:0]`; output `we`, `waddr[2:0]`, `raddr1[2:0]`, `raddr2[2:0]`, `alu_op[2:0]`, `mem_rd`, `mem_wr`, `halt`. Pure combinational.
+- Fixed register address wiring: `raddr1 = vs1` (`instr[8:6]`), `raddr2 = vs2` (`instr[5:3]`), `waddr = vd` (`instr[11:9]`).
+- For `VST`, `raddr1 = vs1` is the data source written to memory.
+- `simd_top` integration: One instruction per clock. Write-back mux: `wdata = mem_rd ? dmem_rdata : alu_y`.
+- **Cycle-counting rule:** `HALT` sets `done` and freezes the PC. `cycle_count` counts clock cycles of executed instructions after reset, **excluding the HALT cycle**. Jivit's scalar baseline must count the same way.
 
 ---
 
@@ -236,28 +263,38 @@ Icarus Verilog 13.0.
 
 ## 5. Running the simulation
 
-Three commands:
+Three commands from the repository root:
 
 ```bash
-make -C sim lint     # compile every module and testbench, run nothing
-make -C sim test     # run all 7 testbenches
-pytest tests/        # the golden model's own tests
+make lint     # compile/elaborate every module and testbench (syntax check)
+make test     # compile and run all unit and integration testbenches
+make system   # run the golden-model-verified system test (tb_system)
 ```
 
-More:
-
+Running individual unit testbenches:
 ```bash
-make -C sim lane_alu                    # one testbench by name
-make -C sim vectors                     # regenerate the golden vectors
-make -C sim wave-vec_alu                # open a waveform in GTKWave
-make -C sim system DEFS=-DDUT_READY     # turn on the system-test comparison
-make -C sim clean
+make ctrl_unit       # run control unit testbench
+make simd_top        # run SIMD integration testbench
+make lane_alu        # run ALU lane testbench
+make vec_alu         # run vector ALU testbench
+make vreg_file       # run vector register file testbench
+make dmem            # run data memory testbench
+make scalar_top      # run scalar baseline testbench
 ```
 
-**Always run through `make -C sim`.** Every `$readmemh` path in the RTL and
-every `$dumpfile` path in the testbenches is relative to `sim/`; running
-`vvp` from the repository root makes `$readmemh` silently load nothing, and the
-benchmark then computes zeros with no error message at all.
+Inspecting waveforms in GTKWave:
+```bash
+make wave-ctrl_unit  # open tb_ctrl_unit waveform in GTKWave
+make wave-simd_top   # open tb_simd_top waveform in GTKWave
+make wave-system     # open tb_system waveform in GTKWave
+```
+
+Cleaning build artifacts:
+```bash
+make clean           # remove sim/build/, sim/waves/, and temporary hex files
+```
+
+*Note on directory structure*: The top-level `Makefile` automatically delegates all targets to `sim/` (`make -C sim ...`), ensuring that `$readmemh` paths (which are relative to `sim/`) and VCD dumps resolve properly.
 
 ---
 
