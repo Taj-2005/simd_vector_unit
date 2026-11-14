@@ -58,10 +58,17 @@ vectors:
 # in, so a port mismatch in someone else's module fails here rather than in
 # their branch only.
 #
-# tb_simd_top uses working stubs in stubs/ until teammates merge their RTL.
+# default: real RTL. Stubs only when explicitly requested via STUBS=1.
 #------------------------------------------------------------------------------
-$(BUILD)/simd_top.vvp: $(TB_DIR)/tb_simd_top.v $(RTL_DIR)/simd_top.v $(RTL_DIR)/ctrl_unit.v $(RTL_DIR)/instr_mem.v $(wildcard stubs/*.v) | $(BUILD)
-	$(IVERILOG) $(IFLAGS) -s tb_simd_top -o $@ $(TB_DIR)/tb_simd_top.v $(RTL_DIR)/simd_top.v $(RTL_DIR)/ctrl_unit.v $(RTL_DIR)/instr_mem.v $(wildcard stubs/*.v)
+ifdef STUBS
+SIMD_TOP_SRC := $(RTL_DIR)/simd_top.v $(RTL_DIR)/ctrl_unit.v \
+                $(RTL_DIR)/instr_mem.v $(wildcard stubs/*.v)
+else
+SIMD_TOP_SRC := $(RTL)
+endif
+
+$(BUILD)/simd_top.vvp: $(TB_DIR)/tb_simd_top.v $(SIMD_TOP_SRC) | $(BUILD)
+	$(IVERILOG) $(IFLAGS) -s tb_simd_top -o $@ $(TB_DIR)/tb_simd_top.v $(SIMD_TOP_SRC)
 
 $(BUILD)/%.vvp: $(TB_DIR)/tb_%.v $(RTL) | $(BUILD)
 	$(IVERILOG) $(IFLAGS) -s tb_$* -o $@ $(TB_DIR)/tb_$*.v $(RTL)
@@ -85,6 +92,7 @@ $(ALL_TESTS): % : $(BUILD)/%.vvp | $(WAVES)
 # Only the system test reads the vectors, so regenerate them once here rather
 # than as a prerequisite of all seven.
 system: vectors
+simd_top: vectors
 
 test: vectors
 	@rc=0; \

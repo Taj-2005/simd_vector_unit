@@ -273,13 +273,14 @@ make system   # run the golden-model-verified system test (tb_system)
 
 Running individual unit testbenches:
 ```bash
-make ctrl_unit       # run control unit testbench
-make simd_top        # run SIMD integration testbench
-make lane_alu        # run ALU lane testbench
-make vec_alu         # run vector ALU testbench
-make vreg_file       # run vector register file testbench
-make dmem            # run data memory testbench
-make scalar_top      # run scalar baseline testbench
+make ctrl_unit             # run control unit testbench
+make simd_top STUBS=1      # run SIMD integration testbench with early testing stubs
+make simd_top              # run against real RTL (fails until teammate RTL lands)
+make lane_alu              # run ALU lane testbench
+make vec_alu               # run vector ALU testbench
+make vreg_file             # run vector register file testbench
+make dmem                  # run data memory testbench
+make scalar_top            # run scalar baseline testbench
 ```
 
 Inspecting waveforms in GTKWave:
