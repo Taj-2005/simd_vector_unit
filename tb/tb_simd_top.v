@@ -5,7 +5,7 @@
 //
 // Tests:
 //   1. Demo Program (sim/programs/prog_demo.hex):
-//      Quick smoke test with programs/prog_demo.hex and vectors/demo_data.hex.
+//      Quick smoke test with programs/prog_demo.hex and programs/demo_data.hex.
 //      Checks done, cycle_count == 4, and DMEM[2] lane results.
 //   2. 16-Element Benchmark (sim/programs/bench_add16.hex):
 //      Headline benchmark with vectors/dmem_init.hex.
@@ -49,7 +49,7 @@ module tb_simd_top;
     simd_top #(
         .LANES     (LANES),
         .PROG_FILE ("programs/prog_demo.hex"),
-        .DATA_FILE ("vectors/demo_data.hex")
+        .DATA_FILE ("programs/demo_data.hex")
     ) u_dut_demo (
         .clk         (clk),
         .rst         (rst_demo),

@@ -16,7 +16,7 @@
 2. **`rtl/ctrl_unit.v`**: Pure combinational 16-bit instruction decoder generating `we`, `waddr`, `raddr1`, `raddr2`, `alu_op`, `mem_rd`, `mem_wr`, and `halt`.
 3. **`tb/tb_ctrl_unit.v`**: Exhaustive directed unit testbench verifying every opcode (arithmetic, logic, compares, shift, memory, halt) and undefined NOP cases; 13/13 checks passing.
 4. **`rtl/instr_mem.v`**: Parameterised 32-word program ROM loaded via `$readmemh`, with combinational read and default `HALT` padding.
-5. **`sim/programs/prog_demo.hex` & `sim/vectors/demo_data.hex`**: Clean self-contained verification program and vector dataset for integration testing.
+5. **`sim/programs/prog_demo.hex` & `sim/programs/demo_data.hex`**: Clean self-contained verification program and vector dataset for integration testing.
 6. **`rtl/simd_top.v`**: Top-level single-cycle SIMD processor integrating fetch, decode, register file, vector ALU, data memory, write-back multiplexer, and cycle counter.
 7. **`sim/stubs/`**: Non-invasive throwaway behavioral stubs (`lane_alu.v`, `vec_alu.v`, `vreg_file.v`, `dmem.v`) to enable early integration testing without altering teammates' files.
 8. **`tb/tb_simd_top.v`**: Self-checking integration testbench checking vector execution, lane-by-lane memory write-back, and cycle counting; 7/7 checks passing.
