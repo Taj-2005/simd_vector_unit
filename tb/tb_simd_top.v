@@ -3,6 +3,9 @@
 //
 // Owner: Parthraj Singh Bhati (integration owner)
 //
+// NOTE ON COUPLING: dmem must expose `reg [127:0] mem [0:15]` because
+// tb_simd_top reads results through u_dmem.mem.
+//
 // Tests:
 //   1. Demo Program (sim/programs/prog_demo.hex):
 //      Quick smoke test with programs/prog_demo.hex and programs/demo_data.hex.

@@ -132,6 +132,8 @@ only by agreement with the module's owner.
 | `vec_alu` (4 × `lane_alu`) | `a[127:0]`, `b[127:0]`, `op[2:0]` | `y[127:0]` |
 | `vreg_file` | `clk`, `we`, `waddr[2:0]`, `wdata[127:0]`, `raddr1[2:0]`, `raddr2[2:0]` | `rdata1[127:0]`, `rdata2[127:0]` |
 | `dmem` | `clk`, `we`, `addr[3:0]`, `wdata[127:0]` | `rdata[127:0]` |
+
+> **Hierarchical coupling on `dmem`:** `dmem` must expose `reg [127:0] mem [0:15]` (or `reg [VEC_W-1:0] mem [0:WORDS-1]`) because integration testbenches (`tb/tb_simd_top.v` and `tb/tb_system.v`) inspect memory results hierarchically through `u_dmem.mem`.
 | `instr_mem` | `addr[5:0]` | `instr[15:0]` |
 | `ctrl_unit` | `instr[15:0]` | `we`, `waddr[2:0]`, `raddr1[2:0]`, `raddr2[2:0]`, `alu_op[2:0]`, `mem_rd`, `mem_wr`, `halt` |
 | `simd_top` | `clk`, `rst` | `done`, `cycle_count[31:0]` |
@@ -160,6 +162,11 @@ it fails `tb_system` with four wrong lanes and no obvious cause.
 
 `sim/vectors/dmem_init.hex` holds words 0–7 and is loaded with `$readmemh`;
 `tb/tb_system.v` checks words 8–11.
+
+> **Implementation requirement for `dmem.v` (Satya):** `dmem` must declare
+> `reg [127:0] mem [0:15]` (or `reg [VEC_W-1:0] mem [0:WORDS-1]`) because
+> `tb/tb_simd_top.v` and `tb/tb_system.v` read verification results hierarchically
+> through `u_dmem.mem`.
 
 ---
 
