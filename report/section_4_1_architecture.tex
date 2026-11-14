@@ -1,0 +1,142 @@
+%%=============================================================================
+%% section_4_1_architecture.tex - Section 4.1: Architecture, Instruction Format,
+%% and Control Unit Design.
+%%
+%% Author: Parthraj Singh Bhati (Integration Lead & Spec Owner)
+%% Enrollment: 2401010320
+%%
+%% Plain LaTeX body text suitable for inclusion in IEEE conference template.
+%%=============================================================================
+
+\subsection{Architecture, Instruction Format, and Control Unit}
+\label{sec:architecture}
+
+The SIMD processor is designed as a parameterised, single-issue vector processor operating on 128-bit vector words partitioned across four 32-bit execution lanes. The primary architectural objective for Phase~I is to achieve a deterministic, single-cycle instruction execution baseline with no pipelining or speculative execution. This non-pipelined model guarantees that every vector arithmetic, logic, compare, and memory instruction completes within exactly one clock cycle, establishing a transparent foundation against which the single-ALU scalar baseline can be quantitatively evaluated.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{top_level.pdf}
+  \caption{Top-level architectural organization of the 4-lane SIMD vector processing unit, illustrating program fetch, decode, vector register file, 4-lane ALU, data memory, and write-back multiplexer.}
+  \label{fig:top_level}
+\end{figure}
+
+\subsubsection{Top-Level Architectural Organization}
+The top-level processor (\texttt{simd\_top}) integrates five functional blocks, as illustrated in Fig.~\ref{fig:top_level}:
+\begin{enumerate}
+  \item \textbf{Instruction Memory (\texttt{instr\_mem}):} A 32-word ROM providing 16-bit instructions, addressed combinationally by the program counter (\texttt{pc}). Untouched memory words are pre-initialised with the \texttt{HALT} opcode (\texttt{16'hF000}) to ensure safe termination upon any out-of-bounds sequencing.
+  \item \textbf{Control Unit (\texttt{ctrl\_unit}):} A purely combinational decoder translating the 16-bit instruction into synchronous register-file, ALU, memory, and lifecycle control signals.
+  \item \textbf{Vector Register File (\texttt{vreg\_file}):} An 8-entry vector register file ($V_0$--$V_7$). Each register holds $\text{LANES} \times 32 = 128$~bits. The unit features two combinational read ports (\texttt{rdata1}, \texttt{rdata2}) and one synchronous write port (\texttt{wdata}), clocked on the rising edge of \texttt{clk} when write enable (\texttt{we}) is asserted.
+  \item \textbf{Vector ALU (\texttt{vec\_alu}):} A parallel compute array instantiating $\text{LANES}=4$ independent instances of \texttt{lane\_alu}. It performs lanewise 32-bit additions, subtractions, bitwise logical operations (AND, OR), signed relational comparisons, and shifts in a single combinational step.
+  \item \textbf{Data Memory (\texttt{dmem}):} A 16-word by 128-bit memory with combinational read access for vector loads (\texttt{VLD}) and synchronous write access on the rising clock edge for vector stores (\texttt{VST}).
+\end{enumerate}
+
+\subsubsection{Fixed 16-Bit Instruction Format and Encoding}
+Instructions are uniformly encoded into 16-bit words. Two distinct formats are defined: Register--Register (Compute) and Memory (\texttt{VLD}/\texttt{VST}), as shown in Fig.~\ref{fig:instr_format}.
+
+\begin{figure}[htbp]
+  \centering
+  \small
+  \begin{tabular}{|c|c|c|c|c|}
+    \multicolumn{5}{l}{\textbf{Register--Register Format (Compute):}} \\
+    \hline
+    \textbf{15:12} & \textbf{11:9} & \textbf{8:6} & \textbf{5:3} & \textbf{2:0} \\
+    \hline
+    opcode [3:0] & vd [2:0] & vs1 [2:0] & vs2 [2:0] & unused \\
+    \hline
+  \end{tabular}
+  \vspace{1.5ex}
+
+  \begin{tabular}{|c|c|c|c|}
+    \multicolumn{4}{l}{\textbf{Memory Format (VLD):}} \\
+    \hline
+    \textbf{15:12} & \textbf{11:9} & \textbf{8:4} & \textbf{3:0} \\
+    \hline
+    opcode (1000) & vd [2:0] & unused & addr [3:0] \\
+    \hline
+  \end{tabular}
+  \vspace{1.5ex}
+
+  \begin{tabular}{|c|c|c|c|c|}
+    \multicolumn{5}{l}{\textbf{Memory Format (VST):}} \\
+    \hline
+    \textbf{15:12} & \textbf{11:9} & \textbf{8:6} & \textbf{5:4} & \textbf{3:0} \\
+    \hline
+    opcode (1001) & unused & vs1 [2:0] & unused & addr [3:0] \\
+    \hline
+  \end{tabular}
+  \caption{Instruction word encoding for compute and memory operations.}
+  \label{fig:instr_format}
+\end{figure}
+
+The opcode field (\texttt{instr[15:12]}) designates the operation:
+\begin{itemize}
+  \item \texttt{0000} (\texttt{VADD}): Lanewise addition modulo $2^{32}$.
+  \item \texttt{0001} (\texttt{VSUB}): Lanewise subtraction modulo $2^{32}$.
+  \item \texttt{0010} (\texttt{VAND}): Bitwise logical AND.
+  \item \texttt{0011} (\texttt{VOR}): Bitwise logical OR.
+  \item \texttt{0100} (\texttt{VCMPEQ}): Lanewise equality test, writing \texttt{1} (true) or \texttt{0} (false) in the least significant bit, with upper 31 bits zeroed.
+  \item \texttt{0101} (\texttt{VCMPLT}): Lanewise signed less-than comparison ($a < b$), returning a 1-bit boolean flag in bit 0.
+  \item \texttt{0110} (\texttt{VSHL}): Lanewise logical shift left by shift amount $b[4:0]$ (optional; decode fully supported).
+  \item \texttt{1000} (\texttt{VLD}): Vector load, $V[vd] \leftarrow \text{DMEM}[addr]$.
+  \item \texttt{1001} (\texttt{VST}): Vector store, $\text{DMEM}[addr] \leftarrow V[vs1]$.
+  \item \texttt{1111} (\texttt{HALT}): Halts execution, asserts \texttt{done}, and freezes the program counter.
+  \item \textbf{Undefined opcodes:} Decode strictly as inert no-operations (NOPs), with all write-enable and halt lines held low.
+\end{itemize}
+
+A critical architectural decision was made in mapping the opcode values: for all arithmetic and logic instructions (\texttt{0000}--\texttt{0110}), bit 3 is \texttt{0}, and the lower three bits (\texttt{instr[14:12]}) correspond directly to the required ALU operation code (\texttt{alu\_op[2:0]}). Consequently, the control unit wires \texttt{alu\_op} directly to \texttt{opcode[2:0]} without requiring any multi-level lookup or decoding table, minimizing critical path latency in the decode stage.
+
+\subsubsection{Control Unit and Register Addressing}
+The control unit is purely combinational, driving write enables, multiplexer selectors, and register addresses directly from the current instruction. Table~\ref{tab:control_signals} outlines the complete decode truth table across all instructions.
+
+\begin{table*}[t]
+  \centering
+  \caption{Control Unit Decode Table and Datapath Control Signals}
+  \label{tab:control_signals}
+  \begin{tabular}{lccccccccc}
+    \toprule
+    \textbf{Instruction} & \textbf{Opcode [15:12]} & \textbf{we} & \textbf{waddr} & \textbf{raddr1} & \textbf{raddr2} & \textbf{alu\_op} & \textbf{mem\_rd} & \textbf{mem\_wr} & \textbf{halt} \\
+    \midrule
+    \texttt{VADD vd, vs1, vs2}   & \texttt{0000} & 1 & $vd$  & $vs1$ & $vs2$ & \texttt{000} (ADD)   & 0 & 0 & 0 \\
+    \texttt{VSUB vd, vs1, vs2}   & \texttt{0001} & 1 & $vd$  & $vs1$ & $vs2$ & \texttt{001} (SUB)   & 0 & 0 & 0 \\
+    \texttt{VAND vd, vs1, vs2}   & \texttt{0010} & 1 & $vd$  & $vs1$ & $vs2$ & \texttt{010} (AND)   & 0 & 0 & 0 \\
+    \texttt{VOR vd, vs1, vs2}    & \texttt{0011} & 1 & $vd$  & $vs1$ & $vs2$ & \texttt{011} (OR)    & 0 & 0 & 0 \\
+    \texttt{VCMPEQ vd, vs1, vs2} & \texttt{0100} & 1 & $vd$  & $vs1$ & $vs2$ & \texttt{100} (CMPEQ) & 0 & 0 & 0 \\
+    \texttt{VCMPLT vd, vs1, vs2} & \texttt{0101} & 1 & $vd$  & $vs1$ & $vs2$ & \texttt{101} (CMPLT) & 0 & 0 & 0 \\
+    \texttt{VSHL vd, vs1, vs2}   & \texttt{0110} & 1 & $vd$  & $vs1$ & $vs2$ & \texttt{110} (SHL)   & 0 & 0 & 0 \\
+    \texttt{VLD vd, [addr]}      & \texttt{1000} & 1 & $vd$  & $vs1$ & $vs2$ & \texttt{000}         & 1 & 0 & 0 \\
+    \texttt{VST vs1, [addr]}     & \texttt{1001} & 0 & $vd$  & $vs1$ & $vs2$ & \texttt{000}         & 0 & 1 & 0 \\
+    \texttt{HALT}                & \texttt{1111} & 0 & $vd$  & $vs1$ & $vs2$ & \texttt{000}         & 0 & 0 & 1 \\
+    \textit{Undefined (NOP)}     & \textit{other}& 0 & $vd$  & $vs1$ & $vs2$ & \texttt{000}         & 0 & 0 & 0 \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+To ensure datapath simplicity, register port addresses are mapped directly to fixed instruction fields without multiplexing:
+\begin{align}
+  \texttt{waddr}  &= \texttt{instr[11:9]} \quad (vd) \\
+  \texttt{raddr1} &= \texttt{instr[8:6]}  \quad (vs1) \\
+  \texttt{raddr2} &= \texttt{instr[5:3]}  \quad (vs2)
+\end{align}
+For store instructions (\texttt{VST}), the stored vector is sourced directly from register $vs1$ via read port 1 (\texttt{rdata1}) and routed to \texttt{dmem.wdata}. This convention avoids an address multiplexer on the register file read port and ensures consistent signal timing across memory operations. The 4-bit memory address is extracted directly from \texttt{instr[3:0]} for both \texttt{VLD} and \texttt{VST}.
+
+\subsubsection{Datapath Flow and Cycle-Counting Protocol}
+In each clock cycle, the execution sequence proceeds as follows:
+\begin{enumerate}
+  \item The program counter (\texttt{pc}) indexes \texttt{instr\_mem}, presenting the 16-bit instruction word combinationally.
+  \item The control unit decodes the instruction into write enables (\texttt{we}, \texttt{mem\_wr}), memory select (\texttt{mem\_rd}), ALU opcode (\texttt{alu\_op}), and register indices.
+  \item The vector register file reads registers $V[vs1]$ and $V[vs2]$ onto \texttt{rdata1} and \texttt{rdata2}.
+  \item For compute instructions, the four parallel ALU lanes compute \texttt{alu\_y}. For \texttt{VLD}, data memory combinationally returns the word at address \texttt{instr[3:0]}.
+  \item The write-back multiplexer selects the result:
+  \begin{equation}
+    \texttt{wdata} = \texttt{mem\_rd} \;?\; \texttt{dmem\_rdata} : \texttt{alu\_y}
+  \end{equation}
+  \item At the next positive clock edge, if \texttt{we} is asserted, \texttt{wdata} is latched into $V[vd]$. Concurrently, if \texttt{mem\_wr} is asserted, \texttt{rdata1} is written into $\text{DMEM}[addr]$.
+\end{enumerate}
+
+To ensure an accurate and rigorous benchmark comparison against the scalar architecture, cycle counting follows an unambiguous rule:
+\begin{itemize}
+  \item Counting begins on the first active clock cycle following reset deassertion.
+  \item \texttt{cycle\_count} increments by one for each executed instruction.
+  \item When the \texttt{HALT} instruction is fetched, the machine asserts \texttt{done} and freezes the program counter. The \texttt{HALT} cycle itself is \textbf{excluded} from \texttt{cycle\_count}.
+  \item The scalar baseline architecture (\texttt{scalar\_top}) enforces the exact same halting and exclusion convention, ensuring an honest, apples-to-apples performance comparison.
+\end{itemize}
