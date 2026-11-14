@@ -36,7 +36,7 @@ IFLAGS := -g2005 -Wall -I $(RTL_DIR) $(DEFS)
 
 RTL := $(wildcard $(RTL_DIR)/*.v) $(wildcard $(SCALAR_DIR)/*.v)
 
-UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top
+UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top simd_top
 ALL_TESTS  := $(UNIT_TESTS) system
 
 .PHONY: all test lint vectors clean help $(ALL_TESTS)
@@ -57,7 +57,12 @@ vectors:
 # Compile. One executable per testbench, every RTL file in the project linked
 # in, so a port mismatch in someone else's module fails here rather than in
 # their branch only.
+#
+# tb_simd_top uses working stubs in stubs/ until teammates merge their RTL.
 #------------------------------------------------------------------------------
+$(BUILD)/simd_top.vvp: $(TB_DIR)/tb_simd_top.v $(RTL_DIR)/simd_top.v $(RTL_DIR)/ctrl_unit.v $(RTL_DIR)/instr_mem.v $(wildcard stubs/*.v) | $(BUILD)
+	$(IVERILOG) $(IFLAGS) -s tb_simd_top -o $@ $(TB_DIR)/tb_simd_top.v $(RTL_DIR)/simd_top.v $(RTL_DIR)/ctrl_unit.v $(RTL_DIR)/instr_mem.v $(wildcard stubs/*.v)
+
 $(BUILD)/%.vvp: $(TB_DIR)/tb_%.v $(RTL) | $(BUILD)
 	$(IVERILOG) $(IFLAGS) -s tb_$* -o $@ $(TB_DIR)/tb_$*.v $(RTL)
 

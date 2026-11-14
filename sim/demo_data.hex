@@ -1,0 +1,7 @@
+// demo_data.hex - initial data for simd_top integration demo test
+// Word 0: DMEM[0] = {4, 3, 2, 1}
+00000004000000030000000200000001
+// Word 1: DMEM[1] = {64, 48, 32, 16}
+00000040000000300000002000000010
+// Word 2: DMEM[2] = 0 (destination for VST)
+00000000000000000000000000000000
