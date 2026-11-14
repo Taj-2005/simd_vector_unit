@@ -1,5 +1,6 @@
 %% Proposed Solution 4.1 - owner: Parthraj Singh Bhati (2401010320)
 %% Architecture, instruction format, control unit.
+\label{sec:architecture}
 
 The SIMD processor is designed as a parameterised, single-issue vector processor operating on 128-bit vector words partitioned across four 32-bit execution lanes. The primary architectural objective for Phase~I is to achieve a deterministic, single-cycle instruction execution baseline with no pipelining or speculative execution. This non-pipelined model guarantees that every vector arithmetic, logic, compare, and memory instruction completes within exactly one clock cycle, establishing a transparent foundation against which the single-ALU scalar baseline can be quantitatively evaluated.
 

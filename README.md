@@ -106,9 +106,14 @@ the testbenches assert:
 
 ### Fixed Instruction Encoding — 16 bits
 
-Bit breakdown:
-`instr[15:12]` opcode, `instr[11:9]` vd, `instr[8:6]` vs1, `instr[5:3]` vs2, `instr[3:0]` addr
-(`addr` is used only by `VLD`/`VST`, which ignore `vs2`).
+All instructions are uniformly encoded into 16 bits with five primary fields:
+- `opcode [15:12]`: 4-bit operation code.
+- `vd [11:9]`: 3-bit destination register (compute operations and `VLD`).
+- `vs1 [8:6]`: 3-bit first source register (compute operations; source data register for `VST`).
+- `vs2 [5:3]`: 3-bit second source register (**arithmetic/compute only**).
+- `addr [3:0]`: 4-bit data memory address (**VLD/VST only**).
+
+> **Note:** `vs2 [5:3]` and `addr [3:0]` are **never used by the same instruction**. Compute instructions read `vs2 [5:3]` and leave bits `[2:0]` unused; memory instructions (`VLD`/`VST`) extract `addr [3:0]` and ignore `vs2`.
 
 ```
 Register-Register (Compute: VADD, VSUB, VAND, VOR, VCMPEQ, VCMPLT, VSHL):
@@ -117,17 +122,16 @@ Register-Register (Compute: VADD, VSUB, VAND, VOR, VCMPEQ, VCMPLT, VSHL):
 |   opcode   |   vd    |   vs1   |   vs2   | unused|
 +------------+---------+---------+---------+-------+
 
-Memory Form (VLD, VST):
-VLD:
+Memory Form (VLD):
  15        12 11      9 8                   4 3       0
 +------------+---------+---------------------+---------+
-|   opcode   |   vd    |       unused        | address |
+|   opcode   |   vd    |       unused        |  addr   |
 +------------+---------+---------------------+---------+
 
-VST:
+Memory Form (VST):
  15        12 11      9 8       6 5         4 3       0
 +------------+---------+---------+-----------+---------+
-|   opcode   | unused  |   vs1   |  unused   | address |
+|   opcode   | unused  |vs1(src) |  unused   |  addr   |
 +------------+---------+---------+-----------+---------+
 ```
 

@@ -4,8 +4,8 @@
 // Owner: Parthraj Singh Bhati (integration owner)
 //
 // Tests:
-//   1. Demo Program (sim/prog_demo.hex):
-//      Quick smoke test with prog_demo.hex and demo_data.hex.
+//   1. Demo Program (sim/programs/prog_demo.hex):
+//      Quick smoke test with programs/prog_demo.hex and vectors/demo_data.hex.
 //      Checks done, cycle_count == 4, and DMEM[2] lane results.
 //   2. 16-Element Benchmark (sim/programs/bench_add16.hex):
 //      Headline benchmark with vectors/dmem_init.hex.
@@ -48,8 +48,8 @@ module tb_simd_top;
     // 1. Demo DUT
     simd_top #(
         .LANES     (LANES),
-        .PROG_FILE ("prog_demo.hex"),
-        .DATA_FILE ("demo_data.hex")
+        .PROG_FILE ("programs/prog_demo.hex"),
+        .DATA_FILE ("vectors/demo_data.hex")
     ) u_dut_demo (
         .clk         (clk),
         .rst         (rst_demo),
