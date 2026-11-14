@@ -23,7 +23,7 @@ here and both tops implement them.
 | A store costs | _TODO_ | _TODO_ |
 | Loop overhead (index increment, branch) | _TODO_ | _TODO_ |
 | Reset cycles | not counted | not counted |
-| The `HALT`/final cycle | _TODO_ | _TODO_ |
+| The `HALT`/final cycle | excluded (cycle_count counts clock cycles of executed instructions after reset, excluding the HALT cycle) | excluded (scalar baseline must count the exact same way) |
 | Counting starts | first cycle after `rst` falls | first cycle after `rst` falls |
 | Counting stops | the cycle `done` goes high | the cycle `done` goes high |
 

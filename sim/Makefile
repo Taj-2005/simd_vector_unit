@@ -36,10 +36,16 @@ IFLAGS := -g2005 -Wall -I $(RTL_DIR) $(DEFS)
 
 RTL := $(wildcard $(RTL_DIR)/*.v) $(wildcard $(SCALAR_DIR)/*.v)
 
+#------------------------------------------------------------------------------
+# Integration test status:
+# simd_top is NOT in `make test` or CI until the real vreg_file, dmem and
+# vec_alu are on main; it passes against stubs via `make -C sim simd_top STUBS=1`;
+# when the real modules arrive, add simd_top back into UNIT_TESTS/ALL_TESTS.
+#------------------------------------------------------------------------------
 UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top
 ALL_TESTS  := $(UNIT_TESTS) system
 
-.PHONY: all test lint vectors clean help $(ALL_TESTS)
+.PHONY: all test lint vectors clean help $(ALL_TESTS) simd_top integration
 
 all: test
 
@@ -57,7 +63,25 @@ vectors:
 # Compile. One executable per testbench, every RTL file in the project linked
 # in, so a port mismatch in someone else's module fails here rather than in
 # their branch only.
+#
+# default: real RTL. Stubs only when explicitly requested via STUBS=1.
 #------------------------------------------------------------------------------
+ifdef STUBS
+SIMD_TOP_SRC := $(RTL_DIR)/simd_top.v $(RTL_DIR)/ctrl_unit.v \
+                $(RTL_DIR)/instr_mem.v $(wildcard stubs/*.v)
+else
+SIMD_TOP_SRC := $(RTL)
+endif
+
+$(BUILD)/simd_top.vvp: $(TB_DIR)/tb_simd_top.v $(SIMD_TOP_SRC) | $(BUILD)
+ifndef STUBS
+	@if ! grep -Eq '^[[:space:]]*reg[[:space:]]+(\[[^]]+\][[:space:]]+)*mem[[:space:]]*\[' $(RTL_DIR)/dmem.v; then \
+	    echo "ERROR: rtl/dmem.v is still a placeholder (missing 'mem' array). Run with STUBS=1 until teammates' modules land on main."; \
+	    exit 1; \
+	fi
+endif
+	$(IVERILOG) $(IFLAGS) -s tb_simd_top -o $@ $(TB_DIR)/tb_simd_top.v $(SIMD_TOP_SRC)
+
 $(BUILD)/%.vvp: $(TB_DIR)/tb_%.v $(RTL) | $(BUILD)
 	$(IVERILOG) $(IFLAGS) -s tb_$* -o $@ $(TB_DIR)/tb_$*.v $(RTL)
 
@@ -77,9 +101,27 @@ $(ALL_TESTS): % : $(BUILD)/%.vvp | $(WAVES)
 	@echo "=== tb_$@ ======================================================"
 	@$(VVP) $<
 
+simd_top: $(BUILD)/simd_top.vvp | $(WAVES)
+	@echo ""
+	@echo "=== tb_simd_top ======================================================"
+	@$(VVP) $<
+
+integration: vectors
+	@if ! grep -Eq '^[[:space:]]*reg[[:space:]]+(\[[^]]+\][[:space:]]+)*mem[[:space:]]*\[' $(RTL_DIR)/dmem.v; then \
+	    echo "ERROR: rtl/dmem.v is still a placeholder (missing 'mem' array). Integration test requires real RTL from Satya on main."; \
+	    exit 1; \
+	fi
+	@mkdir -p $(BUILD) $(WAVES)
+	$(IVERILOG) $(IFLAGS) -s tb_simd_top -o $(BUILD)/simd_top_real.vvp $(TB_DIR)/tb_simd_top.v $(RTL)
+	@echo ""
+	@echo "=== tb_simd_top (real RTL) ==========================================="
+	@$(VVP) $(BUILD)/simd_top_real.vvp
+
 # Only the system test reads the vectors, so regenerate them once here rather
 # than as a prerequisite of all seven.
 system: vectors
+simd_top: vectors
+integration: vectors
 
 test: vectors
 	@rc=0; \
