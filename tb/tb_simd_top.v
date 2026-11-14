@@ -4,16 +4,17 @@
 // Owner: Parthraj Singh Bhati (integration owner)
 //
 // Tests:
-//   - Executes sim/prog_demo.hex:
-//       0: VLD  V0, [0]     (loads DMEM[0] into V0)
-//       1: VLD  V1, [1]     (loads DMEM[1] into V1)
-//       2: VADD V2, V0, V1 (adds vectors in parallel)
-//       3: VST  V2, [2]     (stores result into DMEM[2])
-//       4: HALT             (halts and freezes PC)
-//   - Asserts execution halts and done goes high
-//   - Asserts cycle_count == 4 (excluding HALT cycle)
-//   - Verifies vector stored in DMEM[2] across all 4 lanes
-//   - Dumps VCD into waves/tb_simd_top.vcd
+//   1. Demo Program (sim/prog_demo.hex):
+//      Quick smoke test with prog_demo.hex and demo_data.hex.
+//      Checks done, cycle_count == 4, and DMEM[2] lane results.
+//   2. 16-Element Benchmark (sim/programs/bench_add16.hex):
+//      Headline benchmark with vectors/dmem_init.hex.
+//      Checks done, cycle_count == 16, and DMEM[8..11] == DMEM[0..3] + DMEM[4..7].
+//   3. Logic Benchmark (sim/programs/bench_logic.hex):
+//      Logic operations (AND, OR, CMPEQ, CMPLT) with vectors/dmem_init.hex.
+//      Checks done, cycle_count == 10, and DMEM[8..11] == expected_logic.hex.
+//
+// Dumps VCD into waves/tb_simd_top.vcd.
 //=============================================================================
 `timescale 1ns / 1ps
 `include "simd_defs.vh"
@@ -24,9 +25,18 @@ module tb_simd_top;
     localparam VEC_W = LANES * 32;
 
     reg clk;
-    reg rst;
-    wire done;
-    wire [31:0] cycle_count;
+    reg rst_demo;
+    reg rst_add16;
+    reg rst_logic;
+
+    wire done_demo;
+    wire [31:0] cycles_demo;
+
+    wire done_add16;
+    wire [31:0] cycles_add16;
+
+    wire done_logic;
+    wire [31:0] cycles_logic;
 
     integer errors = 0;
     integer checks = 0;
@@ -35,23 +45,45 @@ module tb_simd_top;
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // DUT instantiation
+    // 1. Demo DUT
     simd_top #(
         .LANES     (LANES),
         .PROG_FILE ("prog_demo.hex"),
         .DATA_FILE ("demo_data.hex")
-    ) dut (
+    ) u_dut_demo (
         .clk         (clk),
-        .rst         (rst),
-        .done        (done),
-        .cycle_count (cycle_count)
+        .rst         (rst_demo),
+        .done        (done_demo),
+        .cycle_count (cycles_demo)
     );
 
-    wire [VEC_W-1:0] result_vec = dut.u_dmem.mem[2];
-    wire [31:0] r_lane0 = result_vec[31:0];
-    wire [31:0] r_lane1 = result_vec[63:32];
-    wire [31:0] r_lane2 = result_vec[95:64];
-    wire [31:0] r_lane3 = result_vec[127:96];
+    // 2. Benchmark Add16 DUT
+    simd_top #(
+        .LANES     (LANES),
+        .PROG_FILE ("programs/bench_add16.hex"),
+        .DATA_FILE ("vectors/dmem_init.hex")
+    ) u_dut_add16 (
+        .clk         (clk),
+        .rst         (rst_add16),
+        .done        (done_add16),
+        .cycle_count (cycles_add16)
+    );
+
+    // 3. Benchmark Logic DUT
+    simd_top #(
+        .LANES     (LANES),
+        .PROG_FILE ("programs/bench_logic.hex"),
+        .DATA_FILE ("vectors/dmem_init.hex")
+    ) u_dut_logic (
+        .clk         (clk),
+        .rst         (rst_logic),
+        .done        (done_logic),
+        .cycle_count (cycles_logic)
+    );
+
+    // Expected vectors loaded from golden vector files
+    reg [VEC_W-1:0] exp_add   [0:3];
+    reg [VEC_W-1:0] exp_logic [0:3];
 
     task check_condition;
         input [1023:0] name;
@@ -70,63 +102,112 @@ module tb_simd_top;
     endtask
 
     integer timeout_cnt;
+    integer i;
 
     initial begin
         $dumpfile("waves/tb_simd_top.vcd");
         $dumpvars(0, tb_simd_top);
 
-        // Reset pulse
-        rst = 1'b1;
+        $readmemh("vectors/expected_add.hex", exp_add);
+        $readmemh("vectors/expected_logic.hex", exp_logic);
+
+        // ---------------------------------------------------------------------
+        // Run Demo Program
+        // ---------------------------------------------------------------------
+        rst_demo  = 1'b1;
+        rst_add16 = 1'b1;
+        rst_logic = 1'b1;
         #25;
         @(negedge clk);
-        rst = 1'b0;
+        rst_demo = 1'b0;
 
-        // Watchdog loop: wait for done or timeout after 50 cycles
         timeout_cnt = 0;
-        while (!done && timeout_cnt < 50) begin
+        while (!done_demo && timeout_cnt < 50) begin
             @(posedge clk);
             timeout_cnt = timeout_cnt + 1;
         end
 
-        // 1. Check completion flag
-        check_condition("done asserted", done === 1'b1, {127'b0, done}, 128'd1);
-
-        // 2. Check cycle counting: 4 instructions before HALT
-        check_condition("cycle_count == 4 (excluding HALT cycle)",
-                        cycle_count === 32'd4,
-                        {96'b0, cycle_count},
-                        128'd4);
-
-        // 3. Check Lane 0 result: 1 + 16 = 17 (0x11)
-        check_condition("Lane 0 result: DMEM[2][31:0] == 0x00000011",
-                        r_lane0 === 32'h00000011,
-                        {96'b0, r_lane0},
-                        128'h00000011);
-
-        // 4. Check Lane 1 result: 2 + 32 = 34 (0x22)
-        check_condition("Lane 1 result: DMEM[2][63:32] == 0x00000022",
-                        r_lane1 === 32'h00000022,
-                        {96'b0, r_lane1},
-                        128'h00000022);
-
-        // 5. Check Lane 2 result: 3 + 48 = 51 (0x33)
-        check_condition("Lane 2 result: DMEM[2][95:64] == 0x00000033",
-                        r_lane2 === 32'h00000033,
-                        {96'b0, r_lane2},
-                        128'h00000033);
-
-        // 6. Check Lane 3 result: 4 + 64 = 68 (0x44)
-        check_condition("Lane 3 result: DMEM[2][127:96] == 0x00000044",
-                        r_lane3 === 32'h00000044,
-                        {96'b0, r_lane3},
-                        128'h00000044);
-
-        // 7. Full 128-bit vector verification
-        check_condition("Full vector DMEM[2] == 0x00000044_00000033_00000022_00000011",
-                        result_vec === 128'h00000044_00000033_00000022_00000011,
-                        result_vec,
+        check_condition("demo: done asserted", done_demo === 1'b1, {127'b0, done_demo}, 128'd1);
+        check_condition("demo: cycle_count == 4 (excluding HALT)", cycles_demo === 32'd4, {96'b0, cycles_demo}, 128'd4);
+        check_condition("demo: DMEM[2] == 0x00000044_00000033_00000022_00000011",
+                        u_dut_demo.u_dmem.mem[2] === 128'h00000044_00000033_00000022_00000011,
+                        u_dut_demo.u_dmem.mem[2],
                         128'h00000044_00000033_00000022_00000011);
 
+        // ---------------------------------------------------------------------
+        // Run bench_add16.hex
+        // ---------------------------------------------------------------------
+        @(negedge clk);
+        rst_add16 = 1'b0;
+
+        timeout_cnt = 0;
+        while (!done_add16 && timeout_cnt < 50) begin
+            @(posedge clk);
+            timeout_cnt = timeout_cnt + 1;
+        end
+
+        check_condition("bench_add16: done asserted", done_add16 === 1'b1, {127'b0, done_add16}, 128'd1);
+        check_condition("bench_add16: cycle_count == 16 (excluding HALT)",
+                        cycles_add16 === 32'd16,
+                        {96'b0, cycles_add16},
+                        128'd16);
+
+        // Verify dmem[8..11] == dmem[0..3] + dmem[4..7] and matches expected_add.hex
+        check_condition("bench_add16: dmem[8] == dmem[0] + dmem[4]",
+                        u_dut_add16.u_dmem.mem[8] === exp_add[0],
+                        u_dut_add16.u_dmem.mem[8],
+                        exp_add[0]);
+        check_condition("bench_add16: dmem[9] == dmem[1] + dmem[5]",
+                        u_dut_add16.u_dmem.mem[9] === exp_add[1],
+                        u_dut_add16.u_dmem.mem[9],
+                        exp_add[1]);
+        check_condition("bench_add16: dmem[10] == dmem[2] + dmem[6]",
+                        u_dut_add16.u_dmem.mem[10] === exp_add[2],
+                        u_dut_add16.u_dmem.mem[10],
+                        exp_add[2]);
+        check_condition("bench_add16: dmem[11] == dmem[3] + dmem[7]",
+                        u_dut_add16.u_dmem.mem[11] === exp_add[3],
+                        u_dut_add16.u_dmem.mem[11],
+                        exp_add[3]);
+
+        // ---------------------------------------------------------------------
+        // Run bench_logic.hex
+        // ---------------------------------------------------------------------
+        @(negedge clk);
+        rst_logic = 1'b0;
+
+        timeout_cnt = 0;
+        while (!done_logic && timeout_cnt < 50) begin
+            @(posedge clk);
+            timeout_cnt = timeout_cnt + 1;
+        end
+
+        check_condition("bench_logic: done asserted", done_logic === 1'b1, {127'b0, done_logic}, 128'd1);
+        check_condition("bench_logic: cycle_count == 10 (excluding HALT)",
+                        cycles_logic === 32'd10,
+                        {96'b0, cycles_logic},
+                        128'd10);
+
+        check_condition("bench_logic: dmem[8] (AND) == expected_logic[0]",
+                        u_dut_logic.u_dmem.mem[8] === exp_logic[0],
+                        u_dut_logic.u_dmem.mem[8],
+                        exp_logic[0]);
+        check_condition("bench_logic: dmem[9] (OR) == expected_logic[1]",
+                        u_dut_logic.u_dmem.mem[9] === exp_logic[1],
+                        u_dut_logic.u_dmem.mem[9],
+                        exp_logic[1]);
+        check_condition("bench_logic: dmem[10] (CMPEQ) == expected_logic[2]",
+                        u_dut_logic.u_dmem.mem[10] === exp_logic[2],
+                        u_dut_logic.u_dmem.mem[10],
+                        exp_logic[2]);
+        check_condition("bench_logic: dmem[11] (CMPLT) == expected_logic[3]",
+                        u_dut_logic.u_dmem.mem[11] === exp_logic[3],
+                        u_dut_logic.u_dmem.mem[11],
+                        exp_logic[3]);
+
+        // ---------------------------------------------------------------------
+        // Summary
+        // ---------------------------------------------------------------------
         $display("");
         if (errors != 0) begin
             $display("FAIL  tb_simd_top: %0d error(s) in %0d check(s)", errors, checks);

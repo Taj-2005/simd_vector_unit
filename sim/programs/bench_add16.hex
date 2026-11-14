@@ -9,21 +9,21 @@
 // whole point of the project.
 //
 // Word format: | 15:12 opcode | 11:9 vd | 8:6 vs1 | 5:3 vs2 | 2:0 unused |
-// Memory form: the 4-bit data address sits in bits 6:3.
+// Memory form: addr sits in bits 3:0; VST source register is vs1 in bits 8:6.
 8000   //  0: VLD  V0, [ 0]      ; A[0]
-8220   //  1: VLD  V1, [ 4]      ; B[0]
+8204   //  1: VLD  V1, [ 4]      ; B[0]
 0408   //  2: VADD V2, V0, V1    ; 4 elements in one cycle
-9440   //  3: VST  V2, [ 8]      ; C[0]
-8008   //  4: VLD  V0, [ 1]      ; A[1]
-8228   //  5: VLD  V1, [ 5]      ; B[1]
+9088   //  3: VST  V2, [ 8]      ; C[0]
+8001   //  4: VLD  V0, [ 1]      ; A[1]
+8205   //  5: VLD  V1, [ 5]      ; B[1]
 0408   //  6: VADD V2, V0, V1    ; 4 elements in one cycle
-9448   //  7: VST  V2, [ 9]      ; C[1]
-8010   //  8: VLD  V0, [ 2]      ; A[2]
-8230   //  9: VLD  V1, [ 6]      ; B[2]
+9089   //  7: VST  V2, [ 9]      ; C[1]
+8002   //  8: VLD  V0, [ 2]      ; A[2]
+8206   //  9: VLD  V1, [ 6]      ; B[2]
 0408   // 10: VADD V2, V0, V1    ; 4 elements in one cycle
-9450   // 11: VST  V2, [10]      ; C[2]
-8018   // 12: VLD  V0, [ 3]      ; A[3]
-8238   // 13: VLD  V1, [ 7]      ; B[3]
+908a   // 11: VST  V2, [10]      ; C[2]
+8003   // 12: VLD  V0, [ 3]      ; A[3]
+8207   // 13: VLD  V1, [ 7]      ; B[3]
 0408   // 14: VADD V2, V0, V1    ; 4 elements in one cycle
-9458   // 15: VST  V2, [11]      ; C[3]
+908b   // 15: VST  V2, [11]      ; C[3]
 f000   // 16: HALT
