@@ -14,7 +14,7 @@
 SIM_DIR := sim
 
 # Unit and integration test names
-TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top simd_top system
+TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top simd_top integration system
 
 .PHONY: all help test lint vectors clean $(TESTS)
 

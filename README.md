@@ -301,6 +301,15 @@ make clean           # remove sim/build/, sim/waves/, and temporary hex files
 
 *Note on directory structure*: The top-level `Makefile` automatically delegates all targets to `sim/` (`make -C sim ...`), ensuring that `$readmemh` paths (which are relative to `sim/`) and VCD dumps resolve properly.
 
+### Integration test status
+
+`simd_top` is NOT in `make test` or CI until the real `vreg_file`, `dmem` and `vec_alu` are on `main`; it passes against stubs via `make -C sim simd_top STUBS=1`; when the real modules arrive, add `simd_top` back into `UNIT_TESTS`/`ALL_TESTS`.
+
+To run integration testing against real RTL:
+```bash
+make integration            # runs tb_simd_top against real RTL (checks dmem placeholder status)
+```
+
 ---
 
 ## 6. What the simulation output means
