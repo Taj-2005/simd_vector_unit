@@ -36,10 +36,10 @@ IFLAGS := -g2005 -Wall -I $(RTL_DIR) $(DEFS)
 
 RTL := $(wildcard $(RTL_DIR)/*.v) $(wildcard $(SCALAR_DIR)/*.v)
 
-UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top simd_top
+UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top
 ALL_TESTS  := $(UNIT_TESTS) system
 
-.PHONY: all test lint vectors clean help $(ALL_TESTS)
+.PHONY: all test lint vectors clean help $(ALL_TESTS) simd_top
 
 all: test
 
@@ -87,6 +87,11 @@ lint: $(addprefix $(BUILD)/,$(addsuffix .vvp,$(ALL_TESTS)))
 $(ALL_TESTS): % : $(BUILD)/%.vvp | $(WAVES)
 	@echo ""
 	@echo "=== tb_$@ ======================================================"
+	@$(VVP) $<
+
+simd_top: $(BUILD)/simd_top.vvp | $(WAVES)
+	@echo ""
+	@echo "=== tb_simd_top ======================================================"
 	@$(VVP) $<
 
 # Only the system test reads the vectors, so regenerate them once here rather
