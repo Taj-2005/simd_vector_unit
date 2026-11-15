@@ -4,14 +4,17 @@
 // touches. Results land in words 8-11 and are checked against
 // sim/vectors/expected_logic.hex, whose lanes deliberately disagree with each
 // other: lane 0 equal, lane 1 greater, lane 2 less, lane 3 signed (-1 < 1).
+//
+// Word format: | 15:12 opcode | 11:9 vd | 8:6 vs1 | 5:3 vs2 | 2:0 unused |
+// Memory form: addr sits in bits 3:0; VST source register is vs1 in bits 8:6.
 8000   //  0: VLD    V0, [ 0]     ; A[0] - crafted compare pair
-8220   //  1: VLD    V1, [ 4]     ; B[0]
+8204   //  1: VLD    V1, [ 4]     ; B[0]
 2408   //  2: VAND   V2, V0, V1
-9440   //  3: VST    V2, [ 8]     ; expected_logic.hex line 1
+9088   //  3: VST    V2, [ 8]     ; expected_logic.hex line 1
 3608   //  4: VOR    V3, V0, V1
-9648   //  5: VST    V3, [ 9]     ; line 2
+90c9   //  5: VST    V3, [ 9]     ; line 2
 4808   //  6: VCMPEQ V4, V0, V1
-9850   //  7: VST    V4, [10]     ; line 3
+910a   //  7: VST    V4, [10]     ; line 3
 5a08   //  8: VCMPLT V5, V0, V1   ; signed
-9a58   //  9: VST    V5, [11]     ; line 4
+914b   //  9: VST    V5, [11]     ; line 4
 f000   // 10: HALT

@@ -60,17 +60,22 @@
 `define OP_HALT     4'b1111
 
 //--------------------------------------------------------------------------
-// Instruction field extraction. Register-register form:
+// Instruction field extraction (Frozen Spec).
 //
+// Register-register form:
 //   | 15:12 opcode | 11:9 vd | 8:6 vs1 | 5:3 vs2 | 2:0 unused |
 //
-// Memory form (VLD, VST) reuses the word: vd is the destination (VLD) or the
-// source (VST), and the 4-bit data-memory address sits in bits 6:3.
+// Memory form (VLD, VST):
+//   VLD: | 15:12 opcode (1000) | 11:9 vd  | 8:4 unused | 3:0 addr |
+//   VST: | 15:12 opcode (1001) | 11:9 unused | 8:6 vs1 | 5:4 unused | 3:0 addr |
+//
+// VST source register is vs1 (instr[8:6]), read via raddr1.
+// Address for VLD/VST is instr[3:0] (which ignores vs2).
 //--------------------------------------------------------------------------
-`define F_OPCODE(i) i[15:12]
-`define F_VD(i)     i[11:9]
-`define F_VS1(i)    i[8:6]
-`define F_VS2(i)    i[5:3]
-`define F_MEMADDR(i) i[6:3]
+`define F_OPCODE(i)  i[15:12]
+`define F_VD(i)      i[11:9]
+`define F_VS1(i)     i[8:6]
+`define F_VS2(i)     i[5:3]
+`define F_MEMADDR(i) i[3:0]
 
 `endif
