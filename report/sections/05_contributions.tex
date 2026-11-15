@@ -1,22 +1,24 @@
 %% Individual Contributions - Jivit collects, EVERYONE checks their own row.
-%% Half a page. One row per member: modules, testbenches, report section, video
-%% slot, commit count. Commit counts from:  git shortlog -sn --all
+%% Commit counts from:  git shortlog -sn --all --no-merges
+%% Re-run before the final compile; they change with every push.
 
-\textit{TODO: fill from the roster in the repository README, with real commit
-counts taken on Monday evening.}
+Every member owned RTL, a testbench, a report section and a video slot. The
+commit counts in Table~\ref{tab:contributions} are generated directly from the
+repository history by \texttt{report/make\_contributions.py} rather than typed
+by hand, so they cannot drift from what \texttt{git shortlog} reports.
 
-%% \begin{table}[h]
-%% \centering
-%% \caption{Individual contributions}
-%% \begin{tabular}{@{}llll@{}}
-%% \toprule
-%% Member & Modules & Testbenches & Commits \\
-%% \midrule
-%% Parthraj Singh Bhati & ctrl\_unit, simd\_top & tb\_ctrl\_unit & TODO \\
-%% Satya Yadav & vreg\_file, dmem & tb\_vreg\_file, tb\_dmem & TODO \\
-%% Himanshu Pandey & lane\_alu, vec\_alu & tb\_lane\_alu, tb\_vec\_alu & TODO \\
-%% Jivit Rana & scalar\_top, benchmarks & tb\_scalar\_top & TODO \\
-%% Shaik Tajuddin & golden model & tb\_system & TODO \\
-%% \bottomrule
-%% \end{tabular}
-%% \end{table}
+\input{sections/contributions_table}
+
+Beyond the per-member split, three pieces of shared infrastructure shaped the
+result. The frozen instruction-set specification
+(\texttt{docs/spec.md}) was agreed before any RTL was written, so eight modules
+by five authors integrated without a port mismatch. The Python golden model
+defined what each instruction must produce independently of the Verilog, which
+turned ``the hardware is correct'' into a test result rather than an opinion.
+And the random-program fuzzer compared the integrated machine against that model
+over thousands of generated programs, finding a reset-time write-enable defect
+that all eight hand-written testbenches missed.
+
+Video slots: Parthraj 0:40--1:25 and 4:20--4:50; Satya 1:25--2:00;
+Himanshu 2:00--2:40; Tajuddin 2:40--3:25; Jivit 3:25--4:20. All five members
+appear in the 0:00--0:40 introduction.

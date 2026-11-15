@@ -34,7 +34,8 @@ the Google Form.** Deadline 16 Nov 2026, 11:59 PM IST; target 9 PM.
 - [ ] Literature Review
 - [ ] Proposed Solution 4.1, 4.2, 4.3
 - [ ] Individual Contributions — one row per member, everyone has checked their
-      own row
+      own row; **re-run `python report/make_contributions.py`** immediately
+      before the final compile so the commit counts are current
 - [ ] References, IEEE style, 6–8 entries, **every one verified** and no TODO
       fields left in `refs.bib`
 - [ ] IEEEtran two-column format, 4–6 pages

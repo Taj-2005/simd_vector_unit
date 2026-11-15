@@ -1,12 +1,142 @@
-%% Proposed Solution 4.3 - owner: Jivit. About half a page.
+%% Proposed Solution 4.3 - owner: Jivit Rana (2401010202)
 %% Scalar baseline, benchmark, cycle-counting rules, prototype status.
 %%
 %% Phase I has no separate Results section, so the preliminary numbers live
-%% HERE. Report what the simulation measured, including a speed-up that is not
-%% exactly 4x, and explain the gap.
+%% here. Everything below is measured, not estimated: reproduce with
+%%   make -C sim scalar_top     (scalar cycles)
+%%   make -C sim system         (SIMD cycles, checked against the golden model)
+%%   python synth/run_synth.py  (area figures)
 
-\textit{TODO: the scalar baseline and why it reuses the same \texttt{lane\_alu};
-the 16-element benchmark; the cycle-counting rules from
-\texttt{docs/cycle\_counting.md}; the measured cycles, elements per cycle and
-speed-up; prototype status, and synthesis numbers or a plain statement that no
-tool was available.}
+The value of a SIMD datapath is a claim about throughput, and a claim about
+throughput is meaningless without something to measure it against. This section
+describes the scalar baseline the vector unit is compared with, the rules under
+which both machines are counted, and the figures those rules produce.
+
+\subsubsection{Scalar Baseline}
+The baseline (\texttt{scalar\_top.v}) is a single-issue machine that processes
+one element at a time through four phases --- load $A[i]$, load $B[i]$, add,
+store $C[i]$ --- one cycle per phase. Two design decisions make the comparison
+honest rather than flattering:
+
+\begin{itemize}
+  \item \textbf{The same ALU.} \texttt{scalar\_top} instantiates the identical
+        \texttt{lane\_alu} module used by each of the four vector lanes. The two
+        machines therefore differ in \emph{how many} ALUs operate per cycle and
+        in nothing else. A separately written scalar adder would have made the
+        speed-up a comparison of two different circuits.
+  \item \textbf{A 32-bit memory, not 128-bit.} The baseline's data memory is one
+        element wide, so a scalar load moves one element per cycle where a
+        vector load moves \texttt{LANES} of them. Giving the baseline a wide
+        memory would have concealed precisely the effect being measured.
+\end{itemize}
+
+Both machines execute on byte-identical data: \texttt{sim/vectors/scalar\_init.hex}
+is unpacked from the same golden-model vectors that fill the SIMD machine's
+\texttt{dmem}.
+
+\subsubsection{Cycle-Counting Rules}
+The rules were fixed \emph{before} the numbers were collected, because rules
+chosen after a result is known are rules fitted to that result. They are
+recorded in \texttt{docs/cycle\_counting.md} and implemented identically in both
+tops.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Cycle-counting rules, applied identically to both machines}
+  \label{tab:cycle_rules}
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    \textbf{Operation} & \textbf{SIMD} & \textbf{Scalar} \\
+    \midrule
+    Load        & 1 cycle, 4 elements & 1 cycle, 1 element \\
+    ALU         & 1 cycle, 4 lanes    & 1 cycle, 1 element \\
+    Store       & 1 cycle, 4 elements & 1 cycle, 1 element \\
+    Loop overhead & none              & none \\
+    \texttt{HALT}/final cycle & excluded & excluded \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Loop overhead is zero on both sides, and that symmetry is deliberate. The vector
+ISA has no branch instruction, so \texttt{bench\_add16} is fully unrolled
+straight-line code whose program counter advances alongside each instruction at
+no cost. Charging the scalar machine a separate cycle for its index increment
+would have billed it for bookkeeping the vector machine does not pay for either,
+inflating the speed-up. \texttt{scalar\_top} therefore folds the increment into
+its store cycle.
+
+\subsubsection{Measured Results}
+Both machines were run on the same 16-element array addition,
+$C[i] = A[i] + B[i]$.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Scalar versus SIMD on a 16-element array addition}
+  \label{tab:cycle_counts}
+  \begin{tabular}{@{}lrrrr@{}}
+    \toprule
+    \textbf{Machine} & \textbf{Lanes} & \textbf{Cycles} &
+    \textbf{Elem/cycle} & \textbf{Speed-up} \\
+    \midrule
+    \texttt{scalar\_top} & 1 & 64 & 0.25 & 1.00$\times$ \\
+    \texttt{simd\_top}   & 4 & \textbf{16} & \textbf{1.00} & \textbf{4.00$\times$} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The measured speed-up is exactly $4.00\times$, equal to the lane count. Landing
+precisely on the theoretical bound invites suspicion, so it is worth stating why
+it happens: the benchmark is pure data-parallel work and nothing else. Every
+scalar operation has an exact vector counterpart, so the instruction mix is the
+same on both sides; loop overhead is zero on both; and the element count is an
+exact multiple of \texttt{LANES}, so no lane is ever idle. Change any one of
+those and the figure falls --- with 17 elements the vector machine would need a
+fifth iteration to process a single element, giving $3.2\times$.
+
+$4.00\times$ should therefore be read as the ceiling being reached under ideal
+conditions, not as a general claim that SIMD is four times faster. A workload
+with partial vectors, data-dependent control flow, or non-contiguous memory
+access would score lower.
+
+\subsubsection{Area Cost}
+Throughput is only half of the trade. Synthesising with Yosys
+(\texttt{synth\_xilinx}, flattened, no I/O pads) gives the area the speed-up is
+bought with.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Area of one lane against four (Xilinx primitives)}
+  \label{tab:area}
+  \begin{tabular}{@{}lrrr@{}}
+    \toprule
+    \textbf{Module} & \textbf{LUTs} & \textbf{CARRY4} & \textbf{Ratio} \\
+    \midrule
+    \texttt{lane\_alu} & 251 & 19 & 1.00$\times$ \\
+    \texttt{vec\_alu} (\texttt{LANES} = 4) & 1012 & 76 &
+      \textbf{4.03$\times$ / 4.00$\times$} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Four lanes cost $4.03\times$ the LUTs and exactly $4\times$ the carry chains of
+one. Area scales with the lane count and nothing else appears, which is the
+measured evidence for the claim in Section~\ref{sec:datapath} that the
+\texttt{generate} loop costs nothing over manual instantiation. Taken together,
+a $4.00\times$ throughput gain for a $4.03\times$ area cost is close to a linear
+trade on this benchmark.
+
+No timing analysis was performed: this flow targets no device and places and
+routes nothing, so no $F_{max}$ is reported. Quoting a frequency the toolchain
+never produced would be the least defensible number in this report. Timing
+closure on a real device is Phase II work.
+
+\subsubsection{Prototype Status}
+The design is complete and verified. All eight testbenches pass with no
+failures and no skipped checks; the integrated machine is checked against an
+independent Python model of the instruction set
+(\texttt{tb\_system}, 18/18 result and cycle-count checks); and a random-program
+fuzzer runs generated programs on both \texttt{simd\_top} and that model,
+comparing final memory and cycle counts. The fuzzer found a defect the
+hand-written testbenches could not: the register file and data memory were being
+written while \texttt{rst} was asserted, which stayed hidden because every
+hand-written benchmark happens to begin with an idempotent \texttt{VLD}.
