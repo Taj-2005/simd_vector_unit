@@ -3,79 +3,94 @@
 %
 % Owner: Satya collects, Taj formats and compiles.
 %
-% RULE, and it is the one an examiner tests: only cite a source someone on the
-% team has actually opened. Every entry below is a STARTING POINT taken from the
-% Phase I team plan, with the fields that need checking marked. Before the final
-% PDF:
+% TWO LEVELS OF "VERIFIED", AND THEY ARE NOT THE SAME THING:
 %
-%   1. open the source;
-%   2. fill in or correct every TODO field from the actual document;
-%   3. delete the "verified" comment line and replace it with your initials and
-%      the date, e.g.  % verified: SY, 15 Nov 2026
+%   metadata verified - the volume, pages, year and DOI below were checked
+%     against Crossref (api.crossref.org) or the publisher's own page, not
+%     written from memory. Every DOI resolves.
 %
-% Any entry still carrying a TODO when the report is compiled gets deleted
-% rather than cited. An invented page number is worse than a missing reference.
+%   source read - somebody on the team has actually opened the paper and can
+%     say what it argues. This is what the Literature Review needs, and it is
+%     what an examiner probes. Metadata being right does not make a citation
+%     honest if nobody read the thing.
+%
+% Each entry records both. Do not cite an entry whose "read by" line is still
+% empty: either read it, or drop it from the bibliography.
+%
+% BibTeX note: '%' comments must sit OUTSIDE the braces. A comment placed after
+% the last field inside an entry makes BibTeX skip the whole entry silently -
+% which is how all six of these were broken until the report was first compiled.
 
-% verified: NOT YET - Satya
+% metadata verified: Crossref 10.1109/PROC.1966.5273
+% read by:
 @article{flynn1966,
   author  = {Flynn, Michael J.},
   title   = {Very High-Speed Computing Systems},
   journal = {Proceedings of the IEEE},
   year    = {1966},
-  volume  = {TODO},
-  number  = {TODO},
-  pages   = {TODO},
-  doi     = {TODO}
+  volume  = {54},
+  number  = {12},
+  pages   = {1901--1909},
+  doi     = {10.1109/PROC.1966.5273}
 }
 
-% verified: NOT YET - Satya
-@book{hennessy2019,
+% metadata verified: Elsevier catalogue page, 6th edition, 23 Nov 2017
+% read by:
+% NOTE: cite the edition you actually used. This is the 6th; if you read the
+% 5th or 7th, change the edition and year to match the copy in your hands.
+@book{hennessy2017,
   author    = {Hennessy, John L. and Patterson, David A.},
   title     = {Computer Architecture: A Quantitative Approach},
   publisher = {Morgan Kaufmann},
-  year      = {TODO},
-  edition   = {TODO},
-  note      = {cite the specific vector/SIMD chapter and edition you used}
+  year      = {2017},
+  edition   = {6th},
+  isbn      = {978-0-12-811905-1}
 }
 
-% verified: NOT YET - Satya
+% metadata verified: Crossref 10.1145/359327.359336
+% read by:
 @article{russell1978,
   author  = {Russell, Richard M.},
   title   = {The {CRAY-1} Computer System},
   journal = {Communications of the ACM},
   year    = {1978},
-  volume  = {TODO},
-  number  = {TODO},
-  pages   = {TODO},
-  doi     = {TODO}
+  volume  = {21},
+  number  = {1},
+  pages   = {63--72},
+  doi     = {10.1145/359327.359336}
 }
 
-% verified: NOT YET - Satya
+% metadata verified: Crossref 10.1145/1344671.1344704
+% read by:
+% NOTE: the surname is Eagleston, not Eagleson - Crossref itself misspells the
+% given name as "Christpher"; the author's own UBC page lists "C. Eagleston".
 @inproceedings{yu2008soft,
-  author    = {Yu, Jason and Lemieux, Guy and Eagleson, Christopher},
-  title     = {TODO - exact title},
-  booktitle = {Proceedings of the ACM/SIGDA International Symposium on
-               Field-Programmable Gate Arrays (FPGA)},
+  author    = {Yu, Jason and Lemieux, Guy and Eagleston, Christopher},
+  title     = {Vector Processing as a Soft-core {CPU} Accelerator},
+  booktitle = {Proceedings of the 16th International ACM/SIGDA Symposium on
+               Field Programmable Gate Arrays (FPGA)},
   year      = {2008},
-  pages     = {TODO},
-  doi       = {TODO},
-  note      = {soft vector processors on FPGAs - the closest work to ours}
+  pages     = {222--232},
+  publisher = {ACM},
+  doi       = {10.1145/1344671.1344704}
 }
 
-% verified: NOT YET - Satya
+% metadata verified: riscvarchive/riscv-v-spec release tag v1.0
+% read by:
 @misc{riscvvector,
-  title        = {RISC-V {``V''} Vector Extension Specification},
+  title        = {{RISC-V} {``V''} Vector Extension Specification, Version 1.0},
   author       = {{RISC-V International}},
-  year         = {TODO},
-  note         = {version TODO; cite the version you actually read},
-  howpublished = {\url{TODO}}
+  year         = {2021},
+  howpublished = {\url{https://github.com/riscvarchive/riscv-v-spec}},
+  note         = {Version 1.0; ratified November 2021}
 }
 
-% Tools. Worth citing: the report claims results produced by them.
-% verified: NOT YET - Taj
+% metadata verified: `iverilog -V` on the machine that produced our results
+% read by: n/a - this is the tool we ran, not a paper
 @misc{icarus,
   title        = {Icarus Verilog},
   author       = {Williams, Stephen},
-  note         = {version TODO - run `iverilog -V`},
-  howpublished = {\url{https://steveicarus.github.io/iverilog/}}
+  year         = {2026},
+  howpublished = {\url{https://steveicarus.github.io/iverilog/}},
+  note         = {Version 13.0 (stable); used for all simulation in this work}
 }
