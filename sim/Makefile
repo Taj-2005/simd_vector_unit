@@ -42,10 +42,10 @@ RTL := $(wildcard $(RTL_DIR)/*.v) $(wildcard $(SCALAR_DIR)/*.v)
 # vec_alu are on main; it passes against stubs via `make -C sim simd_top STUBS=1`;
 # when the real modules arrive, add simd_top back into UNIT_TESTS/ALL_TESTS.
 #------------------------------------------------------------------------------
-UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top
+UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top simd_top
 ALL_TESTS  := $(UNIT_TESTS) system
 
-.PHONY: all test lint vectors clean help $(ALL_TESTS) simd_top integration
+.PHONY: all test lint vectors clean help $(ALL_TESTS) integration
 
 all: test
 
@@ -99,11 +99,6 @@ lint: $(addprefix $(BUILD)/,$(addsuffix .vvp,$(ALL_TESTS)))
 $(ALL_TESTS): % : $(BUILD)/%.vvp | $(WAVES)
 	@echo ""
 	@echo "=== tb_$@ ======================================================"
-	@$(VVP) $<
-
-simd_top: $(BUILD)/simd_top.vvp | $(WAVES)
-	@echo ""
-	@echo "=== tb_simd_top ======================================================"
 	@$(VVP) $<
 
 integration: vectors
