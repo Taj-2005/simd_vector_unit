@@ -4,9 +4,9 @@
 | :--- | :--- |
 | **Enrollment** | 2401010436 |
 | **GitHub** | [@Taj-2005](https://github.com/Taj-2005) |
-| **Role** | Repository owner · scaffold and build system, golden model, system testbench, diagrams, synthesis, IEEE formatting |
+| **Role** | Repository owner · scaffold and build system, golden model, system testbench, fuzzer, diagrams, synthesis, report assembly |
 | **Branch prefix** | `feat/taj-*` |
-| **Report sections** | Abstract, References, IEEE formatting and the final PDF |
+| **Report sections** | Abstract, Literature Review, References, IEEE formatting and the final PDF |
 | **Video slot** | 2:40–3:25 |
 
 ## The job

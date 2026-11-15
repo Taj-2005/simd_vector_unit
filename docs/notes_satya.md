@@ -4,9 +4,9 @@
 | :--- | :--- |
 | **Enrollment** | 2401010427 |
 | **GitHub** | [@ACE-pwd](https://github.com/ACE-pwd) |
-| **Role** | Storage · vector register file, data memory, literature review |
+| **Role** | Storage · vector register file, data memory |
 | **Branch prefix** | `feat/satya-*` |
-| **Report section** | Literature Review |
+| **Report section** | — (the Literature Review moved to Taj) |
 | **Video slot** | 1:25–2:00 |
 
 ## What I built
@@ -15,10 +15,8 @@
 2. **`rtl/dmem.v`** — _TODO: 16 × 128-bit, clocked write, combinational read._
 3. **`tb/tb_vreg_file.v`** and **`tb/tb_dmem.v`** — _TODO_
 4. **Register-file waveform** — `docs/waveforms/` — _TODO_
-5. **Literature Review** — [`docs/literature_review.md`](literature_review.md)
-   → `report/sections/01_literature_review.tex`
-6. **References** — 6 to 8 verified entries, collected into
-   [`docs/refs.bib`](refs.bib) for Taj to format.
+_The Literature Review and the reference list moved to Taj, so the References
+section would not be left unowned._
 
 ## Why I built it that way
 
