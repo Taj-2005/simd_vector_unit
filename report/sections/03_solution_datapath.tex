@@ -57,7 +57,7 @@ endgenerate
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{vec_alu.png}
-  \caption{Simulation waveform of \texttt{tb\_vec\_alu} in GTKWave. Four lanes compute distinct values concurrently, demonstrating strict lane independence during arithmetic operations (0--30\,ns) and alternating boolean results ($[0, 1, 0, 1]$) under vector comparisons (40--50\,ns).}
+  \caption{Timing diagram of \texttt{tb\_vec\_alu}, generated directly from the simulator's VCD output (\texttt{sim/waves/tb\_vec\_alu.vcd}) by \texttt{docs/waveforms/make\_waveform.py}. Four lanes compute distinct values concurrently, demonstrating strict lane independence during arithmetic operations (0--30\,ns) and alternating boolean results ($[1, 0, 1, 0]$ across lanes 0--3) under vector comparisons (40--50\,ns). At 70\,ns the undefined op code drives every lane to zero rather than \texttt{x}.}
   \label{fig:vec_alu_wave}
 \end{figure}
 
