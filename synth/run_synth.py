@@ -66,7 +66,27 @@ def run_one(top: str, sources: list[str]):
     )
     proc = subprocess.run(["yosys", "-p", script], cwd=SIM, capture_output=True, text=True)
     log = proc.stdout + proc.stderr
-    (RESULTS / f"synthesis_{top}.txt").write_text(log)
+
+    # Commit the final `stat` block, not the whole Yosys transcript. The full
+    # log is ~1600 lines per module, embeds this machine's install paths, and
+    # carries elapsed times / memory peaks / a logfile hash that change on every
+    # run - so committing it would mean a dirty tree after any re-run, for no
+    # extra evidence. The stat block is the result and is reproducible.
+    marker = f"=== {top} ==="
+    if marker in log:
+        report = log[log.rindex(marker) :]
+        report = report[: report.index("End of script")] if "End of script" in report else report
+    else:
+        report = "\n".join(
+            line
+            for line in log.splitlines()
+            if "error" in line.lower() or "warning" in line.lower()
+        )
+    header = (
+        f"# {top} - yosys synth_xilinx -flatten -noiopad\n"
+        f"# regenerate with: python synth/run_synth.py\n\n"
+    )
+    (RESULTS / f"synthesis_{top}.txt").write_text(header + report.rstrip() + "\n")
     if proc.returncode != 0:
         return {
             "luts": "n/a",
