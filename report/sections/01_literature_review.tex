@@ -1,8 +1,74 @@
-%% Literature Review - owner: Satya. 1 to 1.5 pages.
-%% Draft in docs/literature_review.md, then move the prose here.
-%% Cite only sources you have opened. Keys are in ../docs/refs.bib.
+%% Literature Review - owner: Taj (taken over from Satya). 1 to 1.5 pages.
+%% Every citation below refers to a source whose claims were checked against
+%% the source itself, not paraphrased from memory. See docs/refs.bib for what
+%% was verified and how.
 
-\textit{TODO: Flynn's taxonomy; scalar vs SIMD; vector processors (CRAY-1);
-short-vector SIMD (SSE, AVX, NEON); the RISC-V vector extension; soft vector
-processors on FPGAs. Close by connecting the survey to our own design
-decisions.}
+This section traces the line of work our design sits on: the classification that
+names it, the machines that first exploited it, its arrival in commodity
+processors, and its present form on reconfigurable hardware.
+
+\subsection{Flynn's Taxonomy}
+Flynn~\cite{flynn1966} classified computing systems by the multiplicity of their
+instruction and data streams, giving the four categories --- SISD, SIMD, MISD
+and MIMD --- that the field still uses. The scheme separates two things easily conflated: issuing many
+instructions at once, versus issuing one instruction that acts on many data
+items. Our unit is squarely \emph{single instruction, multiple data} --- one
+\texttt{VADD} is fetched and decoded once while four lanes act on four element
+pairs. The scalar baseline in Section~\ref{sec:evaluation} is its SISD
+counterpart, so comparing them measures what moving one category buys.
+
+\subsection{Vector Processors}
+The CRAY-1~\cite{russell1978} established the vector register machine. It
+provided eight vector registers of sixty-four 64-bit elements each, a vector
+length register, and a vector mask register for operating on individual
+elements. Critically, it obtained its throughput by \emph{pipelining} functional
+units deeply rather than by replicating them, and by \emph{chaining} --- feeding
+the result of one vector instruction directly into the next without a round trip
+through memory.
+
+We made the opposite choice: our unit replicates the ALU four times and
+completes an operation in one cycle, where the CRAY-1 streamed elements through
+one deep pipeline. Replication costs area linearly and keeps the critical path
+short; pipelining costs latency and control complexity but scales to far longer
+vectors. At four lanes and a 16-element benchmark, replication is the cheaper
+choice, and Section~\ref{sec:evaluation} quantifies it in LUTs. Hennessy and
+Patterson~\cite{hennessy2017} treat the two as the axes along which vector
+hardware scales.
+
+\subsection{Short-Vector SIMD in Commodity Processors}
+The idea reached general-purpose CPUs in a narrower form. Extensions such as
+SSE, AVX and ARM NEON add fixed-width registers treated as packed collections of
+smaller elements. The width is fixed by the encoding, so code compiled for one
+width cannot exploit a wider machine, and a new extension is needed each time
+the register file grows. Our format shares this property: \texttt{VADD} names
+128-bit registers, and widening the datapath changes what the encoding means.
+
+The RISC-V vector extension~\cite{riscvvector} was designed to avoid exactly
+that. Its programming model is vector-length agnostic: software queries the
+hardware for the vector length it can support and loops accordingly, so the same
+binary runs on implementations with different amounts of hardware. This is the
+clearest contrast with what we built. Our \texttt{LANES} parameter is a
+\emph{synthesis-time} decision that changes the instruction set's meaning,
+whereas the RISC-V approach makes vector length a \emph{run-time} property the
+program adapts to. The parameterisation in Section~\ref{sec:datapath} buys
+configurability for the hardware designer, not for the compiled program.
+
+\subsection{Soft Vector Processors on FPGAs}
+The work closest to ours is Yu, Lemieux and Eagleston~\cite{yu2008soft}, who
+proposed adding a vector core to an FPGA soft processor as a general-purpose
+accelerator, instead of designing a custom accelerator for each application.
+Their argument is development cost: a programmer with no hardware experience can
+trade area for performance by scaling the lane count. Across three benchmark
+kernels they report speedups of roughly 3--29$\times$ for 6--30$\times$ the
+area of a Nios~II/s processor.
+
+Their lane-scaling knob is the direct ancestor of our \texttt{LANES} parameter,
+and their area-versus-performance framing is the one we adopt in
+Section~\ref{sec:evaluation}, where we report a measured $4.00\times$ speed-up
+against a $4.03\times$ area cost. The ratio is far more favourable than theirs,
+but the comparison is not like-for-like and should not be read as an
+improvement: our benchmark is a single, perfectly data-parallel kernel on an
+element count that is an exact multiple of the lane width, whereas their figures
+span real kernels with imperfect vectorisation. The honest conclusion is that
+our result confirms the expected linear trade under ideal conditions, which is
+the regime in which their lower bound sits.

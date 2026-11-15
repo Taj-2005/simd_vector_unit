@@ -61,9 +61,9 @@ start with an idempotent `VLD`, which hid it from all eight testbenches.
 
 **What remains is the write-up, not the hardware:**
 
-- **Satya** → literature review, and 6–8 verified references in `docs/refs.bib`
+- **Satya** → video slot 1:25–2:00
 - **Jivit** → `results/cycle_counts.csv`, report 4.3, contributions table
-- **Taj** → abstract (written last), final PDF
+- **Taj** → literature review, abstract (written last), final PDF
 - **Himanshu** → record and edit the video
 
 ---
@@ -231,7 +231,7 @@ simd_vector_unit/
 │   ├── spec.md                # THE frozen spec
 │   ├── phase1_work_plan.md    # editable source of the work plan PDF
 │   ├── cycle_counting.md      # how both machines are counted        [Jivit]
-│   ├── literature_review.md   # drafting space                       [Satya]
+│   ├── literature_review.md   # drafting space                       [Taj]
 │   ├── video_script.md        # slot-by-slot, 4:50
 │   ├── submission_checklist.md
 │   ├── refs.bib               # single source of truth for citations
@@ -432,9 +432,9 @@ Form.
 
 | Member | Code / RTL | Testing and tools | Report section | Video | Branch prefix |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **Taj** *(repo owner)* | Python golden model, `tb_system` | repository and build system, block diagrams, synthesis run, GTKWave screenshots; reviews and merges every PR | Abstract, References, IEEE formatting, final PDF | 2:40–3:25 | `feat/taj-*` |
+| **Taj** *(repo owner)* | Python golden model, `tb_system`, ISA fuzzer | repository and build system, block diagrams, synthesis run, waveform figures; reviews and merges every PR | Abstract, **Literature Review**, References, IEEE formatting, final PDF | 2:40–3:25 | `feat/taj-*` |
 | **Parthraj** *(integration lead)* | `ctrl_unit`, `simd_top`, program ROM | `tb_ctrl_unit`; spec freeze; `simd_top` integration | 4.1 architecture and control | 0:40–1:25, 4:20–4:50 | `feat/parth-*` |
-| **Satya** | `vreg_file`, 128-bit `dmem` | `tb_vreg_file`, `tb_dmem`; register-file waveform | Literature Review | 1:25–2:00 | `feat/satya-*` |
+| **Satya** | `vreg_file`, 128-bit `dmem` | `tb_vreg_file`, `tb_dmem` | — | 1:25–2:00 | `feat/satya-*` |
 | **Himanshu** | `lane_alu`, `vec_alu` | `tb_lane_alu`, `tb_vec_alu`; ALU waveform; **edits and uploads the final video** | 4.2 lane and datapath design | 2:00–2:40 | `feat/himanshu-*` |
 | **Jivit** | `scalar_top`, benchmark programs | cycle counters; scalar vs SIMD comparison table | 4.3 baseline and evaluation; Individual Contributions table | 3:25–4:20 | `feat/jivit-*` |
 

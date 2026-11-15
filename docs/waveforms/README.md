@@ -5,7 +5,7 @@ Committed evidence for the report and the video. The raw `.vcd` files in
 
 | File | From | Shows | Owner |
 | :--- | :--- | :--- | :--- |
-| `vreg_file.png` | `tb_vreg_file` | writing all 8 registers, both read ports active, read-and-write in the same cycle | Satya |
+| `vreg_file.png` | `tb_vreg_file` | writing all 8 registers, both read ports active, read-and-write in the same cycle | Taj |
 | `vec_alu.png` | `tb_vec_alu` | four lanes computing four different results in one cycle | Himanshu |
 | `system_pass.png` | `tb_system` | `simd_top` executing bench_add16 cycle by cycle, generated from the VCD | Taj |
 
@@ -22,6 +22,9 @@ python docs/waveforms/make_waveform.py           # -> vec_alu.svg
 
 make -C sim system                               # -> sim/waves/tb_system.vcd
 python docs/waveforms/make_system_waveform.py    # -> system_pass.svg
+
+make -C sim vreg_file                            # -> sim/waves/tb_vreg_file.vcd
+python docs/waveforms/make_vreg_waveform.py      # -> vreg_file.svg
 
 make -C docs/waveforms                           # svg -> PNG + PDF
 ```

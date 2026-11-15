@@ -24,7 +24,7 @@ PDF: **Taj**. Each section has its own owner and its own file.
 | :--- | :--- | :--- |
 | `main.tex` | document, authors, structure | Taj |
 | `sections/00_abstract.tex` | Abstract, 150–200 words, written **last** | Taj |
-| `sections/01_literature_review.tex` | Literature Review, 1–1.5 pages | Satya |
+| `sections/01_literature_review.tex` | Literature Review, 1–1.5 pages | Taj |
 | `sections/02_solution_architecture.tex` | 4.1 architecture and control, 1 page | Parth |
 | `sections/03_solution_datapath.tex` | 4.2 lane and datapath, 1 page | Himanshu |
 | `sections/04_solution_evaluation.tex` | 4.3 baseline and evaluation, 0.5 page | Jivit |

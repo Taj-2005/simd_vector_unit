@@ -1,7 +1,8 @@
 % Single source of truth for citations. report/main.tex cites this file
 % directly, so an entry added here is immediately citable from any section.
 %
-% Owner: Satya collects, Taj formats and compiles.
+% Owner: Taj - collects, verifies and formats. (Collection was originally
+% Satya's; it moved to Taj so the References section was not left unowned.)
 %
 % TWO LEVELS OF "VERIFIED", AND THEY ARE NOT THE SAME THING:
 %
@@ -22,7 +23,8 @@
 % which is how all six of these were broken until the report was first compiled.
 
 % metadata verified: Crossref 10.1109/PROC.1966.5273
-% read by:
+% read by: NOT YET. The review cites only the four-way taxonomy, which is
+%   textbook-level and not in dispute - but read it before the viva.
 @article{flynn1966,
   author  = {Flynn, Michael J.},
   title   = {Very High-Speed Computing Systems},
@@ -35,7 +37,8 @@
 }
 
 % metadata verified: Elsevier catalogue page, 6th edition, 23 Nov 2017
-% read by:
+% read by: NOT YET. Cited only as general treatment of pipelining vs
+%   replication. Read the vector/SIMD chapter before the viva.
 % NOTE: cite the edition you actually used. This is the 6th; if you read the
 % 5th or 7th, change the edition and year to match the copy in your hands.
 @book{hennessy2017,
@@ -48,7 +51,10 @@
 }
 
 % metadata verified: Crossref 10.1145/359327.359336
-% read by:
+% read by: NOT YET. The review's claims (8 vector registers of 64 elements,
+%   vector length register, chaining, pipelining rather than replication)
+%   come from secondary sources. Confirm against the paper before the viva.
+%   Open access: https://cray-history.net/wp-content/uploads/2021/07/cray1_PaperbyRussell.pdf
 @article{russell1978,
   author  = {Russell, Richard M.},
   title   = {The {CRAY-1} Computer System},
@@ -61,7 +67,10 @@
 }
 
 % metadata verified: Crossref 10.1145/1344671.1344704
-% read by:
+% read by: Taj - abstract and introduction read from the author's PDF.
+%   The cited figures (3-29x speedup for 6-30x the area of a Nios II/s
+%   across three benchmark kernels) are quoted from the paper's own abstract.
+%   https://people.ece.ubc.ca/jasony/research/fpga2008-yu.pdf
 % NOTE: the surname is Eagleston, not Eagleson - Crossref itself misspells the
 % given name as "Christpher"; the author's own UBC page lists "C. Eagleston".
 @inproceedings{yu2008soft,
@@ -76,7 +85,8 @@
 }
 
 % metadata verified: riscvarchive/riscv-v-spec release tag v1.0
-% read by:
+% read by: NOT YET. Cited only for the vector-length-agnostic model, which
+%   is the extension's headline property. Skim the spec before the viva.
 @misc{riscvvector,
   title        = {{RISC-V} {``V''} Vector Extension Specification, Version 1.0},
   author       = {{RISC-V International}},
@@ -93,4 +103,14 @@
   year         = {2026},
   howpublished = {\url{https://steveicarus.github.io/iverilog/}},
   note         = {Version 13.0 (stable); used for all simulation in this work}
+}
+
+% metadata verified: `yosys -V` on the machine that produced our area figures
+% read by: n/a - this is a tool we ran, not a paper
+@misc{yosys,
+  title        = {Yosys Open SYnthesis Suite},
+  author       = {Wolf, Claire},
+  year         = {2026},
+  howpublished = {\url{https://yosyshq.net/yosys/}},
+  note         = {Version 0.71; used for all synthesis figures in this work}
 }

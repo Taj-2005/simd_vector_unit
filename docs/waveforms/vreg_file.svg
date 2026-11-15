@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1114 444" width="1114" height="444">
+<style>
+  .bg{fill:#fff}
+  .lbl{font:600 11px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#111}
+  .v{font:10.5px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#111;text-anchor:middle}
+  .t{font:9px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#667;text-anchor:middle}
+  .c{fill:#f4f6f8;stroke:#111;stroke-width:1}
+  .w{fill:#e2f0f0;stroke:#0a4d4f;stroke-width:1}
+  .note{font:italic 10.5px ui-sans-serif,system-ui,sans-serif;fill:#555}
+  .hd{font:600 13px ui-sans-serif,system-ui,sans-serif;fill:#111}
+  .grid{stroke:#e3e8ec;stroke-width:1}
+</style>
+<rect class="bg" x="0" y="0" width="1114" height="444"/>
+<text class="hd" x="14" y="26">tb_vreg_file — two read ports, one write port</text>
+<text class="note" x="14" y="46">Reconstructed from sim/waves/tb_vreg_file.vcd by docs/waveforms/make_vreg_waveform.py — not a screenshot.</text>
+<text class="note" x="14" y="62">128-bit values truncated to their low 40 bits for width. Radix: hex.</text>
+<text class="t" x="209" y="78">96 ns</text>
+<line class="grid" x1="150" y1="86" x2="150" y2="352"/>
+<text class="t" x="327" y="78">97 ns</text>
+<line class="grid" x1="268" y1="86" x2="268" y2="352"/>
+<text class="t" x="445" y="78">98 ns</text>
+<line class="grid" x1="386" y1="86" x2="386" y2="352"/>
+<text class="t" x="563" y="78">100 ns</text>
+<line class="grid" x1="504" y1="86" x2="504" y2="352"/>
+<text class="t" x="681" y="78">110 ns</text>
+<line class="grid" x1="622" y1="86" x2="622" y2="352"/>
+<text class="t" x="799" y="78">120 ns</text>
+<line class="grid" x1="740" y1="86" x2="740" y2="352"/>
+<text class="t" x="917" y="78">125 ns</text>
+<line class="grid" x1="858" y1="86" x2="858" y2="352"/>
+<text class="t" x="1035" y="78">126 ns</text>
+<line class="grid" x1="976" y1="86" x2="976" y2="352"/>
+<line class="grid" x1="1094" y1="86" x2="1094" y2="352"/>
+<text class="lbl" x="14" y="111">we</text>
+<rect class="w" x="154" y="92" width="110" height="24" rx="3"/>
+<text class="v" x="209" y="109">0</text>
+<rect class="w" x="272" y="92" width="110" height="24" rx="3"/>
+<text class="v" x="327" y="109">0</text>
+<rect class="w" x="390" y="92" width="110" height="24" rx="3"/>
+<text class="v" x="445" y="109">0</text>
+<rect class="w" x="508" y="92" width="110" height="24" rx="3"/>
+<text class="v" x="563" y="109">0</text>
+<rect class="w" x="626" y="92" width="110" height="24" rx="3"/>
+<text class="v" x="681" y="109">0</text>
+<rect class="w" x="744" y="92" width="110" height="24" rx="3"/>
+<text class="v" x="799" y="109">1</text>
+<rect class="w" x="862" y="92" width="110" height="24" rx="3"/>
+<text class="v" x="917" y="109">1</text>
+<rect class="w" x="980" y="92" width="110" height="24" rx="3"/>
+<text class="v" x="1035" y="109">0</text>
+<text class="lbl" x="14" y="149">waddr</text>
+<rect class="w" x="154" y="130" width="110" height="24" rx="3"/>
+<text class="v" x="209" y="147">7</text>
+<rect class="w" x="272" y="130" width="110" height="24" rx="3"/>
+<text class="v" x="327" y="147">7</text>
+<rect class="w" x="390" y="130" width="110" height="24" rx="3"/>
+<text class="v" x="445" y="147">7</text>
+<rect class="w" x="508" y="130" width="110" height="24" rx="3"/>
+<text class="v" x="563" y="147">3</text>
+<rect class="w" x="626" y="130" width="110" height="24" rx="3"/>
+<text class="v" x="681" y="147">3</text>
+<rect class="w" x="744" y="130" width="110" height="24" rx="3"/>
+<text class="v" x="799" y="147">4</text>
+<rect class="w" x="862" y="130" width="110" height="24" rx="3"/>
+<text class="v" x="917" y="147">4</text>
+<rect class="w" x="980" y="130" width="110" height="24" rx="3"/>
+<text class="v" x="1035" y="147">4</text>
+<text class="lbl" x="14" y="187">wdata</text>
+<rect class="w" x="154" y="168" width="110" height="24" rx="3"/>
+<text class="v" x="209" y="185">07d0000007</text>
+<rect class="w" x="272" y="168" width="110" height="24" rx="3"/>
+<text class="v" x="327" y="185">07d0000007</text>
+<rect class="w" x="390" y="168" width="110" height="24" rx="3"/>
+<text class="v" x="445" y="185">07d0000007</text>
+<rect class="w" x="508" y="168" width="110" height="24" rx="3"/>
+<text class="v" x="563" y="185">ffffffffff</text>
+<rect class="w" x="626" y="168" width="110" height="24" rx="3"/>
+<text class="v" x="681" y="185">ffffffffff</text>
+<rect class="w" x="744" y="168" width="110" height="24" rx="3"/>
+<text class="v" x="799" y="185">ffffffffff</text>
+<rect class="w" x="862" y="168" width="110" height="24" rx="3"/>
+<text class="v" x="917" y="185">ffffffffff</text>
+<rect class="w" x="980" y="168" width="110" height="24" rx="3"/>
+<text class="v" x="1035" y="185">ffffffffff</text>
+<text class="lbl" x="14" y="225">raddr1</text>
+<rect class="c" x="154" y="206" width="110" height="24" rx="3"/>
+<text class="v" x="209" y="223">6</text>
+<rect class="c" x="272" y="206" width="110" height="24" rx="3"/>
+<text class="v" x="327" y="223">7</text>
+<rect class="c" x="390" y="206" width="110" height="24" rx="3"/>
+<text class="v" x="445" y="223">2</text>
+<rect class="c" x="508" y="206" width="110" height="24" rx="3"/>
+<text class="v" x="563" y="223">2</text>
+<rect class="c" x="626" y="206" width="110" height="24" rx="3"/>
+<text class="v" x="681" y="223">3</text>
+<rect class="c" x="744" y="206" width="110" height="24" rx="3"/>
+<text class="v" x="799" y="223">4</text>
+<rect class="c" x="862" y="206" width="110" height="24" rx="3"/>
+<text class="v" x="917" y="223">4</text>
+<rect class="c" x="980" y="206" width="110" height="24" rx="3"/>
+<text class="v" x="1035" y="223">3</text>
+<text class="lbl" x="14" y="263">rdata1</text>
+<rect class="c" x="154" y="244" width="110" height="24" rx="3"/>
+<text class="v" x="209" y="261">06d0000006</text>
+<rect class="c" x="272" y="244" width="110" height="24" rx="3"/>
+<text class="v" x="327" y="261">07d0000007</text>
+<rect class="c" x="390" y="244" width="110" height="24" rx="3"/>
+<text class="v" x="445" y="261">02d0000002</text>
+<rect class="c" x="508" y="244" width="110" height="24" rx="3"/>
+<text class="v" x="563" y="261">02d0000002</text>
+<rect class="c" x="626" y="244" width="110" height="24" rx="3"/>
+<text class="v" x="681" y="261">03d0000003</text>
+<rect class="c" x="744" y="244" width="110" height="24" rx="3"/>
+<text class="v" x="799" y="261">04d0000004</text>
+<rect class="c" x="862" y="244" width="110" height="24" rx="3"/>
+<text class="v" x="917" y="261">ffffffffff</text>
+<rect class="c" x="980" y="244" width="110" height="24" rx="3"/>
+<text class="v" x="1035" y="261">03d0000003</text>
+<text class="lbl" x="14" y="301">raddr2</text>
+<rect class="c" x="154" y="282" width="110" height="24" rx="3"/>
+<text class="v" x="209" y="299">0</text>
+<rect class="c" x="272" y="282" width="110" height="24" rx="3"/>
+<text class="v" x="327" y="299">0</text>
+<rect class="c" x="390" y="282" width="110" height="24" rx="3"/>
+<text class="v" x="445" y="299">5</text>
+<rect class="c" x="508" y="282" width="110" height="24" rx="3"/>
+<text class="v" x="563" y="299">5</text>
+<rect class="c" x="626" y="282" width="110" height="24" rx="3"/>
+<text class="v" x="681" y="299">5</text>
+<rect class="c" x="744" y="282" width="110" height="24" rx="3"/>
+<text class="v" x="799" y="299">5</text>
+<rect class="c" x="862" y="282" width="110" height="24" rx="3"/>
+<text class="v" x="917" y="299">5</text>
+<rect class="c" x="980" y="282" width="110" height="24" rx="3"/>
+<text class="v" x="1035" y="299">5</text>
+<text class="lbl" x="14" y="339">rdata2</text>
+<rect class="c" x="154" y="320" width="110" height="24" rx="3"/>
+<text class="v" x="209" y="337">00d0000000</text>
+<rect class="c" x="272" y="320" width="110" height="24" rx="3"/>
+<text class="v" x="327" y="337">00d0000000</text>
+<rect class="c" x="390" y="320" width="110" height="24" rx="3"/>
+<text class="v" x="445" y="337">05d0000005</text>
+<rect class="c" x="508" y="320" width="110" height="24" rx="3"/>
+<text class="v" x="563" y="337">05d0000005</text>
+<rect class="c" x="626" y="320" width="110" height="24" rx="3"/>
+<text class="v" x="681" y="337">05d0000005</text>
+<rect class="c" x="744" y="320" width="110" height="24" rx="3"/>
+<text class="v" x="799" y="337">05d0000005</text>
+<rect class="c" x="862" y="320" width="110" height="24" rx="3"/>
+<text class="v" x="917" y="337">05d0000005</text>
+<rect class="c" x="980" y="320" width="110" height="24" rx="3"/>
+<text class="v" x="1035" y="337">05d0000005</text>
+<text class="note" x="14" y="378">Both read ports serve different registers in the same cycle — that is what "2 read ports" has to mean.</text>
+<text class="note" x="14" y="395">On a read and write to the same address, the combinational read returns the OLD value; the write commits on the clock edge.</text>
+</svg>

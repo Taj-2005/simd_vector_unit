@@ -18,7 +18,7 @@ components depend on everyone.
 | :--- | :--- | :--- | :--- | :--- |
 | **Taj** *(repo owner)* | Python golden model, self-checking system testbench | repository and build system, block diagrams, synthesis run, GTKWave screenshots | Abstract, References, IEEE formatting, final PDF | 2:40–3:25 |
 | **Parthraj** | `ctrl_unit`, `simd_top`, program ROM | `tb_ctrl_unit`; spec freeze; `simd_top` integration | Proposed Solution 4.1: architecture and control | 0:40–1:25 and 4:20–4:50 |
-| **Satya** | `vreg_file`, 128-bit `dmem` | `tb_vreg_file`, `tb_dmem`; register-file waveform | Literature Review | 1:25–2:00 |
+| **Satya** | `vreg_file`, 128-bit `dmem` | `tb_vreg_file`, `tb_dmem` | — | 1:25–2:00 |
 | **Himanshu** | `lane_alu`, `vec_alu` (4 lanes) | `tb_lane_alu`, `tb_vec_alu`; ALU waveform; edits and uploads the final video | Proposed Solution 4.2: lane and datapath design | 2:00–2:40 |
 | **Jivit** | `scalar_top` baseline, benchmark programs (hex) | cycle counters; scalar vs SIMD comparison table | Proposed Solution 4.3: baseline and evaluation method; Individual Contributions table | 3:25–4:20 |
 
@@ -72,7 +72,7 @@ wait — on three of them.
 **Done when:** `simd_top` runs the 16-element array add and `cycle_count` is
 correct.
 
-### Satya — register file, memory, literature review
+### Satya — register file, memory
 
 - **Sat morning** — `vreg_file.v`: 8 × 128-bit, two combinational read ports, one
   clocked write port.
@@ -131,7 +131,7 @@ working link.
   the report** rather than skipping it silently.
 - **Sun** — save GTKWave screenshots of the system test.
 - **Mon morning** — write the Abstract last (150–200 words, once results exist)
-  and format the References from Satya's list.
+  and format the References.
 - **Mon** — compile the final PDF, check IEEE format and every required section,
   commit it to `report/`.
 - **Mon** — present the 2:40–3:25 slot showing the PASS output.
@@ -176,7 +176,7 @@ frozen design.
 | Sat by 9 PM | Golden model and 3 block diagrams pushed; benchmark hex files agreed | Taj, Jivit, Parth |
 | Sun by 2 PM | `simd_top.v` integrated and running one program | Parth |
 | Sun by 6 PM | System testbench prints PASS; cycle table filled; synthesis attempted | Taj, Jivit |
-| Sun by 10 PM | First draft of every report section in Overleaf; reference list sent | All, Satya |
+| Sun by 10 PM | First draft of every report section in Overleaf; reference list verified | All, Taj |
 | Mon by 12 noon | Abstract written; contributions table done; all report text final | Taj, Jivit |
 | Mon 2 PM | **Code freeze** — only bug fixes after this | Parth |
 | Mon 2–5 PM | Record clips and edit the video; check length is under 5:00 | All, Himanshu |
@@ -200,12 +200,12 @@ not run, say it is planned.
 | Section | Content | Owner | Length |
 | :--- | :--- | :--- | :--- |
 | Abstract | Problem, what we built, what we measured | Taj (writes last) | 150–200 words |
-| Literature Review | Flynn's taxonomy, vector and SIMD machines, FPGA soft vector processors | Satya | 1–1.5 pages |
+| Literature Review | Flynn's taxonomy, vector and SIMD machines, FPGA soft vector processors | Taj | 1–1.5 pages |
 | Proposed Solution 4.1 | Architecture, instruction format, control unit | Parth | 1 page |
 | Proposed Solution 4.2 | Lane ALU, vector datapath, register file and memory | Himanshu | 1 page |
 | Proposed Solution 4.3 | Scalar baseline, benchmark, cycle-counting rules, prototype status | Jivit | 0.5 page |
 | Individual Contributions | One row per member: modules, testbenches, report sections, video slot, commit count | Jivit collects, everyone checks their own row | 0.5 page |
-| References | IEEE style, only sources someone has opened | Taj formats, Satya collects | 6–8 entries |
+| References | IEEE style, only sources someone has opened | Taj | 6–8 entries |
 
 ---
 

@@ -46,12 +46,6 @@ Scalar Baseline}
 \IEEEauthorblockA{\textit{2401010427} \\ satya.yadav2024@nst.rishihood.edu.in}
 }
 
-%% References is a required Phase I section, but no section \cite{}s anything
-%% yet, and BibTeX emits an empty bibliography in that case - which is a hard
-%% LaTeX error, not a warning. \nocite{*} lists every entry in refs.bib so the
-%% document builds while the Literature Review is being written.
-%% REMOVE THIS once the sections cite their sources directly.
-\nocite{*}
 
 \maketitle
 
@@ -73,9 +67,11 @@ FPGA, computer architecture
 \input{sections/02_solution_architecture}
 
 \subsection{Lane ALU, Vector Datapath, Register File and Memory}
+\label{sec:datapath}
 \input{sections/03_solution_datapath}
 
 \subsection{Scalar Baseline, Benchmark and Evaluation Method}
+\label{sec:evaluation}
 \input{sections/04_solution_evaluation}
 
 \section{Individual Contributions}

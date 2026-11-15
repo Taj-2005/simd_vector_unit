@@ -66,8 +66,8 @@ inflating the speed-up. \texttt{scalar\_top} therefore folds the increment into
 its store cycle.
 
 \subsubsection{Measured Results}
-Both machines were run on the same 16-element array addition,
-$C[i] = A[i] + B[i]$.
+Both machines were run under Icarus Verilog~\cite{icarus} on the same
+16-element array addition, $C[i] = A[i] + B[i]$.
 
 \begin{table}[htbp]
   \centering
@@ -99,7 +99,7 @@ with partial vectors, data-dependent control flow, or non-contiguous memory
 access would score lower.
 
 \subsubsection{Area Cost}
-Throughput is only half of the trade. Synthesising with Yosys
+Throughput is only half of the trade. Synthesising with Yosys~\cite{yosys}
 (\texttt{synth\_xilinx}, flattened, no I/O pads) gives the area the speed-up is
 bought with.
 
