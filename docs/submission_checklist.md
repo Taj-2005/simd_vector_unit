@@ -21,7 +21,7 @@ the Google Form.** Deadline 16 Nov 2026, 11:59 PM IST; target 9 PM.
 
 - [ ] `make -C sim lint` — every module and testbench elaborates
 - [ ] `make -C sim test` — no testbench prints FAIL
-- [ ] `make -C sim system DEFS=-DDUT_READY` prints **PASS**
+- [ ] `make -C sim system` prints **PASS** (golden-model system test)
 - [ ] `pytest tests/` passes
 - [ ] `make -C sim vectors` leaves no diff — the committed vectors match the model
 - [ ] `results/cycle_counts.csv` holds real numbers from both simulations

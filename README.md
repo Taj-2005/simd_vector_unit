@@ -325,10 +325,9 @@ that count is zero, so a scaffold can never be mistaken for working
 verification. tb_system still SKIPs until its result check is enabled; every other
 testbench must PASS.
 
-`tb_system` additionally reports SKIP, not FAIL, while `simd_top` is a stub:
-its `done` output never asserts, and everyone already knows why. Pass
-`DEFS=-DDUT_READY` once the integration is wired up and that becomes a hard
-failure.
+`tb_system` runs by default and checks every result word against the Python
+golden model. It needs no flags: the gate it used to sit behind was removed
+once the real modules landed.
 
 ---
 
@@ -341,7 +340,7 @@ opinion, and a mismatch points at exactly one of two places.
 
 ```bash
 make -C sim vectors                     # golden/gen_vectors.py -> sim/vectors/
-make -C sim system DEFS=-DDUT_READY     # compare simd_top against it
+make -C sim system                      # compare simd_top against it
 ```
 
 The generator is seeded (`--seed 11`), so every member's regeneration is

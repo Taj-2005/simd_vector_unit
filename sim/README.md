@@ -18,9 +18,9 @@ make -C sim wave-system # open the system-test waveform in GTKWave
 make -C sim clean
 ```
 
-`make -C sim system DEFS=-DDUT_READY` turns on the system test's result
-comparison. Leave it off until `simd_top` is wired up — the testbench then
-reports SKIP instead of a FAIL everyone already knows about.
+`make -C sim system` runs the golden-model system test. It takes no flags: the
+`DUT_READY` gate was removed once the real modules were integrated, so a
+regression there now fails the default build instead of hiding behind a SKIP.
 
 ## What the output means
 
