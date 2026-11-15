@@ -1,0 +1,244 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1928 378" width="1928" height="378">
+<style>
+  .bg{fill:#fff}
+  .lbl{font:600 11px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#111}
+  .v{font:11px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#111;text-anchor:middle}
+  .m{font:600 10px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#0a4d4f;text-anchor:middle}
+  .t{font:9px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#667;text-anchor:middle}
+  .c{fill:#f4f6f8;stroke:#111;stroke-width:1}
+  .mc{fill:#e2f0f0;stroke:#0a4d4f;stroke-width:1}
+  .hi{fill:#0a4d4f}
+  .lo{fill:#ccd4da}
+  .note{font:italic 10.5px ui-sans-serif,system-ui,sans-serif;fill:#555}
+  .hd{font:600 13px ui-sans-serif,system-ui,sans-serif;fill:#111}
+  .grid{stroke:#e3e8ec;stroke-width:1}
+</style>
+<rect class="bg" x="0" y="0" width="1928" height="378"/>
+<text class="hd" x="14" y="26">tb_system — simd_top executing bench_add16 (16-element array add)</text>
+<text class="note" x="14" y="46">Reconstructed from sim/waves/tb_system.vcd by docs/waveforms/make_system_waveform.py — not a screenshot.</text>
+<text class="note" x="14" y="62">One instruction per cycle. The HALT cycle is not counted, which is the rule in docs/cycle_counting.md.</text>
+<text class="t" x="228" y="84">15 ns</text>
+<line class="grid" x1="180" y1="92" x2="180" y2="292"/>
+<text class="t" x="324" y="84">25 ns</text>
+<line class="grid" x1="276" y1="92" x2="276" y2="292"/>
+<text class="t" x="420" y="84">35 ns</text>
+<line class="grid" x1="372" y1="92" x2="372" y2="292"/>
+<text class="t" x="516" y="84">45 ns</text>
+<line class="grid" x1="468" y1="92" x2="468" y2="292"/>
+<text class="t" x="612" y="84">55 ns</text>
+<line class="grid" x1="564" y1="92" x2="564" y2="292"/>
+<text class="t" x="708" y="84">65 ns</text>
+<line class="grid" x1="660" y1="92" x2="660" y2="292"/>
+<text class="t" x="804" y="84">75 ns</text>
+<line class="grid" x1="756" y1="92" x2="756" y2="292"/>
+<text class="t" x="900" y="84">85 ns</text>
+<line class="grid" x1="852" y1="92" x2="852" y2="292"/>
+<text class="t" x="996" y="84">95 ns</text>
+<line class="grid" x1="948" y1="92" x2="948" y2="292"/>
+<text class="t" x="1092" y="84">105 ns</text>
+<line class="grid" x1="1044" y1="92" x2="1044" y2="292"/>
+<text class="t" x="1188" y="84">115 ns</text>
+<line class="grid" x1="1140" y1="92" x2="1140" y2="292"/>
+<text class="t" x="1284" y="84">125 ns</text>
+<line class="grid" x1="1236" y1="92" x2="1236" y2="292"/>
+<text class="t" x="1380" y="84">135 ns</text>
+<line class="grid" x1="1332" y1="92" x2="1332" y2="292"/>
+<text class="t" x="1476" y="84">145 ns</text>
+<line class="grid" x1="1428" y1="92" x2="1428" y2="292"/>
+<text class="t" x="1572" y="84">155 ns</text>
+<line class="grid" x1="1524" y1="92" x2="1524" y2="292"/>
+<text class="t" x="1668" y="84">165 ns</text>
+<line class="grid" x1="1620" y1="92" x2="1620" y2="292"/>
+<text class="t" x="1764" y="84">175 ns</text>
+<line class="grid" x1="1716" y1="92" x2="1716" y2="292"/>
+<text class="t" x="1860" y="84">185 ns</text>
+<line class="grid" x1="1812" y1="92" x2="1812" y2="292"/>
+<line class="grid" x1="1908" y1="92" x2="1908" y2="292"/>
+<text class="lbl" x="14" y="118">pc</text>
+<rect class="c" x="184" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="228" y="116">0</text>
+<rect class="c" x="280" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="324" y="116">1</text>
+<rect class="c" x="376" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="420" y="116">2</text>
+<rect class="c" x="472" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="516" y="116">3</text>
+<rect class="c" x="568" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="612" y="116">4</text>
+<rect class="c" x="664" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="708" y="116">5</text>
+<rect class="c" x="760" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="804" y="116">6</text>
+<rect class="c" x="856" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="900" y="116">7</text>
+<rect class="c" x="952" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="996" y="116">8</text>
+<rect class="c" x="1048" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="1092" y="116">9</text>
+<rect class="c" x="1144" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="1188" y="116">10</text>
+<rect class="c" x="1240" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="1284" y="116">11</text>
+<rect class="c" x="1336" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="1380" y="116">12</text>
+<rect class="c" x="1432" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="1476" y="116">13</text>
+<rect class="c" x="1528" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="1572" y="116">14</text>
+<rect class="c" x="1624" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="1668" y="116">15</text>
+<rect class="c" x="1720" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="1764" y="116">16</text>
+<rect class="c" x="1816" y="99" width="88" height="24" rx="3"/>
+<text class="v" x="1860" y="116">16</text>
+<text class="lbl" x="14" y="158">instr[15:0]</text>
+<rect class="c" x="184" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="228" y="156">8000</text>
+<rect class="c" x="280" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="324" y="156">8204</text>
+<rect class="c" x="376" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="420" y="156">0408</text>
+<rect class="c" x="472" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="516" y="156">9088</text>
+<rect class="c" x="568" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="612" y="156">8001</text>
+<rect class="c" x="664" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="708" y="156">8205</text>
+<rect class="c" x="760" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="804" y="156">0408</text>
+<rect class="c" x="856" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="900" y="156">9089</text>
+<rect class="c" x="952" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="996" y="156">8002</text>
+<rect class="c" x="1048" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="1092" y="156">8206</text>
+<rect class="c" x="1144" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="1188" y="156">0408</text>
+<rect class="c" x="1240" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="1284" y="156">908a</text>
+<rect class="c" x="1336" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="1380" y="156">8003</text>
+<rect class="c" x="1432" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="1476" y="156">8207</text>
+<rect class="c" x="1528" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="1572" y="156">0408</text>
+<rect class="c" x="1624" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="1668" y="156">908b</text>
+<rect class="c" x="1720" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="1764" y="156">f000</text>
+<rect class="c" x="1816" y="139" width="88" height="24" rx="3"/>
+<text class="v" x="1860" y="156">f000</text>
+<text class="lbl" x="14" y="198">decoded</text>
+<rect class="mc" x="184" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="228" y="196">VLD V0,[0]</text>
+<rect class="mc" x="280" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="324" y="196">VLD V1,[4]</text>
+<rect class="mc" x="376" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="420" y="196">VADD V2,V0,V1</text>
+<rect class="mc" x="472" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="516" y="196">VST V2,[8]</text>
+<rect class="mc" x="568" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="612" y="196">VLD V0,[1]</text>
+<rect class="mc" x="664" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="708" y="196">VLD V1,[5]</text>
+<rect class="mc" x="760" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="804" y="196">VADD V2,V0,V1</text>
+<rect class="mc" x="856" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="900" y="196">VST V2,[9]</text>
+<rect class="mc" x="952" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="996" y="196">VLD V0,[2]</text>
+<rect class="mc" x="1048" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="1092" y="196">VLD V1,[6]</text>
+<rect class="mc" x="1144" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="1188" y="196">VADD V2,V0,V1</text>
+<rect class="mc" x="1240" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="1284" y="196">VST V2,[10]</text>
+<rect class="mc" x="1336" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="1380" y="196">VLD V0,[3]</text>
+<rect class="mc" x="1432" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="1476" y="196">VLD V1,[7]</text>
+<rect class="mc" x="1528" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="1572" y="196">VADD V2,V0,V1</text>
+<rect class="mc" x="1624" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="1668" y="196">VST V2,[11]</text>
+<rect class="mc" x="1720" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="1764" y="196">HALT</text>
+<rect class="mc" x="1816" y="179" width="88" height="24" rx="3"/>
+<text class="m" x="1860" y="196">HALT</text>
+<text class="lbl" x="14" y="238">rf_we / mem_wr</text>
+<rect class="c" x="184" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="228" y="236">10</text>
+<rect class="c" x="280" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="324" y="236">10</text>
+<rect class="c" x="376" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="420" y="236">10</text>
+<rect class="c" x="472" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="516" y="236">01</text>
+<rect class="c" x="568" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="612" y="236">10</text>
+<rect class="c" x="664" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="708" y="236">10</text>
+<rect class="c" x="760" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="804" y="236">10</text>
+<rect class="c" x="856" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="900" y="236">01</text>
+<rect class="c" x="952" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="996" y="236">10</text>
+<rect class="c" x="1048" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="1092" y="236">10</text>
+<rect class="c" x="1144" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="1188" y="236">10</text>
+<rect class="c" x="1240" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="1284" y="236">01</text>
+<rect class="c" x="1336" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="1380" y="236">10</text>
+<rect class="c" x="1432" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="1476" y="236">10</text>
+<rect class="c" x="1528" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="1572" y="236">10</text>
+<rect class="c" x="1624" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="1668" y="236">01</text>
+<rect class="c" x="1720" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="1764" y="236">00</text>
+<rect class="c" x="1816" y="219" width="88" height="24" rx="3"/>
+<text class="v" x="1860" y="236">00</text>
+<text class="lbl" x="14" y="278">cycle_count</text>
+<rect class="c" x="184" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="228" y="276">0</text>
+<rect class="c" x="280" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="324" y="276">1</text>
+<rect class="c" x="376" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="420" y="276">2</text>
+<rect class="c" x="472" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="516" y="276">3</text>
+<rect class="c" x="568" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="612" y="276">4</text>
+<rect class="c" x="664" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="708" y="276">5</text>
+<rect class="c" x="760" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="804" y="276">6</text>
+<rect class="c" x="856" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="900" y="276">7</text>
+<rect class="c" x="952" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="996" y="276">8</text>
+<rect class="c" x="1048" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="1092" y="276">9</text>
+<rect class="c" x="1144" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="1188" y="276">10</text>
+<rect class="c" x="1240" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="1284" y="276">11</text>
+<rect class="c" x="1336" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="1380" y="276">12</text>
+<rect class="c" x="1432" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="1476" y="276">13</text>
+<rect class="c" x="1528" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="1572" y="276">14</text>
+<rect class="c" x="1624" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="1668" y="276">15</text>
+<rect class="c" x="1720" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="1764" y="276">16</text>
+<rect class="c" x="1816" y="259" width="88" height="24" rx="3"/>
+<text class="v" x="1860" y="276">16</text>
+<text class="note" x="14" y="318">Each VLD/VADD/VST takes exactly one cycle; the four VST writes land the results in dmem[8..11].</text>
+<text class="note" x="14" y="334">Final cycle_count = 16 for 17 instructions, HALT excluded. All four result words match the Python golden model.</text>
+</svg>

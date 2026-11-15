@@ -1,0 +1,24 @@
+# scalar_top - yosys synth_xilinx -flatten -noiopad
+# regenerate with: python synth/run_synth.py
+
+=== scalar_top ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      152 wires
+      281 wire bits
+        8 public wires
+      105 public wire bits
+        4 ports
+       35 port bits
+      110 cells
+        1   $scopeinfo
+        1   BUFG
+       16   CARRY4
+       70   FDRE
+        2   INV
+        5   LUT2
+        2   LUT3
+        5   LUT4
+        4   LUT5
+        4   LUT6

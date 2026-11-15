@@ -1,0 +1,21 @@
+# lane_alu - yosys synth_xilinx -flatten -noiopad
+# regenerate with: python synth/run_synth.py
+
+=== lane_alu ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      260 wires
+      764 wire bits
+        4 public wires
+       99 public wire bits
+        4 ports
+       99 port bits
+      271 cells
+       19   CARRY4
+        1   INV
+       74   LUT2
+       50   LUT3
+       20   LUT4
+       37   LUT5
+       70   LUT6

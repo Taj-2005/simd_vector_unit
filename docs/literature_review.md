@@ -31,13 +31,22 @@ The plan names these. **Open each one yourself before citing it** — a referenc
 nobody has read is the thing an examiner finds fastest, and the report commits
 to "only sources someone has opened".
 
-| Source | Why it is relevant | Verified? |
-| :--- | :--- | :--- |
-| Flynn (1966), *Proceedings of the IEEE* — very high-speed computing systems | the taxonomy itself | ☐ |
-| Hennessy & Patterson, *Computer Architecture: A Quantitative Approach* — vector and SIMD chapters | textbook treatment, and the source for the speed-up framing | ☐ |
-| RISC-V Vector Extension specification | scalable vectors, the modern contrast | ☐ |
-| Russell (1978), *Communications of the ACM* — the CRAY-1 | the canonical vector machine | ☐ |
-| Yu, Lemieux & Eagleson, FPGA 2008 — soft vector processors | directly comparable work | ☐ |
+All five are now in [`refs.bib`](refs.bib) with **verified bibliographic
+metadata** — volume, pages, year and DOI checked against Crossref or the
+publisher, not written from memory. What is still missing is the other half:
+somebody has to **read** them.
+
+| Source | Key | Metadata | Read by |
+| :--- | :--- | :--- | :--- |
+| Flynn (1966), *Proc. IEEE* 54(12):1901–1909 | `flynn1966` | ✓ | ☐ |
+| Hennessy & Patterson, *Computer Architecture*, 6th ed. (2017) | `hennessy2017` | ✓ | ☐ |
+| Russell (1978), *CACM* 21(1):63–72 — the CRAY-1 | `russell1978` | ✓ | ☐ |
+| Yu, Lemieux & Eagleston, FPGA 2008, pp. 222–232 | `yu2008soft` | ✓ | ☐ |
+| RISC-V "V" Vector Extension v1.0 (2021) | `riscvvector` | ✓ | ☐ |
+
+Two corrections worth knowing: the surname is **Eagleston**, not Eagleson, and
+the textbook entry is the **6th edition** — change it if you read a different
+one.
 
 Target: 6 to 8 references. Two or three more beyond this list is fine if they
 are read; padding the list is not.

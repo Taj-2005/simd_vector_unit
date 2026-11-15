@@ -1,0 +1,17 @@
+# simd_top - yosys synth_xilinx -flatten -noiopad
+# regenerate with: python synth/run_synth.py
+
+=== simd_top ===
+
+        +----------Local Count, excluding submodules.
+        | 
+        6 wires
+       37 wire bits
+        6 public wires
+       37 public wire bits
+        4 ports
+       35 port bits
+       11 cells
+        9   $scopeinfo
+        1   BUFG
+        1   FDRE

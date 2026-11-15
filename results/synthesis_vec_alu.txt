@@ -1,0 +1,22 @@
+# vec_alu - yosys synth_xilinx -flatten -noiopad
+# regenerate with: python synth/run_synth.py
+
+=== vec_alu ===
+
+        +----------Local Count, excluding submodules.
+        | 
+     1021 wires
+     3327 wire bits
+       13 public wires
+      646 public wire bits
+        4 ports
+      387 port bits
+     1096 cells
+        4   $scopeinfo
+       76   CARRY4
+        4   INV
+      289   LUT2
+      158   LUT3
+      110   LUT4
+      195   LUT5
+      260   LUT6

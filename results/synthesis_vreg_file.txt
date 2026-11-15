@@ -1,0 +1,16 @@
+# vreg_file - yosys synth_xilinx -flatten -noiopad
+# regenerate with: python synth/run_synth.py
+
+=== vreg_file ===
+
+        +----------Local Count, excluding submodules.
+        | 
+      105 wires
+      492 wire bits
+        8 public wires
+      395 public wire bits
+        8 ports
+      395 port bits
+       45 cells
+        1   BUFG
+       44   RAM32M

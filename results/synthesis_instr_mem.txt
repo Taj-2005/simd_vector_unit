@@ -1,0 +1,13 @@
+# instr_mem - yosys synth_xilinx -flatten -noiopad
+# regenerate with: python synth/run_synth.py
+
+=== instr_mem ===
+
+        +----------Local Count, excluding submodules.
+        | 
+        2 wires
+       21 wire bits
+        2 public wires
+       21 public wire bits
+        2 ports
+       21 port bits

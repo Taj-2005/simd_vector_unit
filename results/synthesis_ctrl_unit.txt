@@ -1,0 +1,15 @@
+# ctrl_unit - yosys synth_xilinx -flatten -noiopad
+# regenerate with: python synth/run_synth.py
+
+=== ctrl_unit ===
+
+        +----------Local Count, excluding submodules.
+        | 
+       10 wires
+       36 wire bits
+       10 public wires
+       36 public wire bits
+        9 ports
+       32 port bits
+        7 cells
+        7   LUT4

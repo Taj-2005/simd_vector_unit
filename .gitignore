@@ -15,9 +15,9 @@ gtkwave.*
 # a clean regeneration is byte-identical and shows no diff.
 !sim/vectors/*.hex
 
-# Synthesis. The reports are committed (results/synthesis_*.txt); the project
-# directories a tool generates around them are not.
-synth/
+# Synthesis. The runner script and the reports are committed
+# (synth/run_synth.py, results/synthesis*.{csv,txt}); tool scratch dirs are not.
+synth/build/
 *.jou
 *.str
 vivado*.log

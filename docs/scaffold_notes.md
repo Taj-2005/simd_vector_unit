@@ -101,8 +101,8 @@ testbench, but nothing ships with a SKIP against it.
 ### C2. `tb_system` is honest about the stub
 
 While `simd_top` is a stub its `done` never asserts, so `tb_system` reports SKIP
-rather than FAIL. Pass `DEFS=-DDUT_READY` once integration is wired up and it
-becomes a hard failure. One macro, `` `DUT_DMEM ``, is the only place the
+rather than FAIL. **Resolved:** the real modules landed, the gate was removed,
+and `tb_system` now runs unconditionally as part of `make test`. One macro, `` `DUT_DMEM ``, is the only place the
 testbench reaches inside the DUT — if your instance names differ, change that
 line, not the testbench.
 

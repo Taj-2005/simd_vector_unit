@@ -1,0 +1,16 @@
+# dmem - yosys synth_xilinx -flatten -noiopad
+# regenerate with: python synth/run_synth.py
+
+=== dmem ===
+
+        +----------Local Count, excluding submodules.
+        | 
+        6 wires
+      263 wire bits
+        5 public wires
+      262 public wire bits
+        5 ports
+      262 port bits
+       17 cells
+        1   BUFG
+       16   RAM32M
