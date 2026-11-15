@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1276 412" width="1276" height="412">
+<style>
+  .bg{fill:#ffffff}
+  .lbl{font:600 12px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#111}
+  .val{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#111;text-anchor:middle}
+  .op{font:600 12px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#0a4d4f;text-anchor:middle}
+  .t{font:10px ui-monospace,SFMono-Regular,Menlo,monospace;fill:#667;text-anchor:middle}
+  .cell{fill:#f4f6f8;stroke:#111;stroke-width:1}
+  .opcell{fill:#e2f0f0;stroke:#0a4d4f;stroke-width:1}
+  .note{font:italic 11px ui-sans-serif,system-ui,sans-serif;fill:#555}
+  .hd{font:600 13px ui-sans-serif,system-ui,sans-serif;fill:#111}
+  .grid{stroke:#dfe5ea;stroke-width:1}
+</style>
+<rect class="bg" x="0" y="0" width="1276" height="412"/>
+<text class="hd" x="14" y="26">tb_vec_alu — four lanes computing independently (LANES = 4)</text>
+<text class="note" x="14" y="46">Reconstructed from sim/waves/tb_vec_alu.vcd by docs/waveforms/make_waveform.py — not a screenshot.</text>
+<text class="note" x="14" y="62">Every value below is parsed from the VCD the simulator wrote. Radix: hex.</text>
+<text class="t" x="262" y="78">0 ns</text>
+<line class="grid" x1="196" y1="86" x2="196" y2="316"/>
+<text class="t" x="394" y="78">10 ns</text>
+<line class="grid" x1="328" y1="86" x2="328" y2="316"/>
+<text class="t" x="526" y="78">20 ns</text>
+<line class="grid" x1="460" y1="86" x2="460" y2="316"/>
+<text class="t" x="658" y="78">30 ns</text>
+<line class="grid" x1="592" y1="86" x2="592" y2="316"/>
+<text class="t" x="790" y="78">40 ns</text>
+<line class="grid" x1="724" y1="86" x2="724" y2="316"/>
+<text class="t" x="922" y="78">50 ns</text>
+<line class="grid" x1="856" y1="86" x2="856" y2="316"/>
+<text class="t" x="1054" y="78">60 ns</text>
+<line class="grid" x1="988" y1="86" x2="988" y2="316"/>
+<text class="t" x="1186" y="78">70 ns</text>
+<line class="grid" x1="1120" y1="86" x2="1120" y2="316"/>
+<line class="grid" x1="1252" y1="86" x2="1252" y2="316"/>
+<text class="lbl" x="14" y="115">op[2:0]</text>
+<rect class="opcell" x="201" y="95" width="122" height="28" rx="4"/>
+<text class="op" x="262" y="114">000 ADD</text>
+<rect class="opcell" x="333" y="95" width="122" height="28" rx="4"/>
+<text class="op" x="394" y="114">001 SUB</text>
+<rect class="opcell" x="465" y="95" width="122" height="28" rx="4"/>
+<text class="op" x="526" y="114">010 AND</text>
+<rect class="opcell" x="597" y="95" width="122" height="28" rx="4"/>
+<text class="op" x="658" y="114">011 OR</text>
+<rect class="opcell" x="729" y="95" width="122" height="28" rx="4"/>
+<text class="op" x="790" y="114">100 CMPEQ</text>
+<rect class="opcell" x="861" y="95" width="122" height="28" rx="4"/>
+<text class="op" x="922" y="114">101 CMPLT</text>
+<rect class="opcell" x="993" y="95" width="122" height="28" rx="4"/>
+<text class="op" x="1054" y="114">110 SHL</text>
+<rect class="opcell" x="1125" y="95" width="122" height="28" rx="4"/>
+<text class="op" x="1186" y="114">111 UNDEF</text>
+<text class="lbl" x="14" y="161">lane[3].y[31:0]</text>
+<rect class="cell" x="201" y="141" width="122" height="28" rx="4"/>
+<text class="val" x="262" y="160">0000002C</text>
+<rect class="cell" x="333" y="141" width="122" height="28" rx="4"/>
+<text class="val" x="394" y="160">0000000A</text>
+<rect class="cell" x="465" y="141" width="122" height="28" rx="4"/>
+<text class="val" x="526" y="160">00000000</text>
+<rect class="cell" x="597" y="141" width="122" height="28" rx="4"/>
+<text class="val" x="658" y="160">FF000000</text>
+<rect class="cell" x="729" y="141" width="122" height="28" rx="4"/>
+<text class="val" x="790" y="160">00000000</text>
+<rect class="cell" x="861" y="141" width="122" height="28" rx="4"/>
+<text class="val" x="922" y="160">00000000</text>
+<rect class="cell" x="993" y="141" width="122" height="28" rx="4"/>
+<text class="val" x="1054" y="160">00010000</text>
+<rect class="cell" x="1125" y="141" width="122" height="28" rx="4"/>
+<text class="val" x="1186" y="160">00000000</text>
+<text class="lbl" x="14" y="207">lane[2].y[31:0]</text>
+<rect class="cell" x="201" y="187" width="122" height="28" rx="4"/>
+<text class="val" x="262" y="206">00000021</text>
+<rect class="cell" x="333" y="187" width="122" height="28" rx="4"/>
+<text class="val" x="394" y="206">FFFFFFFF</text>
+<rect class="cell" x="465" y="187" width="122" height="28" rx="4"/>
+<text class="val" x="526" y="206">00000000</text>
+<rect class="cell" x="597" y="187" width="122" height="28" rx="4"/>
+<text class="val" x="658" y="206">00FF0000</text>
+<rect class="cell" x="729" y="187" width="122" height="28" rx="4"/>
+<text class="val" x="790" y="206">00000001</text>
+<rect class="cell" x="861" y="187" width="122" height="28" rx="4"/>
+<text class="val" x="922" y="206">00000001</text>
+<rect class="cell" x="993" y="187" width="122" height="28" rx="4"/>
+<text class="val" x="1054" y="206">00000100</text>
+<rect class="cell" x="1125" y="187" width="122" height="28" rx="4"/>
+<text class="val" x="1186" y="206">00000000</text>
+<text class="lbl" x="14" y="253">lane[1].y[31:0]</text>
+<rect class="cell" x="201" y="233" width="122" height="28" rx="4"/>
+<text class="val" x="262" y="252">00000016</text>
+<rect class="cell" x="333" y="233" width="122" height="28" rx="4"/>
+<text class="val" x="394" y="252">FFFFFFEC</text>
+<rect class="cell" x="465" y="233" width="122" height="28" rx="4"/>
+<text class="val" x="526" y="252">00F000F0</text>
+<rect class="cell" x="597" y="233" width="122" height="28" rx="4"/>
+<text class="val" x="658" y="252">0000FF00</text>
+<rect class="cell" x="729" y="233" width="122" height="28" rx="4"/>
+<text class="val" x="790" y="252">00000000</text>
+<rect class="cell" x="861" y="233" width="122" height="28" rx="4"/>
+<text class="val" x="922" y="252">00000000</text>
+<rect class="cell" x="993" y="233" width="122" height="28" rx="4"/>
+<text class="val" x="1054" y="252">00000010</text>
+<rect class="cell" x="1125" y="233" width="122" height="28" rx="4"/>
+<text class="val" x="1186" y="252">00000000</text>
+<text class="lbl" x="14" y="299">lane[0].y[31:0]</text>
+<rect class="cell" x="201" y="279" width="122" height="28" rx="4"/>
+<text class="val" x="262" y="298">0000000B</text>
+<rect class="cell" x="333" y="279" width="122" height="28" rx="4"/>
+<text class="val" x="394" y="298">0000005A</text>
+<rect class="cell" x="465" y="279" width="122" height="28" rx="4"/>
+<text class="val" x="526" y="298">12345678</text>
+<rect class="cell" x="597" y="279" width="122" height="28" rx="4"/>
+<text class="val" x="658" y="298">000000FF</text>
+<rect class="cell" x="729" y="279" width="122" height="28" rx="4"/>
+<text class="val" x="790" y="298">00000001</text>
+<rect class="cell" x="861" y="279" width="122" height="28" rx="4"/>
+<text class="val" x="922" y="298">00000001</text>
+<rect class="cell" x="993" y="279" width="122" height="28" rx="4"/>
+<text class="val" x="1054" y="298">00000002</text>
+<rect class="cell" x="1125" y="279" width="122" height="28" rx="4"/>
+<text class="val" x="1186" y="298">00000000</text>
+<text class="note" x="14" y="342">At 40 ns and 50 ns the compares return [1, 0, 1, 0] across lanes 0..3: lane 2 cannot leak into lane 1.</text>
+<text class="note" x="14" y="360">At 70 ns the undefined op code 111 drives every lane to zero, never x.</text>
+</svg>
