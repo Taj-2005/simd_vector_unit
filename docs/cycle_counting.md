@@ -66,14 +66,36 @@ Goes in `results/cycle_counts.csv` and in report section 4.3.
 
 | Machine | Elements | Cycles | Elements/cycle | Speed-up |
 | :--- | ---: | ---: | ---: | ---: |
-| `scalar_top` | 16 | _TODO_ | _TODO_ | 1.00× |
-| `simd_top` (4 lanes) | 16 | _TODO_ | _TODO_ | _TODO_ |
+| `scalar_top` | 16 | 64 | 0.25 | 1.00× |
+| `simd_top` (4 lanes) | 16 | **16** | **1.00** | **4.00×** |
 
 ## Upper bound, so the result can be sanity-checked
 
 Four lanes cannot beat 4× on a non-pipelined, one-instruction-per-cycle machine.
 With the benchmark as written — `VLD`, `VLD`, `VADD`, `VST` per vector, 4
-vectors, plus `HALT` — the SIMD side issues 17 instructions. A scalar machine
-doing load, load, add, store per element over 16 elements issues about 64, plus
-loop overhead. A measured ratio above 4× means something is being counted
-differently on the two sides; find it before reporting it.
+vectors, plus `HALT` — the SIMD side issues 17 instructions, 16 of them counted.
+The scalar machine spends one cycle in each of `S_LDA`, `S_LDB`, `S_ADD` and
+`S_ST` per element: 4 × 16 = 64. A measured ratio above 4× would mean something
+is being counted differently on the two sides.
+
+## Measured
+
+**64 against 16 cycles, a speed-up of exactly 4.00×.**
+
+The result lands precisely on the theoretical bound, and that is worth
+explaining rather than presenting as a lucky round number. It happens because
+the benchmark is pure data-parallel work with nothing else in it:
+
+- Every scalar operation has an exact vector counterpart — load, load, add,
+  store — so the instruction mix is identical on both sides and nothing is
+  being compared against a different algorithm.
+- Loop overhead is zero on both machines (see the rule above), so neither side
+  carries bookkeeping the other avoids.
+- The element count, 16, is an exact multiple of `LANES`, so no lane is idle in
+  any iteration. With 17 elements the SIMD machine would need a fifth vector
+  iteration to process a single element and the speed-up would fall to 3.2×.
+
+So 4.00× is the ceiling being reached under ideal conditions, not evidence that
+SIMD is four times better in general. Any workload with partial vectors,
+data-dependent branching, or non-contiguous memory access would score lower.
+That honesty is the point of fixing the counting rules before measuring.
