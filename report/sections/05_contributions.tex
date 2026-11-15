@@ -1,22 +1,59 @@
 %% Individual Contributions - Jivit collects, EVERYONE checks their own row.
-%% Half a page. One row per member: modules, testbenches, report section, video
-%% slot, commit count. Commit counts from:  git shortlog -sn --all
+%% Commit counts from:  git shortlog -sn --all --no-merges
+%% Re-run before the final compile; they change with every push.
 
-\textit{TODO: fill from the roster in the repository README, with real commit
-counts taken on Monday evening.}
+Every member owned RTL, a testbench, a report section and a video slot. The
+commit counts below are taken from the repository history with
+\texttt{git shortlog -sn -{}-all -{}-no-merges} and were current at submission.
 
-%% \begin{table}[h]
-%% \centering
-%% \caption{Individual contributions}
-%% \begin{tabular}{@{}llll@{}}
-%% \toprule
-%% Member & Modules & Testbenches & Commits \\
-%% \midrule
-%% Parthraj Singh Bhati & ctrl\_unit, simd\_top & tb\_ctrl\_unit & TODO \\
-%% Satya Yadav & vreg\_file, dmem & tb\_vreg\_file, tb\_dmem & TODO \\
-%% Himanshu Pandey & lane\_alu, vec\_alu & tb\_lane\_alu, tb\_vec\_alu & TODO \\
-%% Jivit Rana & scalar\_top, benchmarks & tb\_scalar\_top & TODO \\
-%% Shaik Tajuddin & golden model & tb\_system & TODO \\
-%% \bottomrule
-%% \end{tabular}
-%% \end{table}
+\begin{table}[htbp]
+  \centering
+  \caption{Individual contributions}
+  \label{tab:contributions}
+  \footnotesize
+  \begin{tabular}{@{}p{1.45cm}p{2.0cm}p{1.75cm}p{1.35cm}r@{}}
+    \toprule
+    \textbf{Member} & \textbf{RTL / code} & \textbf{Testbenches} &
+    \textbf{Report} & \textbf{Com.} \\
+    \midrule
+    Shaik Tajuddin &
+      golden model, ISA fuzzer, build system, CI &
+      \texttt{tb\_system} &
+      Abstract, Refs., final PDF & 27 \\
+    \addlinespace
+    Parthraj Singh Bhati &
+      \texttt{ctrl\_unit}, \texttt{instr\_mem}, \texttt{simd\_top} &
+      \texttt{tb\_ctrl\_unit}, \texttt{tb\_simd\_top} &
+      4.1 & 20 \\
+    \addlinespace
+    Himanshu Pandey &
+      \texttt{lane\_alu}, \texttt{vec\_alu} &
+      \texttt{tb\_lane\_alu}, \texttt{tb\_vec\_alu} &
+      4.2 & 9 \\
+    \addlinespace
+    Jivit Rana &
+      \texttt{scalar\_top}, benchmark programs &
+      \texttt{tb\_scalar\_top} &
+      4.3, this table & 4 \\
+    \addlinespace
+    Satya Yadav &
+      \texttt{vreg\_file}, \texttt{dmem} &
+      \texttt{tb\_vreg\_file}, \texttt{tb\_dmem} &
+      Literature Review & 2 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Beyond the per-member split, three pieces of shared infrastructure shaped the
+result. The frozen instruction-set specification
+(\texttt{docs/spec.md}) was agreed before any RTL was written, so eight modules
+by five authors integrated without a port mismatch. The Python golden model
+defined what each instruction must produce independently of the Verilog, which
+turned ``the hardware is correct'' into a test result rather than an opinion.
+And the random-program fuzzer compared the integrated machine against that model
+over thousands of generated programs, finding a reset-time write-enable defect
+that all eight hand-written testbenches missed.
+
+Video slots: Parthraj 0:40--1:25 and 4:20--4:50; Satya 1:25--2:00;
+Himanshu 2:00--2:40; Tajuddin 2:40--3:25; Jivit 3:25--4:20. All five members
+appear in the 0:00--0:40 introduction.
