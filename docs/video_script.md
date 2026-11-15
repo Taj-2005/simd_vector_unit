@@ -47,9 +47,9 @@ retake instead of the whole video.
 - _TODO_
 
 **Himanshu (2:00–2:40)**
-- _TODO_
-- _TODO_
-- _TODO_
+- Walk through the `vec_alu` GTKWave waveform: 4 independent 32-bit lanes operating in parallel across a 128-bit datapath in a single cycle, parameterised via `generate`.
+- Highlight opcode set and the signed comparator (`CMPLT`): explain why signed evaluation matters (so $-1 < 1$ evaluates to true) and why compares return narrow boolean $1/0$ values.
+- Point to the $40\,\text{ns}$ and $50\,\text{ns}$ compare markers showing $[0, 1, 0, 1]$ output across lanes, proving zero carry/borrow leakage and strict lane isolation.
 
 **Taj (2:40–3:25)**
 - _TODO_
