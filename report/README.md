@@ -29,6 +29,7 @@ PDF: **Taj**. Each section has its own owner and its own file.
 | `sections/03_solution_datapath.tex` | 4.2 lane and datapath, 1 page | Himanshu |
 | `sections/04_solution_evaluation.tex` | 4.3 baseline and evaluation, 0.5 page | Jivit |
 | `sections/05_contributions.tex` | Individual Contributions, 0.5 page | Jivit collects |
+| `sections/contributions_table.tex` | **generated** — `python report/make_contributions.py` | — |
 
 Citations come from [`../docs/refs.bib`](../docs/refs.bib) — a single shared
 file, so any section can cite any entry.
