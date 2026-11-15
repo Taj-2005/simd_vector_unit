@@ -26,7 +26,7 @@ MEMBERS = [
         "Shaik Tajuddin",
         "golden model, ISA fuzzer, build system, CI",
         r"\texttt{tb\_system}",
-        "Abstract, Refs., final PDF",
+        "Abstract, Lit. Review, Refs., final PDF",
     ),
     (
         "Parthraj Singh Bhati",
@@ -54,7 +54,7 @@ MEMBERS = [
         "Satya Yadav",
         r"\texttt{vreg\_file}, \texttt{dmem}",
         r"\texttt{tb\_vreg\_file}, \texttt{tb\_dmem}",
-        "Literature Review",
+        "---",
     ),
 ]
 
