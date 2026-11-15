@@ -11,7 +11,7 @@ requires-python = ">=3.10"
 [tool.ruff]
 line-length = 100
 target-version = "py310"
-include = ["golden/**/*.py", "tests/**/*.py", "fuzz/**/*.py", "docs/waveforms/*.py"]
+include = ["golden/**/*.py", "tests/**/*.py", "fuzz/**/*.py", "docs/waveforms/*.py", "synth/*.py"]
 
 [tool.ruff.lint]
 select = [

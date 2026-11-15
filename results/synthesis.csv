@@ -1,1 +1,9 @@
-module,tool,luts,flip_flops,fmax_mhz,notes
+module,tool,luts,flip_flops,carry4,cells,fmax_mhz,notes
+lane_alu,yosys synth_xilinx -flatten -noiopad,251,0,19,271,,
+vec_alu,yosys synth_xilinx -flatten -noiopad,1012,0,76,1096,,
+vreg_file,yosys synth_xilinx -flatten -noiopad,0,0,0,45,,44 RAM32M distributed-RAM primitives
+dmem,yosys synth_xilinx -flatten -noiopad,0,0,0,17,,16 RAM32M distributed-RAM primitives
+ctrl_unit,yosys synth_xilinx -flatten -noiopad,7,0,0,7,,
+instr_mem,yosys synth_xilinx -flatten -noiopad,0,0,0,n/a,,constant program folds at elaboration; not a usable area figure - see results/README.md
+scalar_top,yosys synth_xilinx -flatten -noiopad,20,70,16,110,,
+simd_top,yosys synth_xilinx -flatten -noiopad,0,1,0,11,,constant program folds at elaboration; not a usable area figure - see results/README.md
