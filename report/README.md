@@ -36,7 +36,8 @@ file, so any section can cite any entry.
 ## Compiling
 
 On Overleaf, set the compiler to pdfLaTeX and the main document to `main.tex`.
-Locally:
+
+Locally, with a full TeX installation:
 
 ```bash
 cd report
@@ -44,6 +45,31 @@ pdflatex main && bibtex main && pdflatex main && pdflatex main
 ```
 
 Two pdfLaTeX passes after BibTeX, or the citations render as `[?]`.
+
+Or with [Tectonic](https://tectonic-typesetting.github.io/), which needs no TeX
+installation and fetches what it needs on demand:
+
+```bash
+cd report
+mkdir -p build && tectonic -X compile main.tex --outdir build
+```
+
+### `\nocite{*}` is temporary
+
+References is a required Phase I section, but no section cites a source yet, and
+BibTeX emits an *empty* bibliography in that case — which is a hard LaTeX error,
+not a warning, so the document will not build at all. `main.tex` therefore
+carries `\nocite{*}` to list every entry in `refs.bib`.
+
+**Remove it once the Literature Review cites its sources directly.**
+
+### The references are not ready
+
+`docs/refs.bib` still has 19 `TODO` fields across its 6 entries, and they render
+into the PDF as literal "TODO" — `vol. TODO, no. TODO, p. TODO`. Every source
+has to be opened and its real volume, pages and DOI filled in before the final
+compile. An invented citation field is the easiest thing in the report for an
+examiner to check.
 
 Commit the final PDF as `report/simd_vector_unit_phase1_report.pdf` on Monday,
 alongside the LaTeX source. Not yet present - it is written last, once the
