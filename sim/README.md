@@ -9,7 +9,9 @@ and the benchmark then computes zeros with no error message.
 
 ```bash
 make -C sim lint        # compile everything, run nothing   <- what CI gates on
-make -C sim test        # compile and run all 7 testbenches
+make -C sim test        # compile and run all 8 testbenches
+make -C sim simd_top    # run SIMD integration testbench (tb_simd_top)
+make -C sim integration # alias for simd_top integration test
 make -C sim lane_alu    # one testbench by name
 make -C sim vectors     # regenerate golden vectors (deterministic)
 make -C sim wave-system # open the system-test waveform in GTKWave
