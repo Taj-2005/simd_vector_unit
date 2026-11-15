@@ -3,46 +3,11 @@
 %% Re-run before the final compile; they change with every push.
 
 Every member owned RTL, a testbench, a report section and a video slot. The
-commit counts below are taken from the repository history with
-\texttt{git shortlog -sn -{}-all -{}-no-merges} and were current at submission.
+commit counts in Table~\ref{tab:contributions} are generated directly from the
+repository history by \texttt{report/make\_contributions.py} rather than typed
+by hand, so they cannot drift from what \texttt{git shortlog} reports.
 
-\begin{table}[htbp]
-  \centering
-  \caption{Individual contributions}
-  \label{tab:contributions}
-  \footnotesize
-  \begin{tabular}{@{}p{1.45cm}p{2.0cm}p{1.75cm}p{1.35cm}r@{}}
-    \toprule
-    \textbf{Member} & \textbf{RTL / code} & \textbf{Testbenches} &
-    \textbf{Report} & \textbf{Com.} \\
-    \midrule
-    Shaik Tajuddin &
-      golden model, ISA fuzzer, build system, CI &
-      \texttt{tb\_system} &
-      Abstract, Refs., final PDF & 27 \\
-    \addlinespace
-    Parthraj Singh Bhati &
-      \texttt{ctrl\_unit}, \texttt{instr\_mem}, \texttt{simd\_top} &
-      \texttt{tb\_ctrl\_unit}, \texttt{tb\_simd\_top} &
-      4.1 & 20 \\
-    \addlinespace
-    Himanshu Pandey &
-      \texttt{lane\_alu}, \texttt{vec\_alu} &
-      \texttt{tb\_lane\_alu}, \texttt{tb\_vec\_alu} &
-      4.2 & 9 \\
-    \addlinespace
-    Jivit Rana &
-      \texttt{scalar\_top}, benchmark programs &
-      \texttt{tb\_scalar\_top} &
-      4.3, this table & 4 \\
-    \addlinespace
-    Satya Yadav &
-      \texttt{vreg\_file}, \texttt{dmem} &
-      \texttt{tb\_vreg\_file}, \texttt{tb\_dmem} &
-      Literature Review & 2 \\
-    \bottomrule
-  \end{tabular}
-\end{table}
+\input{sections/contributions_table}
 
 Beyond the per-member split, three pieces of shared infrastructure shaped the
 result. The frozen instruction-set specification
