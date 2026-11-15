@@ -1,6 +1,7 @@
 # Literature review — working notes
 
-**Owner: Satya.** 1 to 1.5 pages in the report. This file is the drafting space;
+**Owner: Taj** (taken over from Satya). 1 to 1.5 pages in the report. This
+file is the drafting space;
 the finished prose goes into `report/sections/01_literature_review.tex`, and the
 citation list into [`refs.bib`](refs.bib).
 

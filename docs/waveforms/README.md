@@ -5,7 +5,7 @@ Committed evidence for the report and the video. The raw `.vcd` files in
 
 | File | From | Shows | Owner |
 | :--- | :--- | :--- | :--- |
-| `vreg_file.png` | `tb_vreg_file` | writing all 8 registers, both read ports active, read-and-write in the same cycle | Satya |
+| `vreg_file.png` | `tb_vreg_file` | writing all 8 registers, both read ports active, read-and-write in the same cycle | Taj |
 | `vec_alu.png` | `tb_vec_alu` | four lanes computing four different results in one cycle | Himanshu |
 | `system_pass.png` | `tb_system` | `simd_top` executing bench_add16 cycle by cycle, generated from the VCD | Taj |
 
