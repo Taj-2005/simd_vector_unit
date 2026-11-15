@@ -39,6 +39,8 @@ the Google Form.** Deadline 16 Nov 2026, 11:59 PM IST; target 9 PM.
       fields left in `refs.bib`
 - [ ] IEEEtran two-column format, 4–6 pages
 - [ ] At least one block diagram and one waveform inside the PDF
+- [ ] **`docs/waveforms/vec_alu.png` re-captured from real GTKWave** (Himanshu) —
+      the current file is a recreation, not a capture; see `docs/waveforms/README.md`
 - [ ] No separate Results section — preliminary numbers sit inside 4.3
 
 ## Video (15 marks)
