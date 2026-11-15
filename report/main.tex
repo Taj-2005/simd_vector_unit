@@ -46,11 +46,20 @@ Scalar Baseline}
 \IEEEauthorblockA{\textit{2401010427} \\ satya.yadav2024@nst.rishihood.edu.in}
 }
 
-%% References is a required Phase I section, but no section \cite{}s anything
-%% yet, and BibTeX emits an empty bibliography in that case - which is a hard
-%% LaTeX error, not a warning. \nocite{*} lists every entry in refs.bib so the
-%% document builds while the Literature Review is being written.
-%% REMOVE THIS once the sections cite their sources directly.
+%% TEMPORARY - remove when the Literature Review is written.
+%%
+%% Section 4.3 cites the two tools it reports results from (\cite{icarus},
+%% \cite{yosys}), but the five *papers* in refs.bib are cited by nothing yet,
+%% because the Literature Review that discusses them is still a placeholder.
+%% Measured: delete the \nocite line today and the document still COMPILES,
+%% but the bibliography drops from 7 entries to 2 - just the two tools. The
+%% report requires 6-8, so the failure is silent rather than loud. Do not
+%% remove it on the assumption that a clean build means a correct one.
+%%
+%% TO REMOVE: write the Literature Review with \cite{flynn1966},
+%% \cite{hennessy2017}, \cite{russell1978}, \cite{yu2008soft} and
+%% \cite{riscvvector} in the prose, then delete the \nocite line below and
+%% recompile. Check the bibliography still lists all seven.
 \nocite{*}
 
 \maketitle
