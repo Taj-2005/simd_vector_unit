@@ -100,6 +100,14 @@ module tb_vec_alu;
         op = `ALU_SHL;
         check("vshl independent shifts", {32'd65536, 32'd256, 32'd16, 32'd2});
 
+        // --- Undefined op code across every lane ---
+        // Every lane must go to zero, not x. Driving distinct operands first so
+        // a lane that passed its previous result through would be caught.
+        a  = {32'd40, 32'd30, 32'd20, 32'd10};
+        b  = {32'd4,  32'd3,  32'd2,  32'd1};
+        op = 3'b111;
+        check("undefined op zeroes all lanes", {32'd0, 32'd0, 32'd0, 32'd0});
+
         #20;
         $display("");
         if (errors != 0)

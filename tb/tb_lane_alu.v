@@ -91,6 +91,14 @@ module tb_lane_alu;
         a = 32'd1;          b = 32'd31;         op = `ALU_SHL;   check("shl by 31",             32'h80000000);
         a = 32'd1;          b = 32'd36;         op = `ALU_SHL;   check("shl masked shift amt",  32'd16);
 
+        // --- Undefined op code ---
+        // spec.md section 2: op = 111 is undefined and y must be 0, never x.
+        // A decoder that leaves x here propagates unknowns through vec_alu and
+        // into the register file, where it shows up much later as a system-test
+        // failure with no obvious cause.
+        a = 32'hDEADBEEF;   b = 32'h12345678;   op = 3'b111;     check("undefined op is zero",  32'd0);
+        a = 32'hFFFFFFFF;   b = 32'hFFFFFFFF;   op = 3'b111;     check("undefined op, all ones", 32'd0);
+
         $display("");
         if (errors != 0)
             $display("FAIL  tb_lane_alu: %0d error(s) in %0d check(s)", errors, checks);
