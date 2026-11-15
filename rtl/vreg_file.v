@@ -5,8 +5,9 @@
 // Testbench: tb/tb_vreg_file.v
 // Report section: 4.2 contributes the register-file paragraph and waveform
 //
-// STUB. Push the port list early even if the body is unfinished: Parth cannot
-// wire simd_top without it.
+// Three-operand instructions (vd = vs1 op vs2) need two operands in the same
+// cycle, which is why there are two read ports; only one result is produced per
+// instruction, so one write port is enough.
 //=============================================================================
 `timescale 1ns / 1ps
 
@@ -25,18 +26,38 @@ module vreg_file #(
     output wire [VEC_W-1:0]   rdata2
 );
 
-    // TODO(satya): implement. Shape:
+    reg [VEC_W-1:0] regs [0:NREGS-1];
+    integer i;
+
+    // Reset state. Without this the registers start as x, and a program that
+    // reads a register before writing it would propagate unknowns into the
+    // datapath - which shows up much later as an unexplained system-test
+    // failure rather than as an obvious bug here.
+    initial begin
+        for (i = 0; i < NREGS; i = i + 1) begin
+            regs[i] = {VEC_W{1'b0}};
+        end
+    end
+
+    // Single synchronous write port.
+    always @(posedge clk) begin
+        if (we) begin
+            regs[waddr] <= wdata;
+        end
+    end
+
+    // Two independent combinational read ports.
     //
-    //   reg [VEC_W-1:0] regs [0:NREGS-1];
-    //   always @(posedge clk) if (we) regs[waddr] <= wdata;
-    //   assign rdata1 = regs[raddr1];      // combinational reads
-    //   assign rdata2 = regs[raddr2];
+    // READ-DURING-WRITE BEHAVIOUR (frozen decision, see docs/spec.md and report
+    // section 4.2): because the write commits on the clock edge and the reads
+    // are combinational, reading the register being written in the same cycle
+    // returns the OLD value. The new value is visible from the next cycle.
     //
-    // Decide and write down in the report which behaviour you chose for a read
-    // and a write to the same address in the same cycle. With clocked write and
-    // combinational read the read returns the OLD value; the testbench must
-    // assert exactly that, and simd_top's timing depends on it.
-    assign rdata1 = {VEC_W{1'b0}};
-    assign rdata2 = {VEC_W{1'b0}};
+    // simd_top depends on this. A VST that immediately follows the VADD which
+    // produced its data reads V[vs1] in the cycle after the write commits, so
+    // it sees the new value; swapping to write-first (bypass) semantics would
+    // change the benchmark's timing and the cycle counts in results/.
+    assign rdata1 = regs[raddr1];
+    assign rdata2 = regs[raddr2];
 
 endmodule
