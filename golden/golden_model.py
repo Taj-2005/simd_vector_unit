@@ -145,6 +145,21 @@ def from_hex(line: str) -> int:
     return int(line, 16)
 
 
+def write_hex_words(path: str, words: list[int], header: str = "") -> None:
+    """Write `$readmemh` input one LANE_W-bit word per line.
+
+    Same as :func:`write_hex` but 32 bits wide, for the scalar baseline's
+    narrow memory. Fixed width matters: `$readmemh` fills from the right, so a
+    short line zero-pads the wrong end of the word.
+    """
+    with open(path, "w") as handle:
+        if header:
+            for line in header.strip().splitlines():
+                handle.write(f"// {line.strip()}\n")
+        for word in words:
+            handle.write(f"{to_hex(word, LANE_W)}\n")
+
+
 def write_hex(path: str, words: list[int], header: str = "") -> None:
     """Write `$readmemh` input: one hex word per line, index 0 first."""
     with open(path, "w") as handle:
