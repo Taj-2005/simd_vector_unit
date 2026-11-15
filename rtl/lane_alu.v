@@ -4,6 +4,9 @@
 // Owner: Himanshu (feat/himanshu-lane-alu)
 // Testbench: tb/tb_lane_alu.v (same owner)
 // Report section: 4.2, lane and datapath design
+//
+// The port list below is frozen: Jivit's scalar_top and Himanshu's own vec_alu
+// both instantiate this module, so the ports must not change.
 //=============================================================================
 `timescale 1ns / 1ps
 `include "simd_defs.vh"
