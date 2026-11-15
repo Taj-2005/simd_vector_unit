@@ -1,11 +1,24 @@
-%% Abstract - owner: Taj. WRITTEN LAST, on Monday morning, once results exist.
-%% 150 to 200 words. Four sentences of structure:
-%%   1. the problem and why data-level parallelism addresses it;
-%%   2. what we built (4 lanes, 8 vector registers, 6 ops, 16-bit ISA);
-%%   3. how it was verified (golden model, self-checking system testbench);
-%%   4. what was measured (cycles, elements per cycle, speed-up) - the real
-%%      number, not the hoped-for one.
-%%
-%% Do not write "we achieved a 4x speed-up" before the simulation says so.
+%% Abstract - owner: Taj. Written last, once the results existed.
+%% 150-200 words. Every number here is measured and reproducible:
+%%   make -C sim test            8/8 testbenches
+%%   make -C sim system          golden-model comparison
+%%   make -C sim scalar_top      64 cycles
+%%   python synth/run_synth.py   area figures
+%%   python fuzz/run_fuzz.py     random-program equivalence
 
-\textit{TODO: write last, 150--200 words, once the cycle numbers exist.}
+Data-level parallelism is the cheapest form of parallelism to exploit in
+hardware, but the gain it offers is easy to assert and hard to substantiate.
+This paper presents a parameterised four-lane SIMD vector unit implemented in
+Verilog, together with the scalar baseline and verification apparatus needed to
+measure what the vector hardware actually buys. The unit provides eight 128-bit
+vector registers and a frozen 16-bit instruction set covering vector addition,
+subtraction, bitwise operations and signed comparison, with the lane count held
+as a synthesis-time parameter. Correctness is established against an independent
+Python model of the instruction set rather than against hand-written
+expectations: a self-checking system testbench compares every result word, and a
+random-program fuzzer runs generated programs on both the hardware and the model
+and compares memory and cycle counts. That fuzzer exposed a reset-time
+write-enable defect that eight directed testbenches had missed. On a 16-element
+array addition the vector unit completes in 16 cycles against 64 for a scalar
+baseline built from the same ALU, a speed-up of $4.00\times$ for a
+$4.03\times$ increase in LUT count.
