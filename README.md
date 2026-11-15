@@ -322,9 +322,8 @@ make integration            # runs tb_simd_top against real RTL
 
 **SKIP is not a pass.** Every testbench counts its checks and reports SKIP while
 that count is zero, so a scaffold can never be mistaken for working
-verification. CI tolerates SKIP while modules are stubs and fails on any FAIL —
-so a module can land before its testbench without blocking the branch, but
-nothing ships with a SKIP against it.
+verification. tb_system still SKIPs until its result check is enabled; every other
+testbench must PASS.
 
 `tb_system` additionally reports SKIP, not FAIL, while `simd_top` is a stub:
 its `done` output never asserts, and everyone already knows why. Pass

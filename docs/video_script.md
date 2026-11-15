@@ -38,7 +38,7 @@ retake instead of the whole video.
 
 **Parth (0:00–0:40 Intro)**
 - Welcome to Project 11: 4-Lane SIMD Vector Processing Unit for Modern Computer Architecture.
-- I am Parthraj Singh Bhati, Integration Lead, responsible for the top-level processor, control unit, instruction memory, and system integration.
+- I am Parthraj Singh Bhati; I built the control unit, instruction memory and top-level integration.
 - Handing over to team members (Satya, Himanshu, Taj, Jivit) to introduce themselves and their modules.
 
 **Parth (0:40–1:25)**
@@ -68,5 +68,5 @@ retake instead of the whole video.
 
 **Parth (4:20–4:50)**
 - Summarise Phase I deliverables: fully integrated 4-lane SIMD processor verified 15/15 on all test programs, including 16-cycle array addition and 10-cycle logic benchmarks.
-- Outline Phase II roadmap: adding multi-stage pipelining, hazard detection with forwarding paths, vector reductions, and hardware branching.
+- Phase II: results and discussion, synthesis numbers if a tool is available, the scalar vs SIMD cycle comparison, and the final report.
 - Repository open on GitHub at https://github.com/Taj-2005/simd_vector_unit with full reproducible test suite and golden Python model.

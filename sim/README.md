@@ -30,10 +30,8 @@ reports SKIP instead of a FAIL everyone already knows about.
 | `SKIP tb_x: no checks written yet` | the testbench compiles but asserts nothing — the module's owner still has work to do |
 | `FAIL tb_x: n error(s)` | a real failure; fix before pushing |
 
-**SKIP is not a pass.** It means the testbench was never written. CI tolerates
-SKIP while modules are stubs and fails on any `FAIL`, so a module can land
-before its testbench without blocking the branch — but nothing ships with a
-SKIP against it.
+**SKIP is not a pass.** It means the testbench was never written. tb_system
+still SKIPs until its result check is enabled; every other testbench must PASS.
 
 ## Directories
 
