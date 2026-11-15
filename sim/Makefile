@@ -36,10 +36,10 @@ IFLAGS := -g2005 -Wall -I $(RTL_DIR) $(DEFS)
 
 RTL := $(wildcard $(RTL_DIR)/*.v) $(wildcard $(SCALAR_DIR)/*.v)
 
-UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top
+UNIT_TESTS := lane_alu vec_alu vreg_file dmem ctrl_unit scalar_top simd_top
 ALL_TESTS  := $(UNIT_TESTS) system
 
-.PHONY: all test lint vectors clean help $(ALL_TESTS)
+.PHONY: all test lint vectors clean help $(ALL_TESTS) integration
 
 all: test
 
@@ -77,9 +77,13 @@ $(ALL_TESTS): % : $(BUILD)/%.vvp | $(WAVES)
 	@echo "=== tb_$@ ======================================================"
 	@$(VVP) $<
 
+integration: simd_top
+
 # Only the system test reads the vectors, so regenerate them once here rather
 # than as a prerequisite of all seven.
 system: vectors
+simd_top: vectors
+integration: vectors
 
 test: vectors
 	@rc=0; \

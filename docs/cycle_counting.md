@@ -18,14 +18,31 @@ here and both tops implement them.
 
 | Rule | SIMD (`simd_top`) | Scalar (`scalar_top`) |
 | :--- | :--- | :--- |
-| A vector/scalar load costs | _TODO_ cycle(s) | _TODO_ cycle(s) |
-| An ALU operation costs | _TODO_ | _TODO_ |
-| A store costs | _TODO_ | _TODO_ |
-| Loop overhead (index increment, branch) | _TODO_ | _TODO_ |
+| A vector/scalar load costs | 1 cycle (`VLD`), moving `LANES` = 4 elements | 1 cycle (`S_LDA`/`S_LDB`), moving 1 element |
+| An ALU operation costs | 1 cycle (`VADD`), computing 4 lanes at once | 1 cycle (`S_ADD`), computing 1 element |
+| A store costs | 1 cycle (`VST`), writing 4 elements | 1 cycle (`S_ST`), writing 1 element |
+| Loop overhead (index increment, branch) | none — the ISA has no branch, so `bench_add16` is straight-line code and `pc` advances alongside each instruction | none — the index increment rides along with the store in `S_ST` rather than taking its own cycle |
 | Reset cycles | not counted | not counted |
-| The `HALT`/final cycle | _TODO_ | _TODO_ |
+| The `HALT`/final cycle | excluded (cycle_count counts clock cycles of executed instructions after reset, excluding the HALT cycle) | excluded (scalar baseline must count the exact same way) |
 | Counting starts | first cycle after `rst` falls | first cycle after `rst` falls |
 | Counting stops | the cycle `done` goes high | the cycle `done` goes high |
+
+Every cost above is read off the RTL, not estimated:
+
+- **SIMD** issues one instruction per cycle with no pipeline, so each `VLD`,
+  `VADD` and `VST` is exactly one cycle. `bench_add16` is 8 × `VLD`, 4 × `VADD`,
+  4 × `VST` and one `HALT` — 17 instructions, 16 counted.
+- **Scalar** spends one cycle in each of `S_LDA`, `S_LDB`, `S_ADD` and `S_ST`,
+  so four cycles per element.
+
+**Why loop overhead is zero on both sides, and why that is the honest choice.**
+The vector ISA has no branch instruction, so the benchmark is fully unrolled
+straight-line code and its `pc` increments for free alongside each instruction.
+Giving the scalar machine a separate counted cycle for its index increment would
+charge it for bookkeeping the SIMD machine does not pay for either, and would
+inflate the speed-up. So `scalar_top` folds the increment into its store cycle.
+The comparison therefore comes down to the one thing it is supposed to measure:
+how many elements each machine moves and computes per cycle.
 
 ## Non-negotiables
 

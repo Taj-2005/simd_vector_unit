@@ -4,8 +4,14 @@
 // Owner: Satya (feat/satya-dmem)
 // Testbench: tb/tb_dmem.v
 //
-// STUB. INIT_FILE is loaded with $readmemh so the benchmark data can be set
-// from sim/vectors/ without recompiling.
+// One vector word holds LANES elements side by side, so a single VLD moves 4
+// elements in one cycle. That is the whole reason the SIMD machine beats the
+// scalar baseline, and it is why the memory is 128 bits wide rather than 32.
+//
+// COUPLING, do not rename: the storage array must stay
+//   reg [VEC_W-1:0] mem [0:WORDS-1]
+// because tb/tb_simd_top.v and tb/tb_system.v read results hierarchically
+// through u_dmem.mem. See docs/spec.md.
 //=============================================================================
 `timescale 1ns / 1ps
 
@@ -22,16 +28,31 @@ module dmem #(
     output wire [VEC_W-1:0]  rdata
 );
 
-    // TODO(satya): implement. Shape:
-    //
-    //   reg [VEC_W-1:0] mem [0:WORDS-1];
-    //   initial if (INIT_FILE != "") $readmemh(INIT_FILE, mem);
-    //   always @(posedge clk) if (we) mem[addr] <= wdata;
-    //   assign rdata = mem[addr];
-    //
-    // $readmemh fills from index 0 upward and leaves untouched words as x.
-    // The benchmark layout in docs/spec.md is A at words 0-3, B at 4-7,
-    // C at 8-11, so an init file of 8 lines is correct and expected.
-    assign rdata = {VEC_W{1'b0}};
+    reg [VEC_W-1:0] mem [0:WORDS-1];
+    integer i;
+
+    // Zero the array before loading. $readmemh fills from index 0 upward and
+    // leaves everything past the end of the file untouched, so without this the
+    // benchmark's result words (8-11) would start as x: the store would then be
+    // checked against x and the failure would look like a datapath bug rather
+    // than an uninitialised memory.
+    initial begin
+        for (i = 0; i < WORDS; i = i + 1) begin
+            mem[i] = {VEC_W{1'b0}};
+        end
+        if (INIT_FILE != "") begin
+            $readmemh(INIT_FILE, mem);
+        end
+    end
+
+    // Synchronous write.
+    always @(posedge clk) begin
+        if (we) begin
+            mem[addr] <= wdata;
+        end
+    end
+
+    // Combinational read, so VLD can load and write back within one cycle.
+    assign rdata = mem[addr];
 
 endmodule
