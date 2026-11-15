@@ -5,9 +5,9 @@
 | **Enrollment** | 2401010320 |
 | **GitHub** | [@parthrajsinghbhati](https://github.com/parthrajsinghbhati) |
 | **Role** | Integration lead · spec freeze, control unit, `simd_top`, submission |
-| **Branch** | `parth/control-integration` |
-| **Report section** | Proposed Solution 4.1 — architecture and control (`report/section_4_1_architecture.tex`) |
-| **Video slots** | 0:40–1:25 (architecture & datapath) and 4:20–4:50 (summary & demo) |
+| **Branch** | `feat/parth-final` |
+| **Report section** | Proposed Solution 4.1 — architecture and control (`report/sections/02_solution_architecture.tex`) |
+| **Video slots** | 0:00–0:40 (team intro), 0:40–1:25 (architecture & datapath), and 4:20–4:50 (summary & demo) |
 
 ## What I built
 
@@ -18,9 +18,9 @@
 4. **`rtl/instr_mem.v`**: Parameterised 32-word program ROM loaded via `$readmemh`, with combinational read and default `HALT` padding.
 5. **`sim/programs/prog_demo.hex` & `sim/programs/demo_data.hex`**: Clean self-contained verification program and vector dataset for integration testing.
 6. **`rtl/simd_top.v`**: Top-level single-cycle SIMD processor integrating fetch, decode, register file, vector ALU, data memory, write-back multiplexer, and cycle counter.
-7. **`sim/stubs/`**: Non-invasive throwaway behavioral stubs (`lane_alu.v`, `vec_alu.v`, `vreg_file.v`, `dmem.v`) to enable early integration testing without altering teammates' files.
-8. **`tb/tb_simd_top.v`**: Self-checking integration testbench checking vector execution, lane-by-lane memory write-back, and cycle counting; 7/7 checks passing.
-9. **`report/section_4_1_architecture.tex`**: IEEE-style report section documenting architecture, 16-bit encoding, control signal decode table, and datapath flow.
+7. **Full RTL Integration & CI**: Integrated `simd_top.v` with real teammate modules (`vreg_file.v`, `dmem.v`, `vec_alu.v`, `lane_alu.v`), fully replacing early testing stubs. Wired into the default `make test` and `make lint` flow in CI.
+8. **`tb/tb_simd_top.v`**: Comprehensive integration testbench verifying demo (4 cycles), `bench_add16.hex` (16 cycles), and `bench_logic.hex` (10 cycles) directly against the real modules; 15/15 checks passing.
+9. **`report/sections/02_solution_architecture.tex`**: IEEE-style report section documenting architecture, 16-bit encoding, control signal decode table, datapath flow, and integration verification results.
 
 ## Why I built it that way
 

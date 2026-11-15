@@ -278,8 +278,8 @@ make system   # run the golden-model-verified system test (tb_system)
 Running individual unit testbenches:
 ```bash
 make ctrl_unit             # run control unit testbench
-make simd_top STUBS=1      # run SIMD integration testbench with early testing stubs
-make simd_top              # run against real RTL (fails until teammate RTL lands)
+make simd_top              # run SIMD integration testbench (tb_simd_top)
+make integration           # alias for simd_top integration test
 make lane_alu              # run ALU lane testbench
 make vec_alu               # run vector ALU testbench
 make vreg_file             # run vector register file testbench
@@ -303,11 +303,11 @@ make clean           # remove sim/build/, sim/waves/, and temporary hex files
 
 ### Integration test status
 
-`simd_top` is NOT in `make test` or CI until the real `vreg_file`, `dmem` and `vec_alu` are on `main`; it passes against stubs via `make -C sim simd_top STUBS=1`; when the real modules arrive, add `simd_top` back into `UNIT_TESTS`/`ALL_TESTS`.
+`simd_top` is fully integrated into the default test suite (`make test`) and CI (`make lint`), running against the merged real RTL modules (`vreg_file`, `dmem`, `vec_alu`, `ctrl_unit`, and `instr_mem`). All 15/15 checks pass directly against the real modules.
 
 To run integration testing against real RTL:
 ```bash
-make integration            # runs tb_simd_top against real RTL (checks dmem placeholder status)
+make integration            # runs tb_simd_top against real RTL
 ```
 
 ---
@@ -322,9 +322,8 @@ make integration            # runs tb_simd_top against real RTL (checks dmem pla
 
 **SKIP is not a pass.** Every testbench counts its checks and reports SKIP while
 that count is zero, so a scaffold can never be mistaken for working
-verification. CI tolerates SKIP while modules are stubs and fails on any FAIL —
-so a module can land before its testbench without blocking the branch, but
-nothing ships with a SKIP against it.
+verification. tb_system still SKIPs until its result check is enabled; every other
+testbench must PASS.
 
 `tb_system` additionally reports SKIP, not FAIL, while `simd_top` is a stub:
 its `done` output never asserts, and everyone already knows why. Pass

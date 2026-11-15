@@ -131,3 +131,12 @@ To ensure an accurate and rigorous benchmark comparison against the scalar archi
   \item When the \texttt{HALT} instruction is fetched, the machine asserts \texttt{done} and freezes the program counter. The \texttt{HALT} cycle itself is \textbf{excluded} from \texttt{cycle\_count}.
   \item The scalar baseline architecture (\texttt{scalar\_top}) enforces the exact same halting and exclusion convention, ensuring an honest, apples-to-apples performance comparison.
 \end{itemize}
+
+\subsubsection{Integration Verification and Empirical Cycle Counts}
+The integrated processor (\texttt{simd\_top}) was verified via the integration testbench (\texttt{tb\_simd\_top}) compiled directly against the real RTL modules (\texttt{vreg\_file}, \texttt{dmem}, \texttt{vec\_alu}, \texttt{ctrl\_unit}, and \texttt{instr\_mem}), achieving a 15/15 pass rate across three verification suites:
+\begin{itemize}
+  \item \textbf{Demo Program (\texttt{prog\_demo.hex}):} Validates foundational load, compute, and store sequencing, completing in exactly 4 execution cycles (excluding \texttt{HALT}) with verified vector write-back to \texttt{DMEM[2]}.
+  \item \textbf{16-Element Array Addition Benchmark (\texttt{bench\_add16.hex}):} Computes elementwise $C[i] = A[i] + B[i]$ for 16 elements across four vector iterations, executing in exactly 16 cycles (excluding \texttt{HALT}) and verifying that $\text{DMEM}[8..11] = \text{DMEM}[0..3] + \text{DMEM}[4..7]$.
+  \item \textbf{Logic and Comparison Benchmark (\texttt{bench\_logic.hex}):} Evaluates \texttt{VAND}, \texttt{VOR}, \texttt{VCMPEQ}, and signed \texttt{VCMPLT}, completing in exactly 10 cycles (excluding \texttt{HALT}) with results verified against golden vectors.
+\end{itemize}
+All test programs confirm single-cycle execution per instruction and strict adherence to the HALT cycle exclusion rule.

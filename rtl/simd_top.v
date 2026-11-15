@@ -34,8 +34,13 @@ module simd_top #(
 );
 
     localparam VEC_W       = LANES * 32;
-    localparam IMEM_ADDR_W = 5;
-    localparam IMEM_WORDS  = 32;
+    // Must match `IMEM_WORDS / `IMEM_ADDR_W in rtl/simd_defs.vh. They disagreed
+    // (32/5 here against 64/6 there): $readmemh then silently truncated any
+    // program longer than 32 words, and because pc is only ADDR_W bits it
+    // wrapped to 0 instead of ever reaching instr_mem's out-of-range HALT
+    // guard - so an over-long program looped forever with no diagnostic.
+    localparam IMEM_ADDR_W = `IMEM_ADDR_W;
+    localparam IMEM_WORDS  = `IMEM_WORDS;
 
     // Registers: program counter, cycle counter, done latch
     reg [IMEM_ADDR_W-1:0] pc;
@@ -89,7 +94,7 @@ module simd_top #(
         .REG_SEL (3)
     ) u_vrf (
         .clk    (clk),
-        .we     (rf_we),
+        .we     (rf_we && !rst && !done_reg),
         .waddr  (rf_waddr),
         .wdata  (rf_wdata),
         .raddr1 (rf_raddr1),
@@ -122,7 +127,7 @@ module simd_top #(
         .INIT_FILE (DATA_FILE)
     ) u_dmem (
         .clk   (clk),
-        .we    (mem_wr),
+        .we    (mem_wr && !rst && !done_reg),
         .addr  (instr[3:0]),
         .wdata (rf_rdata1),
         .rdata (dmem_rdata)
