@@ -20,7 +20,7 @@
 ## Why I built it that way
 
 - **Why `LANES` is a parameter and not a literal 4:**
-  Parameterizing `LANES` and `LANE_W` isolates the architectural vector length from the datapath implementation. Widening the SIMD unit from 4 lanes (128-bit vector) to 8 lanes (256-bit vector) or 16 lanes is a single parameter change in `simd_defs.vh` / top-level instantiation. No structural code inside `vec_alu` needs modification.
+  Parameterizing `LANES` and `LANE_W` isolates the architectural vector length from the datapath implementation. Widening the SIMD unit from 4 lanes (128-bit vector) to 8 lanes (256-bit vector) or 16 lanes is a single change to `parameter LANES` in `simd_top.v`, which propagates to `vec_alu` through the instantiation. (`LANES` is a module parameter — no RTL reads the `` `LANES `` macro in `simd_defs.vh`.) No structural code inside `vec_alu` needs modification.
 
 - **Why compares return 1 or 0 in bit 0 rather than an all-ones mask:**
   Returning boolean integers (`32'd1` or `32'd0`) directly allows comparison results to be used as numeric masks, loop predicates, or boolean sums (e.g. population count / reduction) without requiring additional conversion logic or bit extraction.
@@ -29,13 +29,13 @@
   Standard integer algorithms and array indexing often involve signed arithmetic comparisons (e.g., negative offsets, relative temperatures, signed coordinates). An unsigned comparator treats `-1` (`0xFFFFFFFF`) as $4,294,967,295$, which would evaluate `(-1 < 1)` as FALSE. Using Verilog's `$signed(a) < $signed(b)` ensures correct two's complement evaluation where `-1 < 1` evaluates to TRUE.
 
 - **What the generate loop costs in area versus a hand-written four-lane block:**
-  In modern synthesis tools (such as Vivado or Yosys), an unrolled `generate` loop synthesizes to the exact same gate netlist as manually instantiated individual lane modules. It incurs zero area or latency overhead while vastly improving code readability, maintainability, and scalability.
+  In modern synthesis tools (such as Vivado or Yosys), an unrolled `generate` loop synthesizes to the exact same gate netlist as manually instantiated individual lane modules. It is expected to incur no area or latency penalty while vastly improving code readability, maintainability, and scalability. **Not yet measured** — no synthesis tool has been run, so this stays a design expectation until `results/synthesis.csv` has numbers in it.
 
 ## Questions I should be able to answer in the viva
 
 - **Point at the waveform and show that lane 2 cannot affect lane 1:**
   In `docs/waveforms/vec_alu.png`, under `VCMPEQ` and `VCMPLT` at $40\,\text{ns}$ and $50\,\text{ns}$, Lane 0 evaluates to `1`, Lane 1 evaluates to `0`, Lane 2 evaluates to `1`, and Lane 3 evaluates to `0`. If any carry, borrow, or cross-talk leaked across lane boundaries, Lane 1 would corrupt or match Lane 0 or 2. Each lane produces its result purely as a function of `a[i]` and `b[i]`.
 - **What exactly changes in the design if `LANES` goes from 4 to 8:**
-  Only `LANES = 8` in `simd_defs.vh` (and port vector width `LANES * LANE_W = 256` bits). The `generate` loop automatically unrolls 8 lane instances, mapping bits `[32*i +: 32]` for $i \in [0, 7]$.
+  Only `parameter LANES = 8` in `simd_top.v`; the port widths follow from `LANES * LANE_W` automatically. Verified against 1,200 eight-lane golden-model vectors. The `generate` loop automatically unrolls 8 lane instances, mapping bits `[32*i +: 32]` for $i \in [0, 7]$.
 - **Why is there no carry between lanes, and when would you want one?**
   In SIMD processing, lanes represent independent parallel data elements (e.g., separate pixels, audio samples, or matrix entries). Carrying between lanes would violate data independence and introduce sequential carry-propagation latency across the 128-bit datapath. A cross-lane carry/reduction is only desirable during specialized vector reduction instructions (like horizontal vector sum `VREDSUM`), which would use a dedicated reduction tree rather than the elementwise ALU.

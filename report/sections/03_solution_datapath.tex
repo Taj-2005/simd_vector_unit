@@ -64,7 +64,7 @@ endgenerate
 The datapath enforces three critical structural properties:
 \begin{itemize}
   \item \textbf{Lane Ordering and Slicing Convention:} Lanes are packed little-end first: lane $i$ occupies bits $[i \times 32 +: 32]$. Lane 0 resides in the least significant 32 bits ($[31:0]$), while lane 3 resides in bits $[127:96]$. This strict ordering matches the Python golden model and eliminates lane-transposition discrepancies.
-  \item \textbf{Parameterised Architecture:} The lane count (\texttt{LANES = 4}) and width (\texttt{LANE\_W = 32}) are fully parameterised. Upgrading the datapath to an 8-lane, 256-bit SIMD unit is a one-line parameter update in \texttt{simd\_defs.vh}, with no structural redesign needed. In logic synthesis, the unrolled loop incurs zero area overhead over manual instantiation.
+  \item \textbf{Parameterised Architecture:} The lane count (\texttt{LANES = 4}) and width (\texttt{LANE\_W = 32}) are Verilog module parameters, not preprocessor macros. Upgrading the datapath to an 8-lane, 256-bit SIMD unit is a one-line change to \texttt{parameter LANES} in \texttt{simd\_top.v}, which propagates through the instantiation to \texttt{vec\_alu}; no structural redesign is needed. This was verified by re-elaborating the datapath at \texttt{LANES = 8} and checking it against 1{,}200 eight-lane reference vectors produced by the Python golden model. The unrolled \texttt{generate} loop is expected to synthesise to the same netlist as manual instantiation; synthesis figures are reported in Phase II.
   \item \textbf{Strict Lane Isolation:} There are zero carry or borrow propagation paths between adjacent lanes. This prevents a 128-bit carry ripple chain, keeping the critical path bounded strictly to a single 32-bit adder delay.
 \end{itemize}
 
