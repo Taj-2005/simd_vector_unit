@@ -21,39 +21,50 @@ on all five of us. Deadline **16 Nov 2026, 11:59 PM IST**; we target 9 PM.
 
 ## Current status
 
-The repository scaffold is in place (Taj): layout, build system, CI, the golden
-model, the system testbench and the documentation set.
-
-**Every RTL module is a stub** with its frozen port list and a TODO naming its
-owner. Stubs compile and elaborate, so nobody is blocked on anyone else's port
-list — which is the thing that actually costs a day on a project this size.
+**The hardware is complete and verified.** Every module is implemented, every
+testbench passes, and the integrated machine is checked against an independent
+Python model of the instruction set.
 
 ```
-make -C sim lint         # 7/7 testbenches elaborate     ✓
-make -C sim test         # 7/7 run; all report SKIP      — no checks written yet
-pytest tests/            # 32/32 golden-model tests pass ✓
-make -C docs/diagrams    # 3 diagrams -> PNG + PDF       ✓
+make -C sim lint            # 8/8 testbenches elaborate            ✓
+make -C sim test            # 8/8 PASS, 0 FAIL, 0 SKIP             ✓
+pytest tests/               # 32/32 golden-model tests             ✓
+python fuzz/run_fuzz.py     # random programs vs the ISA simulator ✓
+python synth/run_synth.py   # Xilinx area figures per module       ✓
+make -C docs/diagrams       # 3 diagrams -> PNG + PDF              ✓
 ```
 
-A testbench with nothing asserted reports **SKIP**, never PASS. See
-[§6](#6-what-the-simulation-output-means).
+| Testbench | Checks | What it proves |
+| :--- | ---: | :--- |
+| `tb_lane_alu` | 37 | every op, signed boundaries, shift masking, undefined op |
+| `tb_vec_alu` | 8 | four lanes compute independently |
+| `tb_vreg_file` | 15 | 2R1W, and read-during-write returns the old value |
+| `tb_dmem` | 22 | per-word writes, `$readmemh` init, no neighbour disturbance |
+| `tb_ctrl_unit` | 13 | one directed check per opcode, including undefined ones |
+| `tb_scalar_top` | 17 | the baseline computes `C[i] = A[i] + B[i]` for all 16 |
+| `tb_simd_top` | 15 | integration across three programs on the real modules |
+| `tb_system` | 18 | both benchmarks against the **Python golden model** |
 
-> **Read [docs/scaffold_notes.md](docs/scaffold_notes.md) first.** It lists
-> everything in this repository that goes beyond the team plan, and the five
-> open decisions Parth needs to confirm when freezing the spec — the
-> instruction op codes, where the `VLD`/`VST` address sits, which register
-> `VST` reads, and two more.
+Beyond the testbenches, `fuzz/` runs randomly generated programs on `simd_top`
+and on an independent ISA simulator and compares memory and cycle counts. That
+is what found the reset write-enable bug described in
+[fuzz/README.md](fuzz/README.md) — every hand-written benchmark happened to
+start with an idempotent `VLD`, which hid it from all eight testbenches.
 
-**Next, in dependency order:**
+**Measured results**
 
-- **Parthraj** → confirm or edit the proposed spec, post "spec is frozen", then
-  `ctrl_unit`, `instr_mem`, `simd_top`
-- **Himanshu** → `lane_alu` **first and pushed early** (Jivit needs the port
-  list), then `vec_alu`
-- **Satya** → `vreg_file` and `dmem` **before Saturday noon** so Parth can
-  integrate
-- **Jivit** → `scalar_top`, then the cycle-counting rules and the comparison
-- **Taj** → synthesis, waveform screenshots, then the report PDF (golden model and block diagrams are done)
+| | |
+| :--- | :--- |
+| 16-element array add, SIMD | **16 cycles** |
+| 16-element array add, scalar baseline | **64 cycles** |
+| `vec_alu` against `lane_alu` (LANES = 4) | **4.03x LUTs, 4.00x CARRY4** |
+
+**What remains is the write-up, not the hardware:**
+
+- **Satya** → literature review, and 6–8 verified references in `docs/refs.bib`
+- **Jivit** → `results/cycle_counts.csv`, report 4.3, contributions table
+- **Taj** → abstract (written last), final PDF
+- **Himanshu** → record and edit the video
 
 ---
 
