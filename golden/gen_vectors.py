@@ -51,6 +51,7 @@ from golden_model import (
     to_unsigned,
     vec_op,
     write_hex,
+    write_hex_words,
 )
 
 # Data-memory layout, fixed by docs/spec.md. A and B are inputs; C is where the
@@ -145,6 +146,28 @@ def main() -> int:
         f"expected AND, OR, CMPEQ, CMPLT on A[0] and B[0]\n{header}",
     )
 
+    # Scalar baseline image. The one-ALU machine in scalar/ is 32 bits wide, so
+    # it needs the same 16+16 elements unpacked from the 128-bit vectors. Both
+    # machines therefore run byte-identical numbers, which is what makes the
+    # cycle comparison in results/ a comparison and not an anecdote.
+    #
+    #   words  0..15  A[0..15]
+    #   words 16..31  B[0..15]
+    #   words 32..47  C[0..15], written by the benchmark
+    a_elems = [lane for vec in a for lane in vec]
+    b_elems = [lane for vec in b for lane in vec]
+    write_hex_words(
+        str(args.out / "scalar_init.hex"),
+        [to_unsigned(v) for v in a_elems + b_elems],
+        f"scalar baseline image: A at words 0-15, B at words 16-31\n"
+        f"results land at words 32-47\n{header}",
+    )
+    write_hex_words(
+        str(args.out / "expected_scalar.hex"),
+        [to_unsigned(x + y) for x, y in zip(a_elems, b_elems, strict=True)],
+        f"expected C[i] = A[i] + B[i], 16 elements of 32 bits\n{header}",
+    )
+
     # Kept for the report's op table rather than for a benchmark program.
     write_hex(
         str(args.out / "expected_sub.hex"),
@@ -152,7 +175,7 @@ def main() -> int:
         f"expected C = A - B, four 128-bit words\n{header}",
     )
 
-    print(f"wrote 6 hex files to {args.out}  (seed {args.seed}, {args.bits}-bit values)")
+    print(f"wrote 8 hex files to {args.out}  (seed {args.seed}, {args.bits}-bit values)")
     if not args.quiet:
         print("  pair 0 is crafted: equal / greater / less / signed+wrap, lane 0 to lane 3")
         for i in range(NVEC):
