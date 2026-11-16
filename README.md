@@ -1,6 +1,9 @@
 # SIMD Vector Processing Unit
 
-> **Video:** _TODO — paste the unlisted link here before submitting._
+> **Report:** [simd_vector_unit_phase1_report.pdf](report/simd_vector_unit_phase1_report.pdf)
+> — Phase I, IEEE format, 7 pages
+>
+> **Video:** [Phase I demonstration](https://drive.google.com/file/d/1PXjrYFt9tF4Ykdg-futQB-UVcm1wS-cD/view?usp=sharing) — under 5:00
 
 A parameterised 4-lane SIMD vector unit in Verilog, verified against an
 independent Python golden model and compared against a one-ALU scalar baseline
@@ -522,7 +525,7 @@ Sunday's integration when there is no time to fix it.
 
 | Item | Marks | Owner | Where |
 | :--- | ---: | :--- | :--- |
-| IEEE report, 4–6 pages | 10 | Taj assembles; one section each | [report/](report/) |
+| IEEE report, 4–6 pages | 10 | Taj assembles; one section each | [simd_vector_unit_phase1_report.pdf](report/simd_vector_unit_phase1_report.pdf) |
 | Demonstration video, under 5:00 | 15 | Himanshu edits; Parth submits | [video/README.md](video/README.md) |
 | GitHub repository and history | 5 | Taj | this repo |
 
