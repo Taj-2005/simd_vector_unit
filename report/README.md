@@ -1,5 +1,7 @@
 # `report/` — IEEE Phase I report
 
+> **Compiled PDF:** [simd_vector_unit_phase1_report.pdf](simd_vector_unit_phase1_report.pdf)
+
 **10 marks.** Owner of the template, the Abstract, the References and the final
 PDF: **Taj**. Each section has its own owner and its own file.
 
