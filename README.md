@@ -1,6 +1,8 @@
 # SIMD Vector Processing Unit
 
-> **Report:** [simd_vector_unit_phase1_report.pdf](report/simd_vector_unit_phase1_report.pdf)
+> **Phase II final report:** [PDF](report/simd_vector_unit_phase2_report.pdf) · [LaTeX source](report/simd_vector_unit_phase2_report.tex)
+>
+> **Phase I report:** [simd_vector_unit_phase1_report.pdf](report/simd_vector_unit_phase1_report.pdf)
 > — Phase I, IEEE format, 7 pages
 >
 > **Video:** [Phase I demonstration](https://drive.google.com/file/d/1PXjrYFt9tF4Ykdg-futQB-UVcm1wS-cD/view?usp=sharing) — under 5:00
@@ -9,16 +11,16 @@ A parameterised 4-lane SIMD vector unit in Verilog, verified against an
 independent Python golden model and compared against a one-ALU scalar baseline
 on the same benchmark and the same data.
 
-**Course project — Modern Computer Architecture, Project 11.** Phase I of two.
+**Course project — Modern Computer Architecture, Project 11.**
 
 | Phase | Scope |
 | :--- | :--- |
-| **Phase I** (this repo, current) | 4-lane SIMD unit, scalar baseline, golden-model verification, cycle comparison |
-| **Phase II** (planned) | Pipelining, vector length register, masking, full Results and Discussion |
+| **Phase I** (prototype) | 4-lane SIMD unit, scalar baseline, golden-model verification, cycle comparison |
+| **Phase II** (final report) | Architecture, results, waveforms, evaluation limits, and individual contributions |
 
 **Marks: report 10, video 15, GitHub 5.** Every member owns one RTL block, one
 testbench, one report section and one video slot, so all three components depend
-on all five of us. Deadline **16 Nov 2026, 11:59 PM IST**; we target 9 PM.
+on all five of us. Phase I deadline **16 Nov 2026, 11:59 PM IST**; we target 9 PM.
 
 ---
 
@@ -543,17 +545,14 @@ Before submitting, work through
 
 ---
 
-## 12. Phase II preview
+## 12. Future work
 
-Everything deliberately out of scope now, so the report can say what was left
-out rather than appear not to have noticed:
+The final report evaluates the four-lane prototype. Possible extensions include:
 
-- Pipelining and hazard detection — the current machine is one instruction per
-  cycle, which is what bounds the speed-up at the lane count.
+- Pipelining and hazard detection to investigate clock frequency and latency.
 - A vector length register, so array sizes need not be a multiple of `LANES`.
 - Masking and predication; scatter/gather addressing.
 - `LANES = 8`, and the area/Fmax curve against lane count.
-- A full Results and Discussion section with synthesis numbers.
 
 ---
 
